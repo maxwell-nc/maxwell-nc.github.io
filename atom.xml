@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[Max的日记]]></title>
+  <subtitle><![CDATA[主要分享一些经验、心得和技术...]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="https://maxwell-nc.github.io/"/>
+  <updated>2015-10-30T05:44:13.345Z</updated>
+  <id>https://maxwell-nc.github.io/</id>
+  
+  <author>
+    <name><![CDATA[Maxwell-nc]]></name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <link href="https://maxwell-nc.github.io/2015/10/30/hello-world/"/>
+    <id>https://maxwell-nc.github.io/2015/10/30/hello-world/</id>
+    <published>2015-10-30T05:44:13.345Z</published>
+    <updated>2015-10-30T05:44:13.345Z</updated>
+    <content type="html"><![CDATA[<p>今天花了点时间利用 <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> 搭建了这个博客。<br>使用的主题是 <a href="https://github.com/A-limon/pacman" target="_blank" rel="external">pacman</a> 主题，非常感谢他们。<br>暂时没有空调整主题或者添加博文，以后有空才更新下。</p>
+<p>欢迎访问：</p>
+<p>我在CSDN的技术博客：<a href="http://blog.csdn.net/maxwell_nc" target="_blank" rel="external">http://blog.csdn.net/maxwell_nc</a> </p>
+<p>我在GitHub：<a href="https://github.com/maxwell-nc" target="_blank" rel="external">https://github.com/maxwell-nc</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>今天花了点时间利用 <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> 搭建了这个博客。<br>使用的主题是 <a href="https://github.com/A-limon/pacman]]>
+    </summary>
+    
+      <category term="hello world" scheme="https://maxwell-nc.github.io/tags/hello-world/"/>
+    
+      <category term="博客管理" scheme="https://maxwell-nc.github.io/categories/%E5%8D%9A%E5%AE%A2%E7%AE%A1%E7%90%86/"/>
+    
+  </entry>
+  
+</feed>
