@@ -4,7 +4,7 @@
   <subtitle><![CDATA[主要分享一些经验、心得和技术...]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://maxwell-nc.github.io/"/>
-  <updated>2015-10-30T05:44:13.345Z</updated>
+  <updated>2015-11-02T10:21:47.068Z</updated>
   <id>https://maxwell-nc.github.io/</id>
   
   <author>
@@ -13,6 +13,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[FeedEye(简阅)项目说明]]></title>
+    <link href="https://maxwell-nc.github.io/2015/11/02/FeedEye-%E7%AE%80%E9%98%85-%E9%A1%B9%E7%9B%AE%E8%AF%B4%E6%98%8E/"/>
+    <id>https://maxwell-nc.github.io/2015/11/02/FeedEye-简阅-项目说明/</id>
+    <published>2015-11-02T08:01:43.000Z</published>
+    <updated>2015-11-02T10:21:47.068Z</updated>
+    <content type="html"><![CDATA[<p>最近在搞一个名为FeedEye(简阅)的聚合阅读Andorid应用。项目托管在GitHub上面，可以在<a href="">https://github.com/maxwell-nc/FeedEye</a>上看到最新的代码。目前项目接近完成，但由于还处于开发阶段，所以不放出Release，待项目完成后，会更新。</p>
+<ul>
+<li>另外借用了空间托管了应用发现页面的JSON数据，欢迎一起维护（目前只添加了少量网站）：存放在<code>feedeye/discover.json</code>中。</li>
+</ul>
+<ul>
+<li>迟些还会更新下应用使用说明之类的。</li>
+</ul>
+<p><strong>有任何的想法、问题都可以给我发邮件</strong><br>我的邮箱：<br>maxwell-nc@outlook.com</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>最近在搞一个名为FeedEye(简阅)的聚合阅读Andorid应用。项目托管在GitHub上面，可以在<a href="">https://github.com/maxwell-nc/FeedEye</a>上看到最新的代码。目前项目接近完成，但由于还处于开发阶段，所以不放出]]>
+    </summary>
+    
+      <category term="Android" scheme="https://maxwell-nc.github.io/tags/Android/"/>
+    
+      <category term="App" scheme="https://maxwell-nc.github.io/tags/App/"/>
+    
+      <category term="FeedEye" scheme="https://maxwell-nc.github.io/tags/FeedEye/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Hello World]]></title>
