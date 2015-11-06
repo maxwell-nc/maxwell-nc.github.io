@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title><![CDATA[Max的日记]]></title>
+  <title><![CDATA[Max Blog]]></title>
   <subtitle><![CDATA[主要分享一些经验、心得和技术...]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://maxwell-nc.github.io/"/>
-  <updated>2015-11-02T10:21:47.068Z</updated>
+  <updated>2015-11-06T11:57:06.579Z</updated>
   <id>https://maxwell-nc.github.io/</id>
   
   <author>
@@ -16,17 +16,16 @@
   
   <entry>
     <title><![CDATA[FeedEye(简阅)项目说明]]></title>
-    <link href="https://maxwell-nc.github.io/2015/11/02/FeedEye-%E7%AE%80%E9%98%85-%E9%A1%B9%E7%9B%AE%E8%AF%B4%E6%98%8E/"/>
-    <id>https://maxwell-nc.github.io/2015/11/02/FeedEye-简阅-项目说明/</id>
+    <link href="https://maxwell-nc.github.io/2015/11/02/FeedEye/"/>
+    <id>https://maxwell-nc.github.io/2015/11/02/FeedEye/</id>
     <published>2015-11-02T08:01:43.000Z</published>
-    <updated>2015-11-02T10:21:47.068Z</updated>
+    <updated>2015-11-06T11:57:06.579Z</updated>
     <content type="html"><![CDATA[<p>最近在搞一个名为FeedEye(简阅)的聚合阅读Andorid应用。项目托管在GitHub上面，可以在<a href="">https://github.com/maxwell-nc/FeedEye</a>上看到最新的代码。目前项目接近完成，但由于还处于开发阶段，所以不放出Release，待项目完成后，会更新。</p>
 <ul>
-<li>另外借用了空间托管了应用发现页面的JSON数据，欢迎一起维护（目前只添加了少量网站）：存放在<code>feedeye/discover.json</code>中。</li>
+<li>另外借用了空间托管了应用发现页面的JSON数据，欢迎一起维护（目前只添加了少量网站）：存放在<code>app_content/feedeye/discover.json</code>中。</li>
 </ul>
-<ul>
-<li>迟些还会更新下应用使用说明之类的。</li>
-</ul>
+<p>update:<br>项目完成了，可以到<a href="https://github.com/maxwell-nc/FeedEye/releases" target="_blank" rel="external">下载地址</a>获取签名后的APK文件</p>
+<p>项目的说明可以看：<br><a href="https://github.com/maxwell-nc/FeedEye/blob/master/README.md" target="_blank" rel="external">项目说明地址</a></p>
 <p><strong>有任何的想法、问题都可以给我发邮件</strong><br>我的邮箱：<br>maxwell-nc@outlook.com</p>
 ]]></content>
     <summary type="html">
