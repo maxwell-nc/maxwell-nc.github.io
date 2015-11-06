@@ -4,7 +4,7 @@
   <subtitle><![CDATA[主要分享一些经验、心得和技术...]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://maxwell-nc.github.io/"/>
-  <updated>2015-11-06T11:57:06.579Z</updated>
+  <updated>2015-11-06T12:13:29.693Z</updated>
   <id>https://maxwell-nc.github.io/</id>
   
   <author>
@@ -15,17 +15,21 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[FeedEye(简阅)项目说明]]></title>
+    <title><![CDATA[FeedEye(简阅)项目]]></title>
     <link href="https://maxwell-nc.github.io/2015/11/02/FeedEye/"/>
     <id>https://maxwell-nc.github.io/2015/11/02/FeedEye/</id>
     <published>2015-11-02T08:01:43.000Z</published>
-    <updated>2015-11-06T11:57:06.579Z</updated>
+    <updated>2015-11-06T12:13:29.693Z</updated>
     <content type="html"><![CDATA[<p>最近在搞一个名为FeedEye(简阅)的聚合阅读Andorid应用。项目托管在GitHub上面，可以在<a href="">https://github.com/maxwell-nc/FeedEye</a>上看到最新的代码。目前项目接近完成，但由于还处于开发阶段，所以不放出Release，待项目完成后，会更新。</p>
 <ul>
 <li>另外借用了空间托管了应用发现页面的JSON数据，欢迎一起维护（目前只添加了少量网站）：存放在<code>app_content/feedeye/discover.json</code>中。</li>
 </ul>
-<p>update:<br>项目完成了，可以到<a href="https://github.com/maxwell-nc/FeedEye/releases" target="_blank" rel="external">下载地址</a>获取签名后的APK文件</p>
+<p><strong>2015年11月6日更新:</strong><br>项目完成了，获取签名后的APK文件地址：<br><a href="https://github.com/maxwell-nc/FeedEye/releases" target="_blank" rel="external">下载地址</a></p>
 <p>项目的说明可以看：<br><a href="https://github.com/maxwell-nc/FeedEye/blob/master/README.md" target="_blank" rel="external">项目说明地址</a></p>
+<h3 id="更新日志">更新日志</h3><p><strong>版本号：1.0.1106</strong></p>
+<blockquote>
+<p>1、支持RSS 2.0和ATOM 1.0解析<br>2、支持图片显示<br>3、支持夜间模式</p>
+</blockquote>
 <p><strong>有任何的想法、问题都可以给我发邮件</strong><br>我的邮箱：<br>maxwell-nc@outlook.com</p>
 ]]></content>
     <summary type="html">
