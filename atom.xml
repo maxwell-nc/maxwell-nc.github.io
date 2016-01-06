@@ -4,7 +4,7 @@
   <subtitle><![CDATA[主要分享一些经验、心得和技术...]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://maxwell-nc.github.io/"/>
-  <updated>2015-11-06T15:00:06.835Z</updated>
+  <updated>2016-01-06T09:36:47.144Z</updated>
   <id>https://maxwell-nc.github.io/</id>
   
   <author>
@@ -13,6 +13,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[通用数据库连接框架]]></title>
+    <link href="https://maxwell-nc.github.io/2016/01/06/CommonDatabaseAccessFramework/"/>
+    <id>https://maxwell-nc.github.io/2016/01/06/CommonDatabaseAccessFramework/</id>
+    <published>2016-01-06T09:26:12.000Z</published>
+    <updated>2016-01-06T09:36:47.144Z</updated>
+    <content type="html"><![CDATA[<p>先放地址：<a href="https://github.com/maxwell-nc/CommonDatabaseAccessFramework" target="_blank" rel="external">项目地址</a></p>
+<p>最近由于项目需要，修改了一个<a href="https://github.com/maxwell-nc/SimpleMySqlAccessFramework" target="_blank" rel="external">项目</a>，由于项目整体结构发生巨大变化，所以不在原来的项目上面动土，原来的框架经过简单修改也可以实现通用数据库连接。不过由于原来的代码性能较低，此项目主要把原来的项目的各部分都分离，封装起来，使用异步监听。</p>
+<p>下面是最简单的使用方法，实现一次异步查询<br>(一般操作的话只需要操作CommonAccesser和ResultProcesser这两个类)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CommonAccesser accesser = <span class="keyword">new</span> CommonAccesser(PROP_FILE);</span><br><span class="line"></span><br><span class="line">accesser.asyncQuery(<span class="keyword">new</span> SimpleOnGetResultSetListener() &#123;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onGetResultSet</span><span class="params">(ResultSet rs)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//处理结果集的代码...</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;, <span class="string">"select * from usertable"</span>);</span><br><span class="line"></span><br><span class="line">accesser.close();</span><br></pre></td></tr></table></figure>
+<p>详细的测试用例可以参考给出的源代码中的.test.JunitTestCase和README.md文件</p>
+<p><strong>以后可能添加一些阻塞查询和不使用线程池查询。</strong></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>先放地址：<a href="https://github.com/maxwell-nc/CommonDatabaseAccessFramework" target="_blank" rel="external">项目地址</a></p>
+<p>最近由于项目需要，修改了一个<]]>
+    </summary>
+    
+      <category term="Connetion Pool" scheme="https://maxwell-nc.github.io/tags/Connetion-Pool/"/>
+    
+      <category term="Database" scheme="https://maxwell-nc.github.io/tags/Database/"/>
+    
+      <category term="JDBC" scheme="https://maxwell-nc.github.io/tags/JDBC/"/>
+    
+      <category term="Thread Pool" scheme="https://maxwell-nc.github.io/tags/Thread-Pool/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[FeedEye(简阅)项目]]></title>

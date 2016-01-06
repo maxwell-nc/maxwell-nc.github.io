@@ -4,15 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hello World | Max Blog</title>
+    <title>通用数据库连接框架 | Max Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Maxwell-nc">
     
-    <meta name="description" content="今天花了点时间利用 Hexo 搭建了这个博客。使用的主题是 pacman 主题，非常感谢他们。暂时没有空调整主题或者添加博文，以后有空才更新下。
-欢迎访问：
-我在CSDN的技术博客：http://blog.csdn.net/maxwell_nc 
-我在GitHub：https://github.co">
+    <meta name="description" content="先放地址：项目地址
+最近由于项目需要，修改了一个项目，由于项目整体结构发生巨大变化，所以不在原来的项目上面动土，原来的框架经过简单修改也可以实现通用数据库连接。不过由于原来的代码性能较低，此项目主要把原来的项目的各部分都分离，封装起来，使用异步监听。
+下面是最简单的使用方法，实现一次异步查询(一般操">
     
     
     
@@ -71,15 +70,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/10/30/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2016/01/06/CommonDatabaseAccessFramework/" title="通用数据库连接框架" itemprop="url">通用数据库连接框架</a>
   </h1>
   <p class="article-author">By
     
       <a href="https://maxwell-nc.github.io" title="Maxwell-nc">Maxwell-nc</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-10-30T05:44:13.345Z" itemprop="datePublished">2015-10-30</time>
-    更新日期:<time datetime="2015-10-30T05:44:13.345Z" itemprop="dateModified">2015-10-30</time>
+    <time datetime="2016-01-06T09:26:12.000Z" itemprop="datePublished">2016-01-06</time>
+    更新日期:<time datetime="2016-01-06T09:36:47.144Z" itemprop="dateModified">2016-01-06</time>
     
   </p>
 </header>
@@ -91,30 +90,27 @@
 		
 		</div>
 		
-		<p>今天花了点时间利用 <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> 搭建了这个博客。<br>使用的主题是 <a href="https://github.com/A-limon/pacman" target="_blank" rel="external">pacman</a> 主题，非常感谢他们。<br>暂时没有空调整主题或者添加博文，以后有空才更新下。</p>
-<p>欢迎访问：</p>
-<p>我在CSDN的技术博客：<a href="http://blog.csdn.net/maxwell_nc" target="_blank" rel="external">http://blog.csdn.net/maxwell_nc</a> </p>
-<p>我在GitHub：<a href="https://github.com/maxwell-nc" target="_blank" rel="external">https://github.com/maxwell-nc</a></p>
+		<p>先放地址：<a href="https://github.com/maxwell-nc/CommonDatabaseAccessFramework" target="_blank" rel="external">项目地址</a></p>
+<p>最近由于项目需要，修改了一个<a href="https://github.com/maxwell-nc/SimpleMySqlAccessFramework" target="_blank" rel="external">项目</a>，由于项目整体结构发生巨大变化，所以不在原来的项目上面动土，原来的框架经过简单修改也可以实现通用数据库连接。不过由于原来的代码性能较低，此项目主要把原来的项目的各部分都分离，封装起来，使用异步监听。</p>
+<p>下面是最简单的使用方法，实现一次异步查询<br>(一般操作的话只需要操作CommonAccesser和ResultProcesser这两个类)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CommonAccesser accesser = <span class="keyword">new</span> CommonAccesser(PROP_FILE);</span><br><span class="line"></span><br><span class="line">accesser.asyncQuery(<span class="keyword">new</span> SimpleOnGetResultSetListener() &#123;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onGetResultSet</span><span class="params">(ResultSet rs)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//处理结果集的代码...</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;, <span class="string">"select * from usertable"</span>);</span><br><span class="line"></span><br><span class="line">accesser.close();</span><br></pre></td></tr></table></figure>
+<p>详细的测试用例可以参考给出的源代码中的.test.JunitTestCase和README.md文件</p>
+<p><strong>以后可能添加一些阻塞查询和不使用线程池查询。</strong></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/hello-world/">hello world</a>
+  <span></span> <a href="/tags/Connetion-Pool/">Connetion Pool</a><a href="/tags/Database/">Database</a><a href="/tags/JDBC/">JDBC</a><a href="/tags/Thread-Pool/">Thread Pool</a>
   </div>
 
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/博客管理/">博客管理</a>
-</div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="https://maxwell-nc.github.io/2015/10/30/hello-world/" data-title="Hello World | Max Blog" data-tsina="null" class="share clearfix">
+  <div data-url="https://maxwell-nc.github.io/2016/01/06/CommonDatabaseAccessFramework/" data-title="通用数据库连接框架 | Max Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -123,14 +119,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/11/02/FeedEye/" title="FeedEye(简阅)项目">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  FeedEye(简阅)项目</span>
+
+<div class="next">
+<a href="/2015/11/02/FeedEye/"  title="FeedEye(简阅)项目">
+ <strong>NEXT:</strong><br/> 
+ <span>FeedEye(简阅)项目
+</span>
 </a>
 </div>
-
 
 </nav>
 
