@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>FeedEye(简阅)项目 | Max Blog</title>
+    <title>Fenice-1.12-with-H.264 | Max Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Maxwell-nc">
     
-    <meta name="description" content="最近在搞一个名为FeedEye(简阅)的聚合阅读Andorid应用。项目托管在GitHub上面，可以在https://github.com/maxwell-nc/FeedEye上看到最新的代码。目前项目接近完成，但由于还处于开发阶段，所以不放出Release，待项目完成后，会更新。
-
-另外借用了空间">
+    <meta name="description" content="先放地址：项目地址
+说明Fenice is a rtsp media server,base on ver 1.12 and add support to H.264 file.
+原项目来自一个开源项目，由于找不到1.12的开源项目地址，找了另一个旧版的开源的地址，可以参考下由于比较麻烦，就不在原项">
     
     
     
@@ -70,15 +70,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/02/FeedEye/" title="FeedEye(简阅)项目" itemprop="url">FeedEye(简阅)项目</a>
+      <a href="/2016/01/21/Fenice/" title="Fenice-1.12-with-H.264" itemprop="url">Fenice-1.12-with-H.264</a>
   </h1>
   <p class="article-author">By
     
       <a href="https://maxwell-nc.github.io" title="Maxwell-nc">Maxwell-nc</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-11-02T08:01:43.000Z" itemprop="datePublished">2015-11-02</time>
-    更新日期:<time datetime="2015-11-06T15:00:06.835Z" itemprop="dateModified">2015-11-06</time>
+    <time datetime="2016-01-21T10:33:21.000Z" itemprop="datePublished">2016-01-21</time>
+    更新日期:<time datetime="2016-01-21T10:36:54.831Z" itemprop="dateModified">2016-01-21</time>
     
   </p>
 </header>
@@ -87,45 +87,65 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#更新日志"><span class="toc-number">1.</span> <span class="toc-text">更新日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预览图片"><span class="toc-number">2.</span> <span class="toc-text">预览图片</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#修改内容"><span class="toc-number">2.</span> <span class="toc-text">修改内容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#H-264文件"><span class="toc-number">3.</span> <span class="toc-text">H.264文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用方法"><span class="toc-number">4.</span> <span class="toc-text">使用方法</span></a></li></ol>
 		</div>
 		
-		<p>最近在搞一个名为FeedEye(简阅)的聚合阅读Andorid应用。项目托管在GitHub上面，可以在<a href="">https://github.com/maxwell-nc/FeedEye</a>上看到最新的代码。目前项目接近完成，但由于还处于开发阶段，所以不放出Release，待项目完成后，会更新。</p>
+		<p>先放地址：<a href="https://github.com/maxwell-nc/Fenice-1.12-with-H.264" target="_blank" rel="external">项目地址</a></p>
+<h1 id="说明">说明</h1><p>Fenice is a rtsp media server,base on ver 1.12 and add support to H.264 file.</p>
+<p>原项目来自一个开源项目，由于找不到1.12的开源项目地址，找了另一个旧版的开源的地址，可以参考下<br>由于比较麻烦，就不在原项目fork修改了。</p>
+<p>Fenice-1.11项目地址：<br><a href="https://github.com/zhuqingcode/fenice-1.11" target="_blank" rel="external">https://github.com/zhuqingcode/fenice-1.11</a></p>
+<h1 id="修改内容">修改内容</h1><p>由于我是基于原来的Fenice开源项目的结构来修改，原项目已经实现了RTSP部分以及MPEG-1和2的流媒体传输，所以我参考MPV的读取、加载释放文件进行修改，主要修改了下列文件：</p>
 <ul>
-<li>另外借用了空间托管了应用发现页面的JSON数据，欢迎一起维护（目前只添加了少量网站）：存放在<code>app_content/feedeye/discover.json</code>中。</li>
+<li><strong>avroot/myh264.sd</strong> …… 用于记录H.264视频文件的流格式信息，包括264文件的帧率、payload_type、编码方式等等</li>
+<li><strong>include/fenice/itu_h264.h</strong> …… 对H.264格式的声明，例如包含FU_HEADER结构体，以及read/load/free三个方法的声明</li>
+<li><strong>include/fenice/mediainfo.h</strong> ……主要添加了_media_entry的成员H.264_time，给read_H.264使用</li>
+<li><strong>include/fenice/types.h</strong> …… 为了方便，添加了TRUE和FALSE的宏定义</li>
+<li><strong>mediainfo/Makefile.am</strong> …… 修改makefile添加新的c文件</li>
+<li><strong>mediainfo/free_h264.c</strong> …… 释放H.264视频</li>
+<li><strong>mediainfo/load_h264.c</strong> …… 加载H.264视频，直接照搬load_MPV.c</li>
+<li><strong>mediainfo/read_h264.c</strong> …… 读取H.264视频并打包RTP包</li>
+<li><strong>mediainfo/parse_SD_file.c</strong> …… 解析SD文件，添加支持H.264编码</li>
+<li><strong>mediainfo/register_media.c</strong> …… 声明H.264的load_media、read_media和free_media的三个对应方法</li>
+<li><p><strong>src/is_supported_url.c</strong> …… 判断是否支持地址类型，添加264文件支持</p>
+</li>
+<li><p><strong>avroot/yourfile.264</strong> ……H.264视频文件，<strong>需要你自己提供</strong>，可以参考下面提供的博文连接</p>
+</li>
 </ul>
-<p><strong>2015年11月6日更新:</strong><br>项目完成了，获取签名后的APK文件地址：<br><a href="https://github.com/maxwell-nc/FeedEye/releases" target="_blank" rel="external">下载地址</a></p>
-<p>项目的说明可以看：<br><a href="https://github.com/maxwell-nc/FeedEye/blob/master/README.md" target="_blank" rel="external">项目说明地址</a></p>
-<h3 id="更新日志">更新日志</h3><p><strong>版本号：1.0.1106</strong></p>
-<blockquote>
-<p>1、支持RSS 2.0和ATOM 1.0解析<br>2、支持图片显示<br>3、支持夜间模式</p>
-</blockquote>
-<h3 id="预览图片">预览图片</h3><p>订阅页面：<br><img src="\app_content\feedeye\screenshot\feed_page.jpg" alt=""></p>
-<p>订阅详细列表页面：<br><img src="\app_content\feedeye\screenshot\detail_page.jpg" alt=""></p>
-<p>订阅内容正文内容页面：<br><img src="\app_content\feedeye\screenshot\content_page.jpg" alt=""></p>
-<p>收藏页面：<br><img src="\app_content\feedeye\screenshot\favor_page.jpg" alt=""></p>
-<p>设置页面：<br><img src="\app_content\feedeye\screenshot\setting_page.jpg" alt=""></p>
-<p><strong>有任何的想法、问题都可以给我发邮件</strong><br>我的邮箱：<br>maxwell-nc@outlook.com</p>
+<h1 id="H-264文件">H.264文件</h1><p>如何转换出H.264文件,可以参考我的博文<br><a href="http://blog.csdn.net/maxwell_nc/article/details/50315675" title="http://blog.csdn.net/maxwell_nc/article/details/50315675" target="_blank" rel="external">http://blog.csdn.net/maxwell_nc/article/details/50315675</a></p>
+<p>另外整个封包过程也可以参考我的博文:<br><a href="http://blog.csdn.net/maxwell_nc/article/details/50267593" title="http://blog.csdn.net/maxwell_nc/article/details/50267593" target="_blank" rel="external">http://blog.csdn.net/maxwell_nc/article/details/50267593</a></p>
+<h1 id="使用方法">使用方法</h1><ul>
+<li><p>配置文件：/etc/fenice.conf</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root=/srv/fenice/avroot</span><br><span class="line">log_file=/var/<span class="built_in">log</span>/fenice.<span class="built_in">log</span></span><br><span class="line">tcp_port=<span class="number">554</span></span><br><span class="line">sctp_port=-<span class="number">1</span></span><br><span class="line">max_session=<span class="number">100</span></span><br></pre></td></tr></table></figure>
+<p>  默认端口554，root就是avroot目录，可以自行修改。</p>
+</li>
+<li><p>日志文件：/var/log/fenice.log</p>
+</li>
+<li><p>编译：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./auto</span><br><span class="line">./configure</span><br><span class="line"><span class="built_in">make</span></span><br><span class="line">sudo <span class="built_in">make</span> install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行：</p>
+<p>  默认生成在/usr/local/bin</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/fenice -c /</span>etc<span class="regexp">/fenice.conf</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用VLC访问：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">rtsp:</span><span class="comment">//localhost:554/myh264.sd</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/App/">App</a><a href="/tags/FeedEye/">FeedEye</a>
+  <span></span> <a href="/tags/Fenice/">Fenice</a><a href="/tags/RTSP/">RTSP</a><a href="/tags/Server/">Server</a>
   </div>
 
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/项目/">项目</a>
-</div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="https://maxwell-nc.github.io/2015/11/02/FeedEye/" data-title="FeedEye(简阅)项目 | Max Blog" data-tsina="null" class="share clearfix">
+  <div data-url="https://maxwell-nc.github.io/2016/01/21/Fenice/" data-title="Fenice-1.12-with-H.264 | Max Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -134,19 +154,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/01/06/CommonDatabaseAccessFramework/" title="通用数据库连接框架">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  通用数据库连接框架</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/10/30/hello-world/"  title="Hello World">
+<a href="/2016/01/06/CommonDatabaseAccessFramework/"  title="通用数据库连接框架">
  <strong>NEXT:</strong><br/> 
- <span>Hello World
+ <span>通用数据库连接框架
 </span>
 </a>
 </div>
@@ -159,7 +171,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#更新日志"><span class="toc-number">1.</span> <span class="toc-text">更新日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预览图片"><span class="toc-number">2.</span> <span class="toc-text">预览图片</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#修改内容"><span class="toc-number">2.</span> <span class="toc-text">修改内容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#H-264文件"><span class="toc-number">3.</span> <span class="toc-text">H.264文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用方法"><span class="toc-number">4.</span> <span class="toc-text">使用方法</span></a></li></ol>
   </div>
 
 <div id="asidepart">

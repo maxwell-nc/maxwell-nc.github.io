@@ -4,7 +4,7 @@
   <subtitle><![CDATA[主要分享一些经验、心得和技术...]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://maxwell-nc.github.io/"/>
-  <updated>2016-01-06T09:36:47.144Z</updated>
+  <updated>2016-01-21T10:36:54.831Z</updated>
   <id>https://maxwell-nc.github.io/</id>
   
   <author>
@@ -13,6 +13,67 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Fenice-1.12-with-H.264]]></title>
+    <link href="https://maxwell-nc.github.io/2016/01/21/Fenice/"/>
+    <id>https://maxwell-nc.github.io/2016/01/21/Fenice/</id>
+    <published>2016-01-21T10:33:21.000Z</published>
+    <updated>2016-01-21T10:36:54.831Z</updated>
+    <content type="html"><![CDATA[<p>先放地址：<a href="https://github.com/maxwell-nc/Fenice-1.12-with-H.264" target="_blank" rel="external">项目地址</a></p>
+<h1 id="说明">说明</h1><p>Fenice is a rtsp media server,base on ver 1.12 and add support to H.264 file.</p>
+<p>原项目来自一个开源项目，由于找不到1.12的开源项目地址，找了另一个旧版的开源的地址，可以参考下<br>由于比较麻烦，就不在原项目fork修改了。</p>
+<p>Fenice-1.11项目地址：<br><a href="https://github.com/zhuqingcode/fenice-1.11" target="_blank" rel="external">https://github.com/zhuqingcode/fenice-1.11</a></p>
+<h1 id="修改内容">修改内容</h1><p>由于我是基于原来的Fenice开源项目的结构来修改，原项目已经实现了RTSP部分以及MPEG-1和2的流媒体传输，所以我参考MPV的读取、加载释放文件进行修改，主要修改了下列文件：</p>
+<ul>
+<li><strong>avroot/myh264.sd</strong> …… 用于记录H.264视频文件的流格式信息，包括264文件的帧率、payload_type、编码方式等等</li>
+<li><strong>include/fenice/itu_h264.h</strong> …… 对H.264格式的声明，例如包含FU_HEADER结构体，以及read/load/free三个方法的声明</li>
+<li><strong>include/fenice/mediainfo.h</strong> ……主要添加了_media_entry的成员H.264_time，给read_H.264使用</li>
+<li><strong>include/fenice/types.h</strong> …… 为了方便，添加了TRUE和FALSE的宏定义</li>
+<li><strong>mediainfo/Makefile.am</strong> …… 修改makefile添加新的c文件</li>
+<li><strong>mediainfo/free_h264.c</strong> …… 释放H.264视频</li>
+<li><strong>mediainfo/load_h264.c</strong> …… 加载H.264视频，直接照搬load_MPV.c</li>
+<li><strong>mediainfo/read_h264.c</strong> …… 读取H.264视频并打包RTP包</li>
+<li><strong>mediainfo/parse_SD_file.c</strong> …… 解析SD文件，添加支持H.264编码</li>
+<li><strong>mediainfo/register_media.c</strong> …… 声明H.264的load_media、read_media和free_media的三个对应方法</li>
+<li><p><strong>src/is_supported_url.c</strong> …… 判断是否支持地址类型，添加264文件支持</p>
+</li>
+<li><p><strong>avroot/yourfile.264</strong> ……H.264视频文件，<strong>需要你自己提供</strong>，可以参考下面提供的博文连接</p>
+</li>
+</ul>
+<h1 id="H-264文件">H.264文件</h1><p>如何转换出H.264文件,可以参考我的博文<br><a href="http://blog.csdn.net/maxwell_nc/article/details/50315675" title="http://blog.csdn.net/maxwell_nc/article/details/50315675" target="_blank" rel="external">http://blog.csdn.net/maxwell_nc/article/details/50315675</a></p>
+<p>另外整个封包过程也可以参考我的博文:<br><a href="http://blog.csdn.net/maxwell_nc/article/details/50267593" title="http://blog.csdn.net/maxwell_nc/article/details/50267593" target="_blank" rel="external">http://blog.csdn.net/maxwell_nc/article/details/50267593</a></p>
+<h1 id="使用方法">使用方法</h1><ul>
+<li><p>配置文件：/etc/fenice.conf</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root=/srv/fenice/avroot</span><br><span class="line">log_file=/var/<span class="built_in">log</span>/fenice.<span class="built_in">log</span></span><br><span class="line">tcp_port=<span class="number">554</span></span><br><span class="line">sctp_port=-<span class="number">1</span></span><br><span class="line">max_session=<span class="number">100</span></span><br></pre></td></tr></table></figure>
+<p>  默认端口554，root就是avroot目录，可以自行修改。</p>
+</li>
+<li><p>日志文件：/var/log/fenice.log</p>
+</li>
+<li><p>编译：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./auto</span><br><span class="line">./configure</span><br><span class="line"><span class="built_in">make</span></span><br><span class="line">sudo <span class="built_in">make</span> install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行：</p>
+<p>  默认生成在/usr/local/bin</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/fenice -c /</span>etc<span class="regexp">/fenice.conf</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用VLC访问：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">rtsp:</span><span class="comment">//localhost:554/myh264.sd</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>先放地址：<a href="https://github.com/maxwell-nc/Fenice-1.12-with-H.264" target="_blank" rel="external">项目地址</a></p>
+<h1 id="说明">说明</h1><p>Fen]]>
+    </summary>
+    
+      <category term="Fenice" scheme="https://maxwell-nc.github.io/tags/Fenice/"/>
+    
+      <category term="RTSP" scheme="https://maxwell-nc.github.io/tags/RTSP/"/>
+    
+      <category term="Server" scheme="https://maxwell-nc.github.io/tags/Server/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[通用数据库连接框架]]></title>
