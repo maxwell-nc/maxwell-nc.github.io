@@ -3,4 +3,7 @@
 This source is refer to [https://maxwell-nc.github.io/](https://maxwell-nc.github.io/ "https://maxwell-nc.github.io/") .
 Welcome to Visit it!
 
-**notice:** `app_content` folder is used to pretent info to other opensource application.
+欢迎访问全新由Pelican搭建的博客，以后会给大家带来更多高质量的博文，详细说明请看博客的说明文章。
+
+附上旧的博客地址：
+[http://blog.csdn.net/maxwell_nc](http://blog.csdn.net/maxwell_nc)
