@@ -148,10 +148,10 @@ Text
 
 
 <p>&emsp;&emsp;这样就会生成output资源时就会自动把iamges文件夹拷贝到output目录了。另外使用EXTRA_PATH_METADATA也可以把某个目录的文件映射过去，例如favicon.ico放在content/extra目录下，最后需要生成到output的根目录，可以添加：</p>
-<div class="highlight"><pre><span></span>STATIC_PATHS = [&#39;images&#39;, &#39;extra/favicon.ico&#39;]
-EXTRA_PATH_METADATA = {
-    &#39;extra/favicon.ico&#39;: {&#39;path&#39;: &#39;favicon.ico&#39;}
-}
+<div class="highlight"><pre><span></span><span class="n">STATIC_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">,</span> <span class="s1">&#39;extra/favicon.ico&#39;</span><span class="p">]</span>
+<span class="n">EXTRA_PATH_METADATA</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;extra/favicon.ico&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;favicon.ico&#39;</span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 
 
@@ -181,7 +181,7 @@ pelican content
 <h2>第三方主题</h2>
 <p>&emsp;&emsp;如果没有什么特别的需求的话，教程就到这里结束了，但是对于官方简陋的主题很多人都希望换一个主题。如果你使用过Hexo的主题甚至修改过，那恭喜你，这一步对于你来说十分简单。</p>
 <p>&emsp;&emsp;首先我们可以在<a href="https://github.com/getpelican/pelican-themes">https://github.com/getpelican/pelican-themes</a>找一个合心意的主题，然后拉下来，解压到博客目录下的Theme目录（这个目录是自己建立的，你可以起的别名字）,在pelicanconf.py下增加一行:</p>
-<div class="highlight"><pre><span></span>THEME = &#39;Theme/nest&#39;
+<div class="highlight"><pre><span></span><span class="n">THEME</span> <span class="o">=</span> <span class="s1">&#39;Theme/nest&#39;</span>
 </pre></div>
 
 
