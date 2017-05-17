@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-17T00:00:00+08:00</updated><entry><title>Windows下使用Pelican搭建静态博客</title><link href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html" rel="alternate"></link><published>2017-05-17T00:00:00+08:00</published><updated>2017-05-17T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-17:/blog/pelicanBuildBlog.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path - python</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/python.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-17T00:00:00+08:00</updated><entry><title>Windows下使用Pelican搭建静态博客</title><link href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html" rel="alternate"></link><published>2017-05-17T00:00:00+08:00</published><updated>2017-05-17T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-17:/blog/pelicanBuildBlog.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;首先Pelican的知名度在国内明显没有Hexo的高，导致也没有几篇教程。遂写一篇简单的Windows搭建教程，给小白们快速使用Pelican搭建静态博客并且发表到Gtihub Pages上。&lt;/p&gt;
 &lt;h2&gt;安装Pelican&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;在Windows下搭建pelican环境可以说完爆Jekyll,如果熟悉Python，甚至比Hexo还要简单，闲话不多说，直接开干。&lt;/p&gt;
@@ -164,35 +164,4 @@ Reprint: https://github.com/maxwell-nc
 &lt;h2&gt;尾声&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;Pelican入门的成本非常低，如果只要普通做个静态博客，相信只要一杯咖啡的时间，但是Pelican的功能远不止上述这些，本文只是抛砖引玉，感兴趣的朋友可以看看参考文章中的官方文档。&lt;/p&gt;
 &lt;h2&gt;参考文章&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;Pelican官方文档：&lt;a href="http://docs.getpelican.com/en/3.7.1/index.html"&gt;http://docs.getpelican.com/en/3.7.1/index.html&lt;/a&gt;&lt;/p&gt;</content><category term="pelican"></category><category term="python"></category><category term="windows"></category></entry><entry><title>博客说明</title><link href="https://maxwell-nc.github.io/blog/blogIntroduction.html" rel="alternate"></link><published>2017-05-16T00:00:00+08:00</published><updated>2017-05-16T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-16:/blog/blogIntroduction.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;由于之前用Hexo搭建的GitPages源目录丢失了，本来已经打算Github上面维护的博客停止维护了，但是&lt;a href="http://blog.csdn.net/maxwell_nc"&gt;我的CSDN博客&lt;/a&gt;强制要求用户绑定隐私信息，否则无法登陆，而且此前没有任何公开提前声明或通知，于是决定放弃CSDN的博客，继续拥抱GithubPages。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;然后最近发现了Python也有Pelican这样类似的静态博客搭建工具，由于自己对Python比较熟悉，于是重新用Pelican搭建了一个博客。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;虽然没有找到Windows下的Pelican教程，但是参考Linux平台下的教程也是非常轻松搭建起来了，之后有空的话顺便写一个教程(PS:由于Windows不能使用Makefile，我写了个简单的批处理代替它)。&lt;/p&gt;
-&lt;h2&gt;关于博文&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;不得不说这个问题，由于上文说到我的CSDN博客无法登陆，所以无法迁移上面的博文，需要看的朋友只能移步过去了，在博客下面有一个Link可以快速跳转过去哦。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;而原来Hexo搭建的Pages文章由于数量比较少，博文主要是项目说明，所以把原来比较重要的博文内容迁移到对应项目的ReadMe上面，这样就不会有太大损失了（苦，手动迁移）。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;以后会坚持带更高质量的文章给大家，有兴趣的看看原来的Hexo博客也可以查看下History拉到本地跑起来看看。&lt;/p&gt;
-&lt;h2&gt;关于主题&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;看了下Pelican的主题并没有Hexo的主题多，虽然说可以把它移植过来，但是出于时间考虑，我只是找一个个人认为比较美观简洁的主题，然后最后还是花了半天修改了下样式和一些设置。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;这个修改后的主题可以在&lt;a href="https://github.com/maxwell-nc/nest"&gt;这里&lt;/a&gt;找到，非常感谢原作者。&lt;/p&gt;
-&lt;h2&gt;关于评论&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;综合各种原因，采用了Disqus第三方评论系统，这个评论系统在国外十分流行，可惜国内无法访问，本来想采用国内的平台，无奈不是已经关闭就是需要登记隐私信息 …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;前序&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;由于之前用Hexo搭建的GitPages源目录丢失了，本来已经打算Github上面维护的博客停止维护了，但是&lt;a href="http://blog.csdn.net/maxwell_nc"&gt;我的CSDN博客&lt;/a&gt;强制要求用户绑定隐私信息，否则无法登陆，而且此前没有任何公开提前声明或通知，于是决定放弃CSDN的博客，继续拥抱GithubPages。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;然后最近发现了Python也有Pelican这样类似的静态博客搭建工具，由于自己对Python比较熟悉，于是重新用Pelican搭建了一个博客。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;虽然没有找到Windows下的Pelican教程，但是参考Linux平台下的教程也是非常轻松搭建起来了，之后有空的话顺便写一个教程(PS:由于Windows不能使用Makefile，我写了个简单的批处理代替它)。&lt;/p&gt;
-&lt;h2&gt;关于博文&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;不得不说这个问题，由于上文说到我的CSDN博客无法登陆，所以无法迁移上面的博文，需要看的朋友只能移步过去了，在博客下面有一个Link可以快速跳转过去哦。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;而原来Hexo搭建的Pages文章由于数量比较少，博文主要是项目说明，所以把原来比较重要的博文内容迁移到对应项目的ReadMe上面，这样就不会有太大损失了（苦，手动迁移）。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;以后会坚持带更高质量的文章给大家，有兴趣的看看原来的Hexo博客也可以查看下History拉到本地跑起来看看。&lt;/p&gt;
-&lt;h2&gt;关于主题&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;看了下Pelican的主题并没有Hexo的主题多，虽然说可以把它移植过来，但是出于时间考虑，我只是找一个个人认为比较美观简洁的主题，然后最后还是花了半天修改了下样式和一些设置。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;这个修改后的主题可以在&lt;a href="https://github.com/maxwell-nc/nest"&gt;这里&lt;/a&gt;找到，非常感谢原作者。&lt;/p&gt;
-&lt;h2&gt;关于评论&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;综合各种原因，采用了Disqus第三方评论系统，这个评论系统在国外十分流行，可惜国内无法访问，本来想采用国内的平台，无奈不是已经关闭就是需要登记隐私信息，所以最终还是采用了Disqus。&lt;/p&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;这个问题让我折腾前后试了好几款评论系统，本来觉得评论是最快的交流方式，不过由于博客在Pages上，国内的搜索引擎并不收录，所以国内的朋友请使用下面的联系方式和我交流↓↓↓。&lt;/p&gt;
-&lt;h2&gt;关于联系方式&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;虽然Otulook邮箱可以使用，但是我很少查看，加上上次微软回收了一次这个账号，所以如果不是发不到163邮箱，尽量发到163邮箱，很高兴能和你交流讨论学习。&lt;/p&gt;
-&lt;p&gt;163邮箱：
-&amp;emsp;&amp;emsp;&lt;a href="mailto:maxwell_nc@163.com"&gt;maxwell_nc@163.com&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Outlook邮箱：
-&amp;emsp;&amp;emsp;&lt;a href="mailto:maxwell-nc@outlook.com"&gt;maxwell-nc@outlook.com&lt;/a&gt;&lt;/p&gt;</content><category term="blog"></category></entry></feed>
+&lt;p&gt;&amp;emsp;&amp;emsp;Pelican官方文档：&lt;a href="http://docs.getpelican.com/en/3.7.1/index.html"&gt;http://docs.getpelican.com/en/3.7.1/index.html&lt;/a&gt;&lt;/p&gt;</content><category term="pelican"></category><category term="python"></category><category term="windows"></category></entry></feed>

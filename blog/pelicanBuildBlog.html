@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="chinese (simplified)">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="前序   首先Pelican的知名度在国内明显没有Hexo的高，导致也没有几篇教程。遂写一篇简单的Windows搭建教程，给小白们快速使用Pelican搭建静态博客并且发表到Gtihub Pages上。 安装Pelican   在Windows下搭建pelican环境可以说完爆Jekyll,如果熟悉Python，甚至比Hexo还要简单，闲话不多说，直接开干。...">
+        <meta name="keywords" content="pelican, python, windows">
+        <link rel="icon" href="https://maxwell-nc.github.io/favicon.ico">
+
+        <title>Windows下使用Pelican搭建静态博客 - Maxwell's Growth Path</title>
+
+        <!-- Stylesheets -->
+        <link href="https://maxwell-nc.github.io/theme/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/fonts.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/nest.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/pygment.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://maxwell-nc.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Full Atom Feed" />
+        <link href="https://maxwell-nc.github.io/feeds/python.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container-article gradient">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <!-- <div class="header-logo">
+                        <a class="pull-left" href="https://maxwell-nc.github.io/"><img class="mr20" src="https://maxwell-nc.github.io/logo.svg" alt="logo">Maxwell's Growth Path</a>
+                    </div> -->
+                    <div class="nav pull-right">
+                                <a href="https://maxwell-nc.github.io/">主页</a>
+                                <a href="https://maxwell-nc.github.io/categories.html">博文目录</a>
+                                <a href="https://maxwell-nc.github.io/tags.html">标签</a>
+                                <a href="https://maxwell-nc.github.io/feeds/all.atom.xml">订阅</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper-article">
+        <div class="row">
+              <div class="col-lg-12">
+					<div class="header-vertical-line"></div>
+					<h1 class="header-title-article">Windows下使用Pelican搭建静态博客</h1>
+					<p class="header-date-article">
+					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
+					2017-05-17&nbsp;&nbsp;|&nbsp;&nbsp;
+					目录 <a href="https://maxwell-nc.github.io/category/python.html">Python</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://maxwell-nc.github.io/tag/pelican.html">pelican</a>, <a href="https://maxwell-nc.github.io/tag/python.html">python</a>, <a href="https://maxwell-nc.github.io/tag/windows.html">windows</a></p>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+    <div class="container content">
+        <h2>前序</h2>
+<p>&emsp;&emsp;首先Pelican的知名度在国内明显没有Hexo的高，导致也没有几篇教程。遂写一篇简单的Windows搭建教程，给小白们快速使用Pelican搭建静态博客并且发表到Gtihub Pages上。</p>
+<h2>安装Pelican</h2>
+<p>&emsp;&emsp;在Windows下搭建pelican环境可以说完爆Jekyll,如果熟悉Python，甚至比Hexo还要简单，闲话不多说，直接开干。</p>
+<p>&emsp;&emsp;因为Pelican是基于Python开发的，所以首先得安装Python环境。我目前使用的是<a href="https://www.python.org/downloads/">Python 3.6.1</a>，这个版本再Windows安装的话连环境都不需要手动配置即可完成。</p>
+<p>&emsp;&emsp;接下来需要使用Python包管理工具，建议没有安装pip的可以使用easy_install安装：</p>
+<div class="highlight"><pre><span></span>easy_install pip
+</pre></div>
+
+
+<p>&emsp;&emsp;安装完成后使用pip安装pelican和markdown</p>
+<div class="highlight"><pre><span></span>pip install markdown
+pip install pelican
+</pre></div>
+
+
+<p>&emsp;&emsp;如果一切正常的话，恭喜已经搭建完成Pelican环境了，是不是很简单？</p>
+<h2>创建博客</h2>
+<p>&emsp;&emsp;首先你需要一个存放你的博客的目录，进入到目录里面，打开cmd，输入下面命令可以生成一个基本的博客模板：</p>
+<div class="highlight"><pre><span></span>pelican-quickstart
+</pre></div>
+
+
+<p>&emsp;&emsp;如下图所示会询问你一些设置，这些设置会生成对应的pelicanconf.py配置文件和Makefile文件，不过Windows下由于不能使用Makefile，所以这里即使填错选项也可以待会在修改。</p>
+<p><img alt="pelican-quickstart" src="../images/pelicanBuildBlog/1.jpg"></p>
+<p>&emsp;&emsp;如果提示"Done. Your new project is available at xxx path"这样就是已经生成成功。</p>
+<p>&emsp;&emsp;下面我们来观察下生成的文件：
+<img alt="files" src="../images/pelicanBuildBlog/2.jpg">
+&emsp;&emsp;注意的是publishconf.py完全导入pelicanconf.py文件，所以前者用于本地调试使用，后者发布时自动替换某些属性，例如SITEURL，不过由于我们不使用Makefile，所以直接使用pelicanconf.py文件即可。</p>
+<p>&emsp;&emsp;fabfile.py里面包括各种Deploy相关的配置和操作，可以在里面修改默认的本地服务器端口，一般来说都不需要修改。下面我们来写第一篇博客试试。</p>
+<h2>编写文章</h2>
+<p>&emsp;&emsp;我们首先写一篇HelloPelican文章然后生成发布到本地瞧瞧是怎么个样子。上文说过content目录是用来存放博文等文件目录的，直接在目录里面新建一个文件test.md(本文使用MarkDown来编辑，pelican也支持reStructuredText)。</p>
+<div class="highlight"><pre><span></span>Title: HelloPelican
+Date: 2017-05-17
+Category: test
+Tags: test
+Slug: blog/hello
+Author: Maxwell-nc
+
+<span class="gu">##</span>First
+Text
+</pre></div>
+
+
+<p>&emsp;&emsp;其中Title等字段用来声明博客的属性，Slug为对应生成html的相对路径，如果上述最终生成路径是blog目录下的hello.html,这些字段还可以自定义，这个进阶内容可以后面再说。出去属性声明外的部分都是正文内容，##First就是正文的开始了。</p>
+<p>&emsp;&emsp;简单编辑后就可以尝试生成html，并且在本地预览了。生成html可以使用下面的命令：</p>
+<div class="highlight"><pre><span></span>pelican content
+</pre></div>
+
+
+<p>&emsp;&emsp;生成成功后，使用下面命令启动本地服务器：</p>
+<div class="highlight"><pre><span></span>python -m pelican.server
+</pre></div>
+
+
+<p>&emsp;&emsp;如果需要临时指定非默认端口也可以在命令后面添加端口参数，如设置8080端口：</p>
+<div class="highlight"><pre><span></span>python -m pelican.server 8080
+</pre></div>
+
+
+<p>&emsp;&emsp;如果服务器启动成功，就可以通过浏览器访问<a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>来预览下效果：
+<img alt="preview" src="../images/pelicanBuildBlog/3.jpg">
+&emsp;&emsp;可以看到已经生成博客成功，这样就已经完成了一大步了。</p>
+<h2>静态文件</h2>
+<p>&emsp;&emsp;通过上文，我们已经成功添加第一篇博客，但是很快会发现，如果你往content目录里面添加一个images文件夹存放博文的图片，你会发现<code>pelican content</code>并不会复制images文件夹到output目录下。这种不需要编译但又要用到的文件，我们称它为“静态文件”。pelican默认不会复制静态文件到output目录，需要我们在pelicanconf.py配置文件上面配置一下,添加一行：</p>
+<div class="highlight"><pre><span></span><span class="n">STATIC_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;这样就会生成output资源时就会自动把iamges文件夹拷贝到output目录了。另外使用EXTRA_PATH_METADATA也可以把某个目录的文件映射过去，例如favicon.ico放在content/extra目录下，最后需要生成到output的根目录，可以添加：</p>
+<div class="highlight"><pre><span></span>STATIC_PATHS = [&#39;images&#39;, &#39;extra/favicon.ico&#39;]
+EXTRA_PATH_METADATA = {
+    &#39;extra/favicon.ico&#39;: {&#39;path&#39;: &#39;favicon.ico&#39;}
+}
+</pre></div>
+
+
+<h2>自动生成发布脚本</h2>
+<p>&emsp;&emsp;由于Windows不能使用makefile，不能使用<code>make html</code>这样快捷的方法来生成Html，所以我们利用Windows的批处理做一个简单的"Makefile"。</p>
+<p>&emsp;&emsp;在博客根目录下新建一个auto-update.bat批处理文件，修改内容为：</p>
+<div class="highlight"><pre><span></span><span class="p">@</span><span class="k">echo</span> off
+<span class="k">setlocal</span> enabledelayedexpansion
+<span class="k">for</span> <span class="k">/f</span> <span class="s2">&quot;delims=  tokens=1&quot;</span> <span class="se">%%</span>i <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;netstat -aon ^| findstr &quot;8000&quot;&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="p">(</span>
+    <span class="k">set</span> <span class="nv">a</span><span class="p">=</span><span class="se">%%</span>i
+    <span class="k">goto</span> <span class="nl">job</span>
+<span class="p">)</span>
+<span class="p">:</span><span class="nl">job</span>
+taskkill /F /pid <span class="s2">&quot;</span><span class="nv">!a:~71,5!</span><span class="s2">&quot;</span>
+pelican content
+<span class="k">cd</span> output
+<span class="k">start</span> cmd /c <span class="s2">&quot;python -m pelican.server 8000&quot;</span>
+<span class="k">cd</span> ..
+</pre></div>
+
+
+<p>&emsp;&emsp;上面的代码内容是找到已经运行的服务器程序，结束它，然后重新生成Output文件，并且重新打开本地服务器。如果要修改端口可以替换bat文件中的端口号。有了这个脚本，以后需要更新预览，只需要在博客目录下打开CMD，输入auto-update.bat，敲一下回车就能自动完成了。</p>
+<p>&emsp;&emsp;<strong>注意：</strong>在pelicanconf.py添加<code>DELETE_OUTPUT_DIRECTORY = True</code>可以每次生成html前都删除Output目录的文件，防止一些缓存导致的问题。</p>
+<h2>发布到Github Pages</h2>
+<p>&emsp;&emsp;很简单，把Github.io项目拉下来，用Output目录里面的内容替换掉，push上去刷新就能看到了。不过这里需要注意的是是否配置了<code>RELATIVE_URLS</code>这个相对路径设置，<code>SITEURL</code>也要设置成Pages的地址，否者Feed的xml地址将显示不完全，编译的时候也会提示：
+"WARNING: Feeds generated without SITEURL set properly may not be valid"。所以这些都要手动检查清楚后再发布。</p>
+<h2>第三方主题</h2>
+<p>&emsp;&emsp;如果没有什么特别的需求的话，教程就到这里结束了，但是对于官方简陋的主题很多人都希望换一个主题。如果你使用过Hexo的主题甚至修改过，那恭喜你，这一步对于你来说十分简单。</p>
+<p>&emsp;&emsp;首先我们可以在<a href="https://github.com/getpelican/pelican-themes">https://github.com/getpelican/pelican-themes</a>找一个合心意的主题，然后拉下来，解压到博客目录下的Theme目录（这个目录是自己建立的，你可以起的别名字）,在pelicanconf.py下增加一行:</p>
+<div class="highlight"><pre><span></span>THEME = &#39;Theme/nest&#39;
+</pre></div>
+
+
+<p>&emsp;&emsp;其中这个nest是你的主题的目录名，本博客采用的是基于nest修改的主题，可以在<a href="https://github.com/maxwell-nc/nest">https://github.com/maxwell-nc/nest</a>找到源代码，感谢它的作者。言归正传，添加了这行之后理论上就可以重新生成发布就可以看到了，但是要注意有些主题需要额外的参数，具体看每个主题页面的ReadMe，这里就不一样介绍了。</p>
+<h2>修改主题</h2>
+<p>&emsp;&emsp;下面我们来简单进阶一下，尝试一下修改主题（注意这需要一点点Html知识）。下面以在博文最后添加转载信息为例。</p>
+<p>&emsp;&emsp;首先我们打算在每篇文章的头部添加一个自定义字段Reprint，这个字段代表转载地址字段，如果这个字段有值，则显示“转载文章”，否则显示“原创文章”。我们进入主题目录中的templates目录，templates代表模板的意思，其中article.html就是每篇文章的生成的模板。html中<code>article.content</code>是正文的内容，我们一直定位到article.content位置，在下面添加，</p>
+<div class="highlight"><pre><span></span>{{ article.content }}
+<span class="p">&lt;</span><span class="nt">br</span><span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">/&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;color: #eb2344;&quot;</span><span class="p">&gt;&lt;</span><span class="nt">b</span><span class="p">&gt;</span>
+{% if article.reprint %}
+本文为转载文章，原文链接：<span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{{ article.reprint }}&quot;</span> <span class="na">target</span><span class="o">=</span><span class="s">&quot;_blank&quot;</span><span class="p">&gt;</span>{{ article.reprint }}<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+{% else %}
+原创文章，欢迎转载，请保留出处。有任何错误、疑问或者建议，欢迎指出。
+{% endif %}
+<span class="p">&lt;/</span><span class="nt">b</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">br</span><span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">/&gt;</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;新增的字段可以用article.reprint来访问，支持使用<code>{% if article.reprint %}</code>结合<code>{% else %}</code>和<code>{% endif %}</code>的组合来实现判断。
+接下来可以在一篇文章的头部，如果是转载文章，可以添加Reprint属性来声明转载文章，实现自动显示转载信息：</p>
+<div class="highlight"><pre><span></span>Title: xxx
+Date: 2017-05-17
+Category: xxx
+Tags: xxx
+Slug: blog/xxx
+Author: Maxwell-nc
+Reprint: https://github.com/maxwell-nc
+</pre></div>
+
+
+<p>&emsp;&emsp;主题的修改除了添加转载信息之外还以修改主题的布局等等功能，除了if条件表达式还有for表达式等等的功能，或者添加评论插件、音乐播放器等等，更多的功能可以参考官方文档，这里就不重复了。</p>
+<h2>尾声</h2>
+<p>&emsp;&emsp;Pelican入门的成本非常低，如果只要普通做个静态博客，相信只要一杯咖啡的时间，但是Pelican的功能远不止上述这些，本文只是抛砖引玉，感兴趣的朋友可以看看参考文章中的官方文档。</p>
+<h2>参考文章</h2>
+<p>&emsp;&emsp;Pelican官方文档：<a href="http://docs.getpelican.com/en/3.7.1/index.html">http://docs.getpelican.com/en/3.7.1/index.html</a></p>
+		<br/><br/>
+		<p style="color: #eb2344;"><b>
+		原创文章，欢迎转载，请保留出处。有任何错误、疑问或者建议，欢迎指出。
+		</b></p>
+		<br/><br/>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'maxwell-nc';
+                var disqus_identifier = 'blog/pelicanBuildBlog.html';
+                //var disqus_url = 'https://maxwell-nc.github.io/blog/pelicanBuildBlog.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">社交</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/maxwell-nc" target="_blank">Github</a></li>
+                            <li><a href="mailto:maxwell_nc@163.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">链接</div>
+                        <ul class="list-unstyled">
+                            <li><a href="http://blog.csdn.net/maxwell_nc" target="_blank">旧的博客</a></li>
+                        </ul>
+                    </div> 
+					<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <p class="pull-right text-right">
+                            <em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank"><u>Pelican</u></a></em><br/>
+                            <em>Original Theme by <a href="https://github.com/molivier" target="_blank"><u>Molivier</u></a></em><br/>
+                            <em>Modified Theme by <a href="https://github.com/maxwell-nc" target="_blank"><u>Maxwell-nc</u></a></em><br/>
+                            <small>&copy; Maxwell-nc 2017</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>

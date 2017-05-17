@@ -319,12 +319,12 @@ h4:after {
 .content img{
     border: 0;
     display: block;
-    width: 100%;
+    max-width: 100%;
     height: auto;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 45px;
-    margin-bottom: 45px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .content.highlight pre {
