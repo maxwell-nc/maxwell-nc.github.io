@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="chinese (simplified)">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="前序   此前也接触过一些第三方静态分析工具，因为工作原因接触了一款开源移动App安全框架MobileSecurityFramework，经过一番折腾后决定写下一篇博文记录一下心得。 搭建环境   本文是基于Windows搭建的Android...">
+        <meta name="keywords" content="analys, android, automation, python">
+        <link rel="icon" href="https://maxwell-nc.github.io/favicon.ico">
+
+        <title>MobSF Android静态分析使用心得 - Maxwell's Growth Path</title>
+
+        <!-- Stylesheets -->
+        <link href="https://maxwell-nc.github.io/theme/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/fonts.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/nest.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/pygment.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://maxwell-nc.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Full Atom Feed" />
+        <link href="https://maxwell-nc.github.io/feeds/android.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container-article gradient">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <!-- <div class="header-logo">
+                        <a class="pull-left" href="https://maxwell-nc.github.io/"><img class="mr20" src="https://maxwell-nc.github.io/logo.svg" alt="logo">Maxwell's Growth Path</a>
+                    </div> -->
+                    <div class="nav pull-right">
+                                <a href="https://maxwell-nc.github.io/">主页</a>
+                                <a href="https://maxwell-nc.github.io/categories.html">博文目录</a>
+                                <a href="https://maxwell-nc.github.io/tags.html">标签</a>
+                                <a href="https://maxwell-nc.github.io/feeds/all.atom.xml">订阅</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper-article">
+        <div class="row">
+              <div class="col-lg-12">
+					<div class="header-vertical-line"></div>
+					<h1 class="header-title-article">MobSF Android静态分析使用心得</h1>
+					<p class="header-date-article">
+					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
+					2017-05-19&nbsp;&nbsp;|&nbsp;&nbsp;
+					目录 <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://maxwell-nc.github.io/tag/analys.html">analys</a>, <a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/automation.html">automation</a>, <a href="https://maxwell-nc.github.io/tag/python.html">python</a></p>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+    <div class="container content">
+        <h2>前序</h2>
+<p>&emsp;&emsp;此前也接触过一些第三方静态分析工具，因为工作原因接触了一款开源移动App安全框架<a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF">MobileSecurityFramework</a>，经过一番折腾后决定写下一篇博文记录一下心得。</p>
+<h2>搭建环境</h2>
+<p>&emsp;&emsp;本文是基于Windows搭建的Android App静态分析环境，首先是先要到<a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF">Github</a>上拿去拉一份源码下来。由于这个框架是基于Python开发的，而且需要反编译Apk，所以我们列下需要的环境清单：</p>
+<ul>
+<li>Python 2.7(不能使3.x版本，低于2.7我也没有试过)</li>
+<li>Oracle JDK 1.7+</li>
+<li>MobSF源码</li>
+</ul>
+<p>&emsp;&emsp;以上是静态分析需要的环境，另外再官方的文档中写了一句推荐使用虚拟机环境搭建，否则存在安全问题，这里只是试用一下就不使用虚拟机了。</p>
+<p>&emsp;&emsp;拿到源码后解压到一个目录里，在这个目录打开CMD，输入命令：</p>
+<div class="highlight"><pre><span></span>py -2 pip install -r requirements.txt
+</pre></div>
+
+
+<p>&emsp;&emsp;注意我这里因为同时安装了Python2.x和3.x，所以使用py启动器来指定版本，如果只有Python2.x，可以直接采用：</p>
+<div class="highlight"><pre><span></span>pip install -r requirements.txt
+</pre></div>
+
+
+<p>&emsp;&emsp;其中requirements.txt是运行MobSF的Python依赖环境。如果安装完成，接下来就是运行MobSF的服务器了，在命令行输入：</p>
+<div class="highlight"><pre><span></span>python manage.py runserver
+</pre></div>
+
+
+<p>&emsp;&emsp;同样需要注意Python版本问题，第一次启动服务器会自动安装服务器需要的东西，主要是nuget、binskim、binscope等东西，国内的用户注意代理，否则可能卡住不动。</p>
+<p>&emsp;&emsp;<strong>note：</strong>如果第一次安装失败不慎退出了，可以进入install目录先运行setup.py手动安装，然后在执行runserver命令。安装之后会自动生成一个自启动bat文件，根据源代码可以看出实际上他就是运行rpc_client.py。</p>
+<p>&emsp;&emsp;如果一切顺利的话，可以看到Django运行成功：
+<img alt="Django" src="../images/mobsfAnalys/1.jpg">
+&emsp;&emsp;这个监听端口可以通过指定启动参数来修改，如：</p>
+<div class="highlight"><pre><span></span>python manage.py runserver 8100
+</pre></div>
+
+
+<p>&emsp;&emsp;然后可以打开浏览器输入地址，比如默认端口为：<a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a>，我这边出现了一个这样的问题（也许你可以直接看到成功画面，恭喜）：
+<img alt="error" src="../images/mobsfAnalys/2.jpg">
+&emsp;&emsp;如果和我一样出现“Don't Play Around. An Error just popped in!”的朋友，可以执行后重新启动服务器：</p>
+<div class="highlight"><pre><span></span>python manage.py migrate 
+python manage.py makemigrations
+</pre></div>
+
+
+<p>&emsp;&emsp;注意原因是“no such table: StaticAnalyzer_staticanalyzerandroid”才适用这个方法。成功之后就可以看到MobSF的界面：
+<img alt="server" src="../images/mobsfAnalys/3.jpg">
+&emsp;&emsp;这样就算搭建完成了，当然也有可能上传App文件的时候发生错误，这就需要大家动动脑袋来处理了。</p>
+<h2>MobSF静态分析</h2>
+<p>&emsp;&emsp;使用MobSF的静态分析十分简单，直接上传一个Apk包，等待服务器解包反编译分析结果即可。不过我使用了多次发现这个框架很有可能卡在MalwareAnalyzer上面，可能是联网检查的问题，具体我并没有分析，然后假设你中断了操作，下次再启动会重新解包重新分析，十分耗时。一切正常的话，你将会看到分析报告页面：
+<img alt="Analys" src="../images/mobsfAnalys/4.jpg">
+&emsp;&emsp;这个分析报告可以说“仅供参考”，比如说PERMISSION的检测，含有<code>android.permission.INTERNET</code>就说Dangerous（后面会分析源码），这是比较令人费解的。毕竟这个权限只要是网络应用都会使用到，那岂不是所有的应用都是危险？？</p>
+<p>&emsp;&emsp;而对于Code Analysis里面的ISSUE，其中一个“App can read/write to External Storage. Any App can read data written to External Storage.”也是SEVERITY为High，其实也只是提示你其他App可能会串改数据而已，而不是说你不能使用外部存储器，所以只要你访问了外部存储器的API就一定会报这个问题（汗颜）。</p>
+<h2>源码及原理分析</h2>
+<p>&emsp;&emsp;由于上面给出的分析结果有点让人摸不着头脑，而且也没有标注错误的位置，所以只能从源码入手，分析其原理。源码的目录结构十分清晰，由于我们采用的事静态分析，可以直接找到<code>StaticAnalyzer</code>目录。</p>
+<div class="highlight"><pre><span></span>├─migrations
+├─test_files
+├─tools
+│  ├─apkid
+│  │  └─rules
+│  ├─d2j2
+│  │  └─lib
+│  ├─enjarify
+│  │  ├─enjarify
+│  │  │  ├─jvm
+│  │  │  │  ├─constants
+│  │  │  │  └─optimizatio
+│  │  │  └─typeinference
+│  │  └─tests
+│  └─mac
+└─views
+    ├─android
+    └─ios
+</pre></div>
+
+
+<p>&emsp;&emsp;通过打印StaticAnalyzer目录的树结构可以粗略知道，migrations是迁移文件，test_files是用来测试静态测试的文件，tools是用来反编译等的工具，views才是我们想要找的分析源码。
+&emsp;&emsp;直接到StaticAnalyzer\views\android目录下可以很快找到对应分析的源码（十分清晰的模块名）。比如我们找一下上文所述的Premission问题，一眼可以看到dvm_permissions.py,打开发现只是一个字典，对应每个权限和状态值、描述等信息：</p>
+<div class="highlight"><pre><span></span> <span class="s2">&quot;INTERNET&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;dangerous&quot;</span><span class="p">,</span> <span class="s2">&quot;full Internet access&quot;</span><span class="p">,</span> <span class="s2">&quot;Allows an application to create network sockets.&quot;</span><span class="p">]</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;这还不能说明什么，我们可以继续发现manifest_analysis.py文件中导入了dvm_permissions，其中代码中：</p>
+<div class="highlight"><pre><span></span><span class="n">permissions</span> <span class="o">=</span> <span class="n">mfxml</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;uses-permission&quot;</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="k">for</span> <span class="n">permission</span> <span class="ow">in</span> <span class="n">permissions</span><span class="p">:</span>
+    <span class="n">perm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">permission</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;android:name&quot;</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">perm</span><span class="p">:</span>
+    <span class="n">prm</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">prm</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">dvm_perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">DVM_PERMISSIONS</span><span class="p">[</span><span class="s2">&quot;MANIFEST_PERMISSION&quot;</span><span class="p">][</span><span class="n">prm</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">dvm_perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;dangerous&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Unknown permission from android reference&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Unknown permission from android reference&quot;</span>
+        <span class="p">]</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;看以看出这个权限的检测直接就是根据dvm_permissions.py中定义的字典来决定的，并没有更多的判断规则。</p>
+<p>&emsp;&emsp;接下来我们看看Code Analysis ISSUE：“The App uses an insecure Random Number Generator.”的判断原理。同理我们也可以找到code_analysis.py文件直接分析。先找到一个字典字段描述这个问题：</p>
+<div class="highlight"><pre><span></span><span class="s1">&#39;rand&#39;</span><span class="p">:(</span><span class="s1">&#39;The App uses an insecure Random Number Generator.&#39;</span><span class="p">),</span>
+</pre></div>
+
+
+<p>然后我们搜索key'rand'可以看到,</p>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;apk&quot;</span><span class="p">:</span>
+    <span class="n">java_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app_dir</span><span class="p">,</span> <span class="s1">&#39;java_source/&#39;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;studio&quot;</span><span class="p">:</span>
+    <span class="n">java_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app_dir</span><span class="p">,</span> <span class="s1">&#39;app/src/main/java/&#39;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;eclipse&quot;</span><span class="p">:</span>
+    <span class="n">java_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app_dir</span><span class="p">,</span> <span class="s1">&#39;src/&#39;</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">dat</span> <span class="o">=</span> <span class="n">file_pointer</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;java\.util\.Random&#39;</span><span class="p">,</span> <span class="n">dat</span><span class="p">):</span>
+        <span class="n">code</span><span class="p">[</span><span class="s1">&#39;rand&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jfile_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">java_src</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;表示只要使用了<code>java.util.Random</code>这个类就会报这个问题。实际上即使是<code>java.security.SecureRandom</code>也存在安全风险。所以这类问题还是比较难处理的，不过如果不涉及安全的随机数（比如为用户起一个随机昵称，而这个昵称并不作为唯一标识），即使使用了也没有关系，这里就不展开讨论了。</p>
+<p>&emsp;&emsp;其他还有很多检查大体原理相似，如果经常需要用到某一个检测，也可以把那部分源码单独拷出来做成一个单独检测工具，这样不需要每次都去完整的检测才知道结果。</p>
+<h2>尾声</h2>
+<p>&emsp;&emsp;使用过后我觉得很失望，很多功能都没有，比如：</p>
+<ul>
+<li>不支持排除第三方</li>
+<li>不支持显示错误行数或者位置</li>
+<li>不支持Mapping</li>
+<li>不支持自定义规则</li>
+<li>不支持标记已处理的问题</li>
+</ul>
+<p>&emsp;&emsp;很多情况下使用这个框架，都是由程序员搭建好一个服务器供开发人员或者是非开发人员去检测使用。倘若出了这么一份充满Dangerous和High SEVERITY的报告给非技术人员看，更重要的是无论你怎么改都无法去掉，这想必得花好一段时间去解析吧？所以个人不是很推荐这个框架给非技术人员使用。</p>
+<p>&emsp;&emsp;当然目前这个框架还处于Beta阶段，版本号也没有到1.0，我仅仅使用了它的静态分析功能，它还有动态分析等等，总体来说这是一个很不错的工具，但是还没有足够的完善，我们期待他更好地发展。特别是规则自定义，希望可以单独出来，这样可以让更多开源力量去维护增强它。</p>
+		<br/><br/>
+		<p style="color: #eb2344;"><b>
+		原创文章，欢迎转载，请保留出处。有任何错误、疑问或者建议，欢迎指出。
+		</b></p>
+		<br/><br/>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'maxwell-nc';
+                var disqus_identifier = 'android/mobsfAnalys.html';
+                //var disqus_url = 'https://maxwell-nc.github.io/android/mobsfAnalys.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">社交</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/maxwell-nc" target="_blank">Github</a></li>
+                            <li><a href="mailto:maxwell_nc@163.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">链接</div>
+                        <ul class="list-unstyled">
+                            <li><a href="http://blog.csdn.net/maxwell_nc" target="_blank">旧的博客</a></li>
+                        </ul>
+                    </div> 
+					<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <p class="pull-right text-right">
+                            <em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank"><u>Pelican</u></a></em><br/>
+                            <em>Original Theme by <a href="https://github.com/molivier" target="_blank"><u>Molivier</u></a></em><br/>
+                            <em>Modified Theme by <a href="https://github.com/maxwell-nc" target="_blank"><u>Maxwell-nc</u></a></em><br/>
+                            <small>&copy; Maxwell-nc 2017</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>

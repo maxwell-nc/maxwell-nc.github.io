@@ -1,5 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-17T00:00:00+08:00</updated><entry><title>Windows下使用Pelican搭建静态博客</title><link href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html" rel="alternate"></link><published>2017-05-17T00:00:00+08:00</published><updated>2017-05-17T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-17:/blog/pelicanBuildBlog.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-19T00:00:00+08:00</updated><entry><title>MobSF Android静态分析使用心得</title><link href="https://maxwell-nc.github.io/android/mobsfAnalys.html" rel="alternate"></link><published>2017-05-19T00:00:00+08:00</published><updated>2017-05-19T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-19:/android/mobsfAnalys.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;此前也接触过一些第三方静态分析工具，因为工作原因接触了一款开源移动App安全框架&lt;a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF"&gt;MobileSecurityFramework&lt;/a&gt;，经过一番折腾后决定写下一篇博文记录一下心得。&lt;/p&gt;
+&lt;h2&gt;搭建环境&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;本文是基于Windows搭建的Android App静态分析环境，首先是先要到&lt;a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF"&gt;Github&lt;/a&gt;上拿去拉一份源码下来。由于这个框架是基于Python开发的，而且需要反编译Apk，所以我们列下需要的环境清单：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Python 2.7(不能使3.x版本，低于2.7我也没有试过)&lt;/li&gt;
+&lt;li&gt;Oracle JDK 1.7+&lt;/li&gt;
+&lt;li&gt;MobSF源码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;以上是静态分析需要的环境，另外再官方的文档中写了一句推荐使用虚拟机环境搭建，否则存在安全问题，这里只是试用一下就不使用虚拟机了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;拿到源码后解压到一个目录里，在这个目录打开CMD，输入命令：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;py -2 pip install -r requirements.txt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;注意我这里因为同时安装了Python2.x和3.x，所以使用py启动器来指定版本，如果只有Python2.x，可以直接采用：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install -r …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;此前也接触过一些第三方静态分析工具，因为工作原因接触了一款开源移动App安全框架&lt;a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF"&gt;MobileSecurityFramework&lt;/a&gt;，经过一番折腾后决定写下一篇博文记录一下心得。&lt;/p&gt;
+&lt;h2&gt;搭建环境&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;本文是基于Windows搭建的Android App静态分析环境，首先是先要到&lt;a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF"&gt;Github&lt;/a&gt;上拿去拉一份源码下来。由于这个框架是基于Python开发的，而且需要反编译Apk，所以我们列下需要的环境清单：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Python 2.7(不能使3.x版本，低于2.7我也没有试过)&lt;/li&gt;
+&lt;li&gt;Oracle JDK 1.7+&lt;/li&gt;
+&lt;li&gt;MobSF源码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;以上是静态分析需要的环境，另外再官方的文档中写了一句推荐使用虚拟机环境搭建，否则存在安全问题，这里只是试用一下就不使用虚拟机了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;拿到源码后解压到一个目录里，在这个目录打开CMD，输入命令：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;py -2 pip install -r requirements.txt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;注意我这里因为同时安装了Python2.x和3.x，所以使用py启动器来指定版本，如果只有Python2.x，可以直接采用：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install -r requirements.txt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;其中requirements.txt是运行MobSF的Python依赖环境。如果安装完成，接下来就是运行MobSF的服务器了，在命令行输入：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python manage.py runserver
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;同样需要注意Python版本问题，第一次启动服务器会自动安装服务器需要的东西，主要是nuget、binskim、binscope等东西，国内的用户注意代理，否则可能卡住不动。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;strong&gt;note：&lt;/strong&gt;如果第一次安装失败不慎退出了，可以进入install目录先运行setup.py手动安装，然后在执行runserver命令。安装之后会自动生成一个自启动bat文件，根据源代码可以看出实际上他就是运行rpc_client.py。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;如果一切顺利的话，可以看到Django运行成功：
+&lt;img alt="Django" src="../images/mobsfAnalys/1.jpg"&gt;
+&amp;emsp;&amp;emsp;这个监听端口可以通过指定启动参数来修改，如：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python manage.py runserver 8100
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;然后可以打开浏览器输入地址，比如默认端口为：&lt;a href="http://127.0.0.1:8000/"&gt;http://127.0.0.1:8000/&lt;/a&gt;，我这边出现了一个这样的问题（也许你可以直接看到成功画面，恭喜）：
+&lt;img alt="error" src="../images/mobsfAnalys/2.jpg"&gt;
+&amp;emsp;&amp;emsp;如果和我一样出现“Don't Play Around. An Error just popped in!”的朋友，可以执行后重新启动服务器：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python manage.py migrate 
+python manage.py makemigrations
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;注意原因是“no such table: StaticAnalyzer_staticanalyzerandroid”才适用这个方法。成功之后就可以看到MobSF的界面：
+&lt;img alt="server" src="../images/mobsfAnalys/3.jpg"&gt;
+&amp;emsp;&amp;emsp;这样就算搭建完成了，当然也有可能上传App文件的时候发生错误，这就需要大家动动脑袋来处理了。&lt;/p&gt;
+&lt;h2&gt;MobSF静态分析&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;使用MobSF的静态分析十分简单，直接上传一个Apk包，等待服务器解包反编译分析结果即可。不过我使用了多次发现这个框架很有可能卡在MalwareAnalyzer上面，可能是联网检查的问题，具体我并没有分析，然后假设你中断了操作，下次再启动会重新解包重新分析，十分耗时。一切正常的话，你将会看到分析报告页面：
+&lt;img alt="Analys" src="../images/mobsfAnalys/4.jpg"&gt;
+&amp;emsp;&amp;emsp;这个分析报告可以说“仅供参考”，比如说PERMISSION的检测，含有&lt;code&gt;android.permission.INTERNET&lt;/code&gt;就说Dangerous（后面会分析源码），这是比较令人费解的。毕竟这个权限只要是网络应用都会使用到，那岂不是所有的应用都是危险？？&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;而对于Code Analysis里面的ISSUE，其中一个“App can read/write to External Storage. Any App can read data written to External Storage.”也是SEVERITY为High，其实也只是提示你其他App可能会串改数据而已，而不是说你不能使用外部存储器，所以只要你访问了外部存储器的API就一定会报这个问题（汗颜）。&lt;/p&gt;
+&lt;h2&gt;源码及原理分析&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;由于上面给出的分析结果有点让人摸不着头脑，而且也没有标注错误的位置，所以只能从源码入手，分析其原理。源码的目录结构十分清晰，由于我们采用的事静态分析，可以直接找到&lt;code&gt;StaticAnalyzer&lt;/code&gt;目录。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;├─migrations
+├─test_files
+├─tools
+│  ├─apkid
+│  │  └─rules
+│  ├─d2j2
+│  │  └─lib
+│  ├─enjarify
+│  │  ├─enjarify
+│  │  │  ├─jvm
+│  │  │  │  ├─constants
+│  │  │  │  └─optimizatio
+│  │  │  └─typeinference
+│  │  └─tests
+│  └─mac
+└─views
+    ├─android
+    └─ios
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;通过打印StaticAnalyzer目录的树结构可以粗略知道，migrations是迁移文件，test_files是用来测试静态测试的文件，tools是用来反编译等的工具，views才是我们想要找的分析源码。
+&amp;emsp;&amp;emsp;直接到StaticAnalyzer\views\android目录下可以很快找到对应分析的源码（十分清晰的模块名）。比如我们找一下上文所述的Premission问题，一眼可以看到dvm_permissions.py,打开发现只是一个字典，对应每个权限和状态值、描述等信息：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;INTERNET&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;dangerous&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;full Internet access&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Allows an application to create network sockets.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;这还不能说明什么，我们可以继续发现manifest_analysis.py文件中导入了dvm_permissions，其中代码中：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;permissions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;mfxml&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getElementsByTagName&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;uses-permission&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;...&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;permission&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;permissions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;perm&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;permission&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getAttribute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;android:name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;perm&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;prm&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;
+    &lt;span class="n"&gt;pos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rfind&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;pos&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;prm&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;pos&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:]&lt;/span&gt;
+    &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;dvm_perm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;DVM_PERMISSIONS&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;MANIFEST_PERMISSION&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="n"&gt;prm&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="ne"&gt;KeyError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;dvm_perm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;dangerous&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;Unknown permission from android reference&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;Unknown permission from android reference&amp;quot;&lt;/span&gt;
+        &lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;看以看出这个权限的检测直接就是根据dvm_permissions.py中定义的字典来决定的，并没有更多的判断规则。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;接下来我们看看Code Analysis ISSUE：“The App uses an insecure Random Number Generator.”的判断原理。同理我们也可以找到code_analysis.py文件直接分析。先找到一个字典字段描述这个问题：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;rand&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;The App uses an insecure Random Number Generator.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然后我们搜索key'rand'可以看到,&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;typ&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;apk&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;java_src&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;app_dir&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;java_source/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;typ&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;studio&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;java_src&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;app_dir&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;app/src/main/java/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;typ&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;eclipse&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;java_src&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;app_dir&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;src/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;...&lt;/span&gt;
+&lt;span class="n"&gt;dat&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;file_pointer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="o"&gt;...&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;findall&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;r&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;java\.util\.Random&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dat&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;code&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;rand&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;jfile_path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;java_src&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;表示只要使用了&lt;code&gt;java.util.Random&lt;/code&gt;这个类就会报这个问题。实际上即使是&lt;code&gt;java.security.SecureRandom&lt;/code&gt;也存在安全风险。所以这类问题还是比较难处理的，不过如果不涉及安全的随机数（比如为用户起一个随机昵称，而这个昵称并不作为唯一标识），即使使用了也没有关系，这里就不展开讨论了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;其他还有很多检查大体原理相似，如果经常需要用到某一个检测，也可以把那部分源码单独拷出来做成一个单独检测工具，这样不需要每次都去完整的检测才知道结果。&lt;/p&gt;
+&lt;h2&gt;尾声&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;使用过后我觉得很失望，很多功能都没有，比如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不支持排除第三方&lt;/li&gt;
+&lt;li&gt;不支持显示错误行数或者位置&lt;/li&gt;
+&lt;li&gt;不支持Mapping&lt;/li&gt;
+&lt;li&gt;不支持自定义规则&lt;/li&gt;
+&lt;li&gt;不支持标记已处理的问题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;很多情况下使用这个框架，都是由程序员搭建好一个服务器供开发人员或者是非开发人员去检测使用。倘若出了这么一份充满Dangerous和High SEVERITY的报告给非技术人员看，更重要的是无论你怎么改都无法去掉，这想必得花好一段时间去解析吧？所以个人不是很推荐这个框架给非技术人员使用。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;当然目前这个框架还处于Beta阶段，版本号也没有到1.0，我仅仅使用了它的静态分析功能，它还有动态分析等等，总体来说这是一个很不错的工具，但是还没有足够的完善，我们期待他更好地发展。特别是规则自定义，希望可以单独出来，这样可以让更多开源力量去维护增强它。&lt;/p&gt;</content><category term="android"></category><category term="python"></category><category term="automation"></category><category term="analys"></category></entry><entry><title>Windows下使用Pelican搭建静态博客</title><link href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html" rel="alternate"></link><published>2017-05-17T00:00:00+08:00</published><updated>2017-05-17T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-17:/blog/pelicanBuildBlog.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;首先Pelican的知名度在国内明显没有Hexo的高，导致也没有几篇教程。遂写一篇简单的Windows搭建教程，给小白们快速使用Pelican搭建静态博客并且发表到Gtihub Pages上。&lt;/p&gt;
 &lt;h2&gt;安装Pelican&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;在Windows下搭建pelican环境可以说完爆Jekyll,如果熟悉Python，甚至比Hexo还要简单，闲话不多说，直接开干。&lt;/p&gt;
