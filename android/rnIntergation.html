@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="chinese (simplified)">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="前序   突然想起来之前旧博客的《Windows下搭建ReactNative开发环境（Android）》留下的一个坑，遂填一下坑。而且集成ReactNative到现有Android项目也不是什么容易的事情，网上很多教程都是不完整，你会发现跟着来做都是一步一个坑，不断搜索error解决花了半天才能搭建好，下次再做又是一堆问题，所以我这里记录下自己的集成心得。 准备操作...">
+        <meta name="keywords" content="android, react-native">
+        <link rel="icon" href="https://maxwell-nc.github.io/favicon.ico">
+
+        <title>快速集成ReactNative到现有Android项目 - Maxwell's Growth Path</title>
+
+        <!-- Stylesheets -->
+        <link href="https://maxwell-nc.github.io/theme/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/fonts.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/nest.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/pygment.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://maxwell-nc.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Full Atom Feed" />
+        <link href="https://maxwell-nc.github.io/feeds/android.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container-article gradient">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <!-- <div class="header-logo">
+                        <a class="pull-left" href="https://maxwell-nc.github.io/"><img class="mr20" src="https://maxwell-nc.github.io/logo.svg" alt="logo">Maxwell's Growth Path</a>
+                    </div> -->
+                    <div class="nav pull-right">
+                                <a href="https://maxwell-nc.github.io/">主页</a>
+                                <a href="https://maxwell-nc.github.io/categories.html">博文目录</a>
+                                <a href="https://maxwell-nc.github.io/tags.html">标签</a>
+                                <a href="https://maxwell-nc.github.io/feeds/all.atom.xml">订阅</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper-article">
+        <div class="row">
+              <div class="col-lg-12">
+					<div class="header-vertical-line"></div>
+					<h1 class="header-title-article">快速集成ReactNative到现有Android项目</h1>
+					<p class="header-date-article">
+					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
+					2017-05-24&nbsp;&nbsp;|&nbsp;&nbsp;
+					目录 <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/react-native.html">react-native</a></p>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+    <div class="container content">
+        <h2>前序</h2>
+<p>&emsp;&emsp;突然想起来之前旧博客的<a href="http://blog.csdn.net/maxwell_nc/article/details/60960864">《Windows下搭建ReactNative开发环境（Android）》</a>留下的一个坑，遂填一下坑。而且集成ReactNative到现有Android项目也不是什么容易的事情，网上很多教程都是不完整，你会发现跟着来做都是一步一个坑，不断搜索error解决花了半天才能搭建好，下次再做又是一堆问题，所以我这里记录下自己的集成心得。</p>
+<h2>准备操作</h2>
+<p>&emsp;&emsp;首先你建议你先看看<a href="http://blog.csdn.net/maxwell_nc/article/details/60960864">上一篇搭建环境的文章</a>，否则接下来的内容你可以看不懂或者没有对应的工具。然后就是你需要有一个现有的Android项目，如果你需要创建全新项目前一篇已经描述过了，本文就不再重复了。</p>
+<p>&emsp;&emsp;本文集成的<strong>ReactNative版本为0.44</strong>，如果不是的话可能与本文内容有所差异，请自行甄别。</p>
+<h2>安装ReactNative到项目</h2>
+<p>&emsp;&emsp;我们已一个已存在的工程ExistedProject为例，首先打开项目的目录，在CMD输入：</p>
+<div class="highlight"><pre><span></span>npm init
+</pre></div>
+
+
+<p>&emsp;&emsp;<code>npm init</code>会提示引导你创建package.json,如下图所示：
+<img alt="init" src="../images/rnIntergation/1.jpg">
+&emsp;&emsp;创建成功后可以安装React、ReactNative到目录里面，继续在<strong>当前目录</strong>下输入命令：</p>
+<div class="highlight"><pre><span></span>npm install --save react react-native
+</pre></div>
+
+
+<p>&emsp;&emsp;等待安装成功的过程中，可以到<a href="https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig">https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig</a>下载<code>.flowconfig</code>文件复制到项目之中。（这个文件只是用来约束Javascript代码，也可以跳过），很快就安装完成了：
+<img alt="warn" src="../images/rnIntergation/2.jpg">
+&emsp;&emsp;这里需要有一个警告：</p>
+<div class="highlight"><pre><span></span><span class="n">react</span><span class="o">-</span><span class="n">native</span><span class="mf">@0.44.0</span> <span class="n">requires</span> <span class="n">a</span> <span class="n">peer</span> <span class="n">of</span> <span class="n">react</span><span class="mf">@16.0.0</span><span class="o">-</span><span class="n">alpha</span><span class="mf">.6</span> <span class="n">but</span> <span class="n">none</span> <span class="n">was</span> <span class="n">installed</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;很多的文章都没有说明这个，导致后面项目运行后会出错。遇到这个问题是因为ReactNative和React的版本有着严格的对应关系，如果不一样就会报错，解决方法就是重新安装对应的React版本，输入命令：</p>
+<div class="highlight"><pre><span></span><span class="n">npm</span> <span class="n">install</span> <span class="o">--</span><span class="n">save</span> <span class="n">react</span><span class="mf">@16.0.0</span><span class="o">-</span><span class="n">alpha</span><span class="mf">.6</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;这样就可以避免后面出现的这两个问题:</p>
+<div class="highlight"><pre><span></span>Unable to resolve module `react/lib/ReactDebugCurrentFrame`
+Unable to resolve module `react/lib/ReactComponentWithPureRenderMixin`
+</pre></div>
+
+
+<p>&emsp;&emsp;接下来修改package.json文件,在<code>"scripts"</code>下增加一句<code>"start": "node node_modules/react-native/local-cli/cli.js start"</code>,注意json格式，需要添加逗号，最后package.json文件应该是这样的：</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ext_prj&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;nothing&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;main&quot;</span><span class="p">:</span> <span class="s2">&quot;index.js&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;node node_modules/react-native/local-cli/cli.js start&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;maxwell-nc&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;license&quot;</span><span class="p">:</span> <span class="s2">&quot;ISC&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;react&quot;</span><span class="p">:</span> <span class="s2">&quot;^16.0.0-alpha.6&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;react-native&quot;</span><span class="p">:</span> <span class="s2">&quot;^0.44.0&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2>创建安卓首页js文件</h2>
+<p>&emsp;&emsp;接下来在项目目录中创建index.android.js文件，然后编辑内容：</p>
+<div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">AppRegistry</span><span class="p">,</span> <span class="nx">Text</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react-native&#39;</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">HelloWorld</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="nx">Hello</span> <span class="nx">world</span><span class="o">!&lt;</span><span class="err">/Text&gt;</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//这里的&#39;HelloWorld&#39;是后面android项目使用的</span>
+<span class="c1">//而后面的HelloWorld是class的名称</span>
+<span class="nx">AppRegistry</span><span class="p">.</span><span class="nx">registerComponent</span><span class="p">(</span><span class="s1">&#39;HelloWorld&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">HelloWorld</span><span class="p">);</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;留意注释里面的内容，后面有用到，这个文件是react页面的启动页。基本的框架已经搭建好，下面我们配置android项目的设置。</p>
+<h2>配置Android项目</h2>
+<p>&emsp;&emsp;首先在android项目目录下的build.gradle文件添加依赖Maven仓库，代码如下：</p>
+<div class="highlight"><pre><span></span>allprojects {
+    repositories {
+        maven {
+            url &quot;$rootDir/node_modules/react-native/android&quot;
+        }
+        jcenter()
+    }
+}
+</pre></div>
+
+
+<p>&emsp;&emsp;这里又要注意了，node_modules目录的位置必须正确，否则Gradle就会报错误了。然后修改app目录下的build.gradle文件，添加ReactNative依赖：</p>
+<div class="highlight"><pre><span></span>dependencies {
+    //...
+    compile &quot;com.facebook.react:react-native:+&quot;
+}
+</pre></div>
+
+
+<p>&emsp;&emsp;为了防止64位库问题和findbugsbug版本问题，同时增加下面的代码：</p>
+<div class="highlight"><pre><span></span>android {
+    //...
+    defaultConfig {
+        //...
+        ndk{
+            abiFilters &quot;armeabi-v7a&quot;,&quot;armeabi-v7a&quot;,&quot;x86&quot;
+        }
+    }
+    //...
+    configurations.all {
+        resolutionStrategy.force &#39;com.google.code.findbugs:jsr305:3.0.0&#39;
+    }
+}
+</pre></div>
+
+
+<p>&emsp;&emsp;如果没有设置，后面可能会产生如下类似问题：</p>
+<div class="highlight"><pre><span></span><span class="n">Error</span><span class="o">:</span><span class="n">Conflict</span> <span class="k">with</span> <span class="n">dependency</span> <span class="s1">&#39;com.google.code.findbugs:jsr305&#39;</span>
+<span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">UnsatisfiedLinkError</span><span class="o">:</span> <span class="n">could</span> <span class="n">find</span> <span class="n">DSO</span> <span class="n">to</span> <span class="n">load</span><span class="o">:</span> <span class="n">libreactnativejni</span><span class="o">.</span><span class="na">so</span>
+<span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">UnsatisfiedLinkError</span><span class="o">:</span> <span class="n">dlopen</span> <span class="n">failed</span><span class="o">:</span> <span class="s2">&quot;xxx/libgnustl_shared.so&quot;</span> <span class="k">is</span> <span class="mi">32</span><span class="o">-</span><span class="n">bit</span> <span class="n">instead</span> <span class="n">of</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;配置完Gradle之后执行以下Sync操作确保上述操作无误，然后给AndroidManifest.xml文件添加上网路权限，和DevSettingsActivity界面配置：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.INTERNET&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;com.facebook.react.devsupport.DevSettingsActivity&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;DevSettingsActivity这个界面在Release的时候可以去掉，仅仅用于开发测试设置。</p>
+<h2>Andorid调用ReactNative</h2>
+<p>&emsp;&emsp;首先需要创建一个基类，方便后面使用，这里给大家写了一个BaseReactActivity：</p>
+<div class="highlight"><pre><span></span><span class="cm">/**</span>
+<span class="cm"> * ReactNativeActivity基类</span>
+<span class="cm"> */</span>
+<span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">BaseReactActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="kd">implements</span> <span class="n">DefaultHardwareBackBtnHandler</span> <span class="o">{</span>
+
+    <span class="kd">protected</span> <span class="n">ReactRootView</span> <span class="n">mReactRootView</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">ReactInstanceManager</span> <span class="n">mReactInstanceManager</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="nd">@Nullable</span> <span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">mReactInstanceManager</span> <span class="o">=</span> <span class="n">ReactInstanceManager</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">setApplication</span><span class="o">(</span><span class="n">getApplication</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">setBundleAssetName</span><span class="o">(</span><span class="s">&quot;index.android.bundle&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">setJSMainModuleName</span><span class="o">(</span><span class="s">&quot;index.android&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">addPackage</span><span class="o">(</span><span class="k">new</span> <span class="n">MainReactPackage</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">setUseDeveloperSupport</span><span class="o">(</span><span class="n">BuildConfig</span><span class="o">.</span><span class="na">DEBUG</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">setInitialLifecycleState</span><span class="o">(</span><span class="n">LifecycleState</span><span class="o">.</span><span class="na">RESUMED</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * 加载ReactNative内容</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">loadReact</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//这里的HelloWorld必须对应“index.android.js”中的“AppRegistry.registerComponent()”的第一个参数</span>
+        <span class="n">mReactRootView</span><span class="o">.</span><span class="na">startReactApplication</span><span class="o">(</span><span class="n">mReactInstanceManager</span><span class="o">,</span> <span class="s">&quot;HelloWorld&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">invokeDefaultOnBackPressed</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onBackPressed</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onPause</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onPause</span><span class="o">();</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">mReactInstanceManager</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mReactInstanceManager</span><span class="o">.</span><span class="na">onHostPause</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onResume</span><span class="o">();</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">mReactInstanceManager</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mReactInstanceManager</span><span class="o">.</span><span class="na">onHostResume</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDestroy</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDestroy</span><span class="o">();</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">mReactInstanceManager</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mReactInstanceManager</span><span class="o">.</span><span class="na">onHostDestroy</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBackPressed</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mReactInstanceManager</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mReactInstanceManager</span><span class="o">.</span><span class="na">onBackPressed</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">.</span><span class="na">onBackPressed</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;注意代码中startReactApplication方法中的参数要与前面index.android.js文件中设置的一样（看注释），然后根据官方的文档，这个ReactInstanceManager可以设置成一个单例，全局使用同一个ReactInstanceManager就可以了，这里为了方便快捷就写在一起了。这个类主要传递了声明周期给ReactNative，也处理了后退按钮事件。</p>
+<p>&emsp;&emsp;注意上面的类中BuildConfig的导包是选择自己的包名，而不是其他：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.github.maxwell.nc.existedproject.BuildConfig</span><span class="o">;</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;下面需要把使用到ReactNative的Activity继承这个Activity，如果需要这个ContentView使用ReactRootView，可以在onCreate中添加：</p>
+<div class="highlight"><pre><span></span><span class="n">setContentView</span><span class="o">(</span><span class="n">mReactRootView</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ReactRootView</span><span class="o">(</span><span class="k">this</span><span class="o">));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;如果是在布局中增加了ReactRootView，可以使用：</p>
+<div class="highlight"><pre><span></span><span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+<span class="n">mReactRootView</span> <span class="o">=</span> <span class="o">(</span><span class="n">ReactRootView</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">rrv_content</span><span class="o">);</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;然后可以调用<code>loadReact();</code>去加载ReactNative内容。</p>
+<h2>Android打包</h2>
+<p>&emsp;&emsp;前面的操作完成后就基本完成了，现在需要打包一份离线JSBundle进去App，用于没网的时候App展示使用。</p>
+<p>&emsp;&emsp;首先在项目app/src/main下面必须要创建一个assets目录，否则后面生成会报<code>ENOENT: no such file or directory, open 'E:\Project\ExistedProject\app\src\main\assets\index.android.bundle'</code>。</p>
+<p>&emsp;&emsp;然后在项目目录下打开CMD，输入：</p>
+<div class="highlight"><pre><span></span>react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output app/src/main/assets/index.android.bundle --assets-dest app/src/main/res/
+</pre></div>
+
+
+<p>&emsp;&emsp;看到<code>Done writing bundle output</code>就证明生成成功了。接下来直接运行App到手机上看看效果，成功看到离线内容。
+<img alt="result" src="../images/rnIntergation/3.jpg"></p>
+<h2>启动服务器</h2>
+<p>&emsp;&emsp;上面的查看效果是离线JSBundle的效果，如果你尝试reload的话就会发现出现error，因为连接不上服务器。直接在目录下输入：</p>
+<div class="highlight"><pre><span></span>npm start
+</pre></div>
+
+
+<p>&emsp;&emsp;启动服务器后不要关闭CMD，手机App注意设置Debug server host &amp; port为主机的地址（具体可以参考我的<a href="http://blog.csdn.net/maxwell_nc/article/details/60960864">上一篇博文</a>）,然后reload，看到App绿色的进度条或者服务器CMD中build的进度条就知道正在构建。成功后就可以看到服务器端的js效果。</p>
+<p>&emsp;&emsp;可以尝试修改提示语为“Hello ReactNative For Android!”并且保存，手机端reload既可以看到app端更新了的效果：
+<img alt="update" src="../images/rnIntergation/4.jpg"></p>
+<p>&emsp;&emsp;注意你修改了资源可以不重新打包离线JSBundle进去，但是至少需要一份离线JSBundle才能运行App，否则Gradle编译无法通过。</p>
+<h2>远程调试</h2>
+<p>&emsp;&emsp;如果你选在手机选择“Debug JS Remotely”，如果你没有安装chrome浏览器，不出意外就是npm服务器提示：
+<img alt="update" src="../images/rnIntergation/5.jpg">
+&emsp;&emsp;然后手机端也红屏提示错误，实际上你只需要用任一款chrome壳浏览器打开<a href="http://localhost:8081/debugger-ui">http://localhost:8081/debugger-ui</a>然后重新reload，看到<code>Status: Debugger session #0 active.</code>就可以连上远程调试了，调试不是本文的内容就不再阐述了。</p>
+<h2>尾声</h2>
+<p>&emsp;&emsp;ReactNative集成的过程中有很多的坑，如果你按照我的博文来操作可能你会说：“不会啊，一路流程非常轻松没问题啊”,但实际上本博文只是把可能的遇到问题和处理地方已经提前说明了。其中遇到的错误本文也列出来了，方便后面遇到的朋友也参考学习下。</p>
+<h2>相关文章</h2>
+<p><strong>Windows下搭建ReactNative开发环境（Android）：</strong><a href="http://blog.csdn.net/maxwell_nc/article/details/60960864">http://blog.csdn.net/maxwell_nc/article/details/60960864</a></p>
+		<br/><br/>
+		<p style="color: #eb2344;"><b>
+		原创文章，欢迎转载，请保留出处。有任何错误、疑问或者建议，欢迎指出。
+		</b></p>
+		<br/><br/>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'maxwell-nc';
+                var disqus_identifier = 'android/rnIntergation.html';
+                //var disqus_url = 'https://maxwell-nc.github.io/android/rnIntergation.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">社交</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/maxwell-nc" target="_blank">Github</a></li>
+                            <li><a href="mailto:maxwell_nc@163.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">链接</div>
+                        <ul class="list-unstyled">
+                            <li><a href="http://blog.csdn.net/maxwell_nc" target="_blank">旧的博客</a></li>
+                        </ul>
+                    </div> 
+					<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <p class="pull-right text-right">
+                            <em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank"><u>Pelican</u></a></em><br/>
+                            <em>Original Theme by <a href="https://github.com/molivier" target="_blank"><u>Molivier</u></a></em><br/>
+                            <em>Modified Theme by <a href="https://github.com/maxwell-nc" target="_blank"><u>Maxwell-nc</u></a></em><br/>
+                            <small>&copy; Maxwell-nc 2017</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>

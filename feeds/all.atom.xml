@@ -1,5 +1,272 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-22T00:00:00+08:00</updated><entry><title>Android单元测试之JUnit框架</title><link href="https://maxwell-nc.github.io/android/junitTest.html" rel="alternate"></link><published>2017-05-22T00:00:00+08:00</published><updated>2017-05-22T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-22:/android/junitTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-24T00:00:00+08:00</updated><entry><title>快速集成ReactNative到现有Android项目</title><link href="https://maxwell-nc.github.io/android/rnIntergation.html" rel="alternate"></link><published>2017-05-24T00:00:00+08:00</published><updated>2017-05-24T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-24:/android/rnIntergation.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;突然想起来之前旧博客的&lt;a href="http://blog.csdn.net/maxwell_nc/article/details/60960864"&gt;《Windows下搭建ReactNative开发环境（Android）》&lt;/a&gt;留下的一个坑，遂填一下坑。而且集成ReactNative到现有Android项目也不是什么容易的事情，网上很多教程都是不完整，你会发现跟着来做都是一步一个坑，不断搜索error解决花了半天才能搭建好，下次再做又是一堆问题，所以我这里记录下自己的集成心得。&lt;/p&gt;
+&lt;h2&gt;准备操作&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先你建议你先看看&lt;a href="http://blog.csdn.net/maxwell_nc/article/details/60960864"&gt;上一篇搭建环境的文章&lt;/a&gt;，否则接下来的内容你可以看不懂或者没有对应的工具。然后就是你需要有一个现有的Android项目，如果你需要创建全新项目前一篇已经描述过了，本文就不再重复了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;本文集成的&lt;strong&gt;ReactNative版本为0.44&lt;/strong&gt;，如果不是的话可能与本文内容有所差异，请自行甄别。&lt;/p&gt;
+&lt;h2&gt;安装ReactNative到项目&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;我们已一个已存在的工程ExistedProject为例，首先打开项目的目录，在CMD输入：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;npm init
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;code&gt;npm init&lt;/code&gt;会提示引导你创建package.json,如下图所示：
+&lt;img alt="init" src="../images/rnIntergation/1.jpg"&gt;
+&amp;emsp;&amp;emsp;创建成功后可以安装React、ReactNative到目录里面，继续在&lt;strong&gt;当前目录&lt;/strong&gt;下输入命令：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;npm install --save react react-native
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;等待安装成功的过程中，可以到&lt;a href="https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig"&gt;https://raw.githubusercontent …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;突然想起来之前旧博客的&lt;a href="http://blog.csdn.net/maxwell_nc/article/details/60960864"&gt;《Windows下搭建ReactNative开发环境（Android）》&lt;/a&gt;留下的一个坑，遂填一下坑。而且集成ReactNative到现有Android项目也不是什么容易的事情，网上很多教程都是不完整，你会发现跟着来做都是一步一个坑，不断搜索error解决花了半天才能搭建好，下次再做又是一堆问题，所以我这里记录下自己的集成心得。&lt;/p&gt;
+&lt;h2&gt;准备操作&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先你建议你先看看&lt;a href="http://blog.csdn.net/maxwell_nc/article/details/60960864"&gt;上一篇搭建环境的文章&lt;/a&gt;，否则接下来的内容你可以看不懂或者没有对应的工具。然后就是你需要有一个现有的Android项目，如果你需要创建全新项目前一篇已经描述过了，本文就不再重复了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;本文集成的&lt;strong&gt;ReactNative版本为0.44&lt;/strong&gt;，如果不是的话可能与本文内容有所差异，请自行甄别。&lt;/p&gt;
+&lt;h2&gt;安装ReactNative到项目&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;我们已一个已存在的工程ExistedProject为例，首先打开项目的目录，在CMD输入：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;npm init
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;code&gt;npm init&lt;/code&gt;会提示引导你创建package.json,如下图所示：
+&lt;img alt="init" src="../images/rnIntergation/1.jpg"&gt;
+&amp;emsp;&amp;emsp;创建成功后可以安装React、ReactNative到目录里面，继续在&lt;strong&gt;当前目录&lt;/strong&gt;下输入命令：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;npm install --save react react-native
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;等待安装成功的过程中，可以到&lt;a href="https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig"&gt;https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig&lt;/a&gt;下载&lt;code&gt;.flowconfig&lt;/code&gt;文件复制到项目之中。（这个文件只是用来约束Javascript代码，也可以跳过），很快就安装完成了：
+&lt;img alt="warn" src="../images/rnIntergation/2.jpg"&gt;
+&amp;emsp;&amp;emsp;这里需要有一个警告：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;react&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;native&lt;/span&gt;&lt;span class="mf"&gt;@0.44.0&lt;/span&gt; &lt;span class="n"&gt;requires&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;peer&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;react&lt;/span&gt;&lt;span class="mf"&gt;@16.0.0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="mf"&gt;.6&lt;/span&gt; &lt;span class="n"&gt;but&lt;/span&gt; &lt;span class="n"&gt;none&lt;/span&gt; &lt;span class="n"&gt;was&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;很多的文章都没有说明这个，导致后面项目运行后会出错。遇到这个问题是因为ReactNative和React的版本有着严格的对应关系，如果不一样就会报错，解决方法就是重新安装对应的React版本，输入命令：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;npm&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt; &lt;span class="n"&gt;react&lt;/span&gt;&lt;span class="mf"&gt;@16.0.0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="mf"&gt;.6&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;这样就可以避免后面出现的这两个问题:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Unable to resolve module `react/lib/ReactDebugCurrentFrame`
+Unable to resolve module `react/lib/ReactComponentWithPureRenderMixin`
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;接下来修改package.json文件,在&lt;code&gt;"scripts"&lt;/code&gt;下增加一句&lt;code&gt;"start": "node node_modules/react-native/local-cli/cli.js start"&lt;/code&gt;,注意json格式，需要添加逗号，最后package.json文件应该是这样的：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;ext_prj&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;1.0.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;description&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;nothing&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;main&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;index.js&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;scripts&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;start&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;node node_modules/react-native/local-cli/cli.js start&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;echo \&amp;quot;Error: no test specified\&amp;quot; &amp;amp;&amp;amp; exit 1&amp;quot;&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;author&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;maxwell-nc&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;license&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;ISC&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;react&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;^16.0.0-alpha.6&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;react-native&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;^0.44.0&amp;quot;&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;创建安卓首页js文件&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;接下来在项目目录中创建index.android.js文件，然后编辑内容：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;React&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;Component&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;react&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="kr"&gt;import&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;AppRegistry&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;Text&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="nx"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;react-native&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;HelloWorld&lt;/span&gt; &lt;span class="kr"&gt;extends&lt;/span&gt; &lt;span class="nx"&gt;Component&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;render&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;Text&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="nx"&gt;Hello&lt;/span&gt; &lt;span class="nx"&gt;world&lt;/span&gt;&lt;span class="o"&gt;!&amp;lt;&lt;/span&gt;&lt;span class="err"&gt;/Text&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;//这里的&amp;#39;HelloWorld&amp;#39;是后面android项目使用的&lt;/span&gt;
+&lt;span class="c1"&gt;//而后面的HelloWorld是class的名称&lt;/span&gt;
+&lt;span class="nx"&gt;AppRegistry&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;registerComponent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;HelloWorld&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;HelloWorld&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;留意注释里面的内容，后面有用到，这个文件是react页面的启动页。基本的框架已经搭建好，下面我们配置android项目的设置。&lt;/p&gt;
+&lt;h2&gt;配置Android项目&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先在android项目目录下的build.gradle文件添加依赖Maven仓库，代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;allprojects {
+    repositories {
+        maven {
+            url &amp;quot;$rootDir/node_modules/react-native/android&amp;quot;
+        }
+        jcenter()
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;这里又要注意了，node_modules目录的位置必须正确，否则Gradle就会报错误了。然后修改app目录下的build.gradle文件，添加ReactNative依赖：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;dependencies {
+    //...
+    compile &amp;quot;com.facebook.react:react-native:+&amp;quot;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;为了防止64位库问题和findbugsbug版本问题，同时增加下面的代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;android {
+    //...
+    defaultConfig {
+        //...
+        ndk{
+            abiFilters &amp;quot;armeabi-v7a&amp;quot;,&amp;quot;armeabi-v7a&amp;quot;,&amp;quot;x86&amp;quot;
+        }
+    }
+    //...
+    configurations.all {
+        resolutionStrategy.force &amp;#39;com.google.code.findbugs:jsr305:3.0.0&amp;#39;
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;如果没有设置，后面可能会产生如下类似问题：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Error&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;Conflict&lt;/span&gt; &lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;dependency&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;com.google.code.findbugs:jsr305&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;java&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;UnsatisfiedLinkError&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;could&lt;/span&gt; &lt;span class="n"&gt;find&lt;/span&gt; &lt;span class="n"&gt;DSO&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;libreactnativejni&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;so&lt;/span&gt;
+&lt;span class="n"&gt;java&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;UnsatisfiedLinkError&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;dlopen&lt;/span&gt; &lt;span class="n"&gt;failed&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;xxx/libgnustl_shared.so&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="mi"&gt;32&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;bit&lt;/span&gt; &lt;span class="n"&gt;instead&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="mi"&gt;64&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;bit&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;配置完Gradle之后执行以下Sync操作确保上述操作无误，然后给AndroidManifest.xml文件添加上网路权限，和DevSettingsActivity界面配置：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span class="na"&gt;android:name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android.permission.INTERNET&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span class="nt"&gt;&amp;lt;activity&lt;/span&gt; &lt;span class="na"&gt;android:name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;com.facebook.react.devsupport.DevSettingsActivity&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;DevSettingsActivity这个界面在Release的时候可以去掉，仅仅用于开发测试设置。&lt;/p&gt;
+&lt;h2&gt;Andorid调用ReactNative&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先需要创建一个基类，方便后面使用，这里给大家写了一个BaseReactActivity：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cm"&gt;/**&lt;/span&gt;
+&lt;span class="cm"&gt; * ReactNativeActivity基类&lt;/span&gt;
+&lt;span class="cm"&gt; */&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;abstract&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;BaseReactActivity&lt;/span&gt; &lt;span class="kd"&gt;extends&lt;/span&gt; &lt;span class="n"&gt;Activity&lt;/span&gt; &lt;span class="kd"&gt;implements&lt;/span&gt; &lt;span class="n"&gt;DefaultHardwareBackBtnHandler&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="kd"&gt;protected&lt;/span&gt; &lt;span class="n"&gt;ReactRootView&lt;/span&gt; &lt;span class="n"&gt;mReactRootView&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;ReactInstanceManager&lt;/span&gt; &lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="kd"&gt;protected&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;onCreate&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nd"&gt;@Nullable&lt;/span&gt; &lt;span class="n"&gt;Bundle&lt;/span&gt; &lt;span class="n"&gt;savedInstanceState&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;super&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onCreate&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;savedInstanceState&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ReactInstanceManager&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;builder&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt;
+                &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setApplication&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;getApplication&lt;/span&gt;&lt;span class="o"&gt;())&lt;/span&gt;
+                &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setBundleAssetName&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;index.android.bundle&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+                &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setJSMainModuleName&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;index.android&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+                &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;addPackage&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;MainReactPackage&lt;/span&gt;&lt;span class="o"&gt;())&lt;/span&gt;
+                &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setUseDeveloperSupport&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;BuildConfig&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;DEBUG&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+                &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setInitialLifecycleState&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;LifecycleState&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;RESUMED&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+                &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;build&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="cm"&gt;/**&lt;/span&gt;
+&lt;span class="cm"&gt;     * 加载ReactNative内容&lt;/span&gt;
+&lt;span class="cm"&gt;     */&lt;/span&gt;
+    &lt;span class="kd"&gt;protected&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;loadReact&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;//这里的HelloWorld必须对应“index.android.js”中的“AppRegistry.registerComponent()”的第一个参数&lt;/span&gt;
+        &lt;span class="n"&gt;mReactRootView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;startReactApplication&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;HelloWorld&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;invokeDefaultOnBackPressed&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;super&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onBackPressed&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="kd"&gt;protected&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;onPause&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;super&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onPause&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onHostPause&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="kd"&gt;protected&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;onResume&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;super&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onResume&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onHostResume&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="kd"&gt;protected&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;onDestroy&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;super&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onDestroy&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onHostDestroy&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;onBackPressed&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;mReactInstanceManager&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onBackPressed&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="kd"&gt;super&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onBackPressed&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;注意代码中startReactApplication方法中的参数要与前面index.android.js文件中设置的一样（看注释），然后根据官方的文档，这个ReactInstanceManager可以设置成一个单例，全局使用同一个ReactInstanceManager就可以了，这里为了方便快捷就写在一起了。这个类主要传递了声明周期给ReactNative，也处理了后退按钮事件。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;注意上面的类中BuildConfig的导包是选择自己的包名，而不是其他：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;com.github.maxwell.nc.existedproject.BuildConfig&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;下面需要把使用到ReactNative的Activity继承这个Activity，如果需要这个ContentView使用ReactRootView，可以在onCreate中添加：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;setContentView&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mReactRootView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ReactRootView&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;));&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;如果是在布局中增加了ReactRootView，可以使用：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;setContentView&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;layout&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;activity_main&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;mReactRootView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ReactRootView&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="n"&gt;findViewById&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;rrv_content&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;然后可以调用&lt;code&gt;loadReact();&lt;/code&gt;去加载ReactNative内容。&lt;/p&gt;
+&lt;h2&gt;Android打包&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;前面的操作完成后就基本完成了，现在需要打包一份离线JSBundle进去App，用于没网的时候App展示使用。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先在项目app/src/main下面必须要创建一个assets目录，否则后面生成会报&lt;code&gt;ENOENT: no such file or directory, open 'E:\Project\ExistedProject\app\src\main\assets\index.android.bundle'&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;然后在项目目录下打开CMD，输入：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output app/src/main/assets/index.android.bundle --assets-dest app/src/main/res/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;看到&lt;code&gt;Done writing bundle output&lt;/code&gt;就证明生成成功了。接下来直接运行App到手机上看看效果，成功看到离线内容。
+&lt;img alt="result" src="../images/rnIntergation/3.jpg"&gt;&lt;/p&gt;
+&lt;h2&gt;启动服务器&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;上面的查看效果是离线JSBundle的效果，如果你尝试reload的话就会发现出现error，因为连接不上服务器。直接在目录下输入：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;npm start
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;启动服务器后不要关闭CMD，手机App注意设置Debug server host &amp;amp; port为主机的地址（具体可以参考我的&lt;a href="http://blog.csdn.net/maxwell_nc/article/details/60960864"&gt;上一篇博文&lt;/a&gt;）,然后reload，看到App绿色的进度条或者服务器CMD中build的进度条就知道正在构建。成功后就可以看到服务器端的js效果。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;可以尝试修改提示语为“Hello ReactNative For Android!”并且保存，手机端reload既可以看到app端更新了的效果：
+&lt;img alt="update" src="../images/rnIntergation/4.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;注意你修改了资源可以不重新打包离线JSBundle进去，但是至少需要一份离线JSBundle才能运行App，否则Gradle编译无法通过。&lt;/p&gt;
+&lt;h2&gt;远程调试&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;如果你选在手机选择“Debug JS Remotely”，如果你没有安装chrome浏览器，不出意外就是npm服务器提示：
+&lt;img alt="update" src="../images/rnIntergation/5.jpg"&gt;
+&amp;emsp;&amp;emsp;然后手机端也红屏提示错误，实际上你只需要用任一款chrome壳浏览器打开&lt;a href="http://localhost:8081/debugger-ui"&gt;http://localhost:8081/debugger-ui&lt;/a&gt;然后重新reload，看到&lt;code&gt;Status: Debugger session #0 active.&lt;/code&gt;就可以连上远程调试了，调试不是本文的内容就不再阐述了。&lt;/p&gt;
+&lt;h2&gt;尾声&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;ReactNative集成的过程中有很多的坑，如果你按照我的博文来操作可能你会说：“不会啊，一路流程非常轻松没问题啊”,但实际上本博文只是把可能的遇到问题和处理地方已经提前说明了。其中遇到的错误本文也列出来了，方便后面遇到的朋友也参考学习下。&lt;/p&gt;
+&lt;h2&gt;相关文章&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Windows下搭建ReactNative开发环境（Android）：&lt;/strong&gt;&lt;a href="http://blog.csdn.net/maxwell_nc/article/details/60960864"&gt;http://blog.csdn.net/maxwell_nc/article/details/60960864&lt;/a&gt;&lt;/p&gt;</content><category term="android"></category><category term="react-native"></category></entry><entry><title>Android单元测试之JUnit框架</title><link href="https://maxwell-nc.github.io/android/junitTest.html" rel="alternate"></link><published>2017-05-22T00:00:00+08:00</published><updated>2017-05-22T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-22:/android/junitTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;最近抽空整理下项目，顺手整理了单元测试，于是记录下自己学习单元测试的心得，让更多的人快速用上单元测试提高开发效率。本文主要讲解如何使用JUnit框架进行单元测试，不会提及单元测试优缺点。&lt;/p&gt;
 &lt;h2&gt;在Android项目中使用JUnit&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;记得在Eclipse中集成Junit框架是一件很复杂的事情，首先要导入lib包，然后配置...现在如果使用Android Studio的话什么工作都不需要处理，创建一个新的项目就帮你配置好整个JUnit框架，你只需要专心写测试类即可。而且测试类也是可以自动生成的,如下图所示：
