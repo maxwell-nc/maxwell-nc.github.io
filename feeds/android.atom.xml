@@ -1,5 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path - android</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/android.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-24T00:00:00+08:00</updated><entry><title>快速集成ReactNative到现有Android项目</title><link href="https://maxwell-nc.github.io/android/rnIntergation.html" rel="alternate"></link><published>2017-05-24T00:00:00+08:00</published><updated>2017-05-24T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-24:/android/rnIntergation.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path - android</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/android.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-25T00:00:00+08:00</updated><entry><title>Android单元测试之Mockito框架</title><link href="https://maxwell-nc.github.io/android/mockitoTest.html" rel="alternate"></link><published>2017-05-25T00:00:00+08:00</published><updated>2017-05-25T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-25:/android/mockitoTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;之前写的&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;JUnit框架单元测试&lt;/a&gt;的最后留了一个悬念，今天我们把这个问题解决下，首先我们要理解mock的概念，然后学习使用mock来做单元测试。关于Mock的框架有很多，比如Mockito、PowerMock、EasyMock等等，本文主要介绍Mockito的用法，各种框架的对比不在本文阐述范围，而且此类框架大体相同，只需要学习其中一个就能轻松地学习其他框架，没必要纠结那个框架才是最好的。&lt;/p&gt;
+&lt;h2&gt;Mock的概念&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先要明白什么是Mock，为什么要Mock，Mock能干什么这三个问题。Mock的中文意思是“模仿”，Mock就是去构造（模仿）一个虚拟的对象，而这个对象通常比较难直接创建，有了Mock可以轻松地帮助你对复杂的功能解耦，实现单元测试。比如&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;前文&lt;/a&gt;最后留下的Log类，你会发现它依赖于Android运行环境，很难把整个依赖树都构建出来，所以我们需要Mock。&lt;/p&gt;
+&lt;h2&gt;集成Mocktio&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;Android上集成非常简单，在app项目下的build.gradle添加测试编译依赖(下面采用2.x最新版本)：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;dependencies {
+    //...
+    testCompile &amp;quot;org.mockito:mockito-core:2.+&amp;quot;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;然后使用Gradle Sync一下即可。顺便附上Mockito的Jcenter地址：&lt;a href="http://jcenter.bintray.com/org/mockito/mockito-core/"&gt;http …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;之前写的&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;JUnit框架单元测试&lt;/a&gt;的最后留了一个悬念，今天我们把这个问题解决下，首先我们要理解mock的概念，然后学习使用mock来做单元测试。关于Mock的框架有很多，比如Mockito、PowerMock、EasyMock等等，本文主要介绍Mockito的用法，各种框架的对比不在本文阐述范围，而且此类框架大体相同，只需要学习其中一个就能轻松地学习其他框架，没必要纠结那个框架才是最好的。&lt;/p&gt;
+&lt;h2&gt;Mock的概念&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先要明白什么是Mock，为什么要Mock，Mock能干什么这三个问题。Mock的中文意思是“模仿”，Mock就是去构造（模仿）一个虚拟的对象，而这个对象通常比较难直接创建，有了Mock可以轻松地帮助你对复杂的功能解耦，实现单元测试。比如&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;前文&lt;/a&gt;最后留下的Log类，你会发现它依赖于Android运行环境，很难把整个依赖树都构建出来，所以我们需要Mock。&lt;/p&gt;
+&lt;h2&gt;集成Mocktio&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;Android上集成非常简单，在app项目下的build.gradle添加测试编译依赖(下面采用2.x最新版本)：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;dependencies {
+    //...
+    testCompile &amp;quot;org.mockito:mockito-core:2.+&amp;quot;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;然后使用Gradle Sync一下即可。顺便附上Mockito的Jcenter地址：&lt;a href="http://jcenter.bintray.com/org/mockito/mockito-core/"&gt;http://jcenter.bintray.com/org/mockito/mockito-core/&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;验证互动（Interactions）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;下面来使用Mockito验证互动功能，比如说验证TextView的setText方法交互情况：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TextView&lt;/span&gt; &lt;span class="n"&gt;mockedTextView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;mock&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;verify&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;上述代码的&lt;code&gt;mock&lt;/code&gt;方法用于“模仿”一个对象并返回这个对象，而&lt;code&gt;verify&lt;/code&gt;方法则是用于验证“模仿对象”的互动。&lt;strong&gt;特别注意：如果你使用&lt;code&gt;mockedTextView.getText()&lt;/code&gt;获取设置的值会发现返回值为null&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;设置桩（Stub）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;上面最后说到&lt;code&gt;mockedTextView.getText()&lt;/code&gt;会返回一个null，假设我们需要测试&lt;code&gt;mockedTextView.getText()&lt;/code&gt;返回值是否正确怎么处理呢？Mockito给我们设置方法桩功能。简单来说就是“指定方法返回的结果”，比如下面代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TextView&lt;/span&gt; &lt;span class="n"&gt;mockedTextView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;mock&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;when&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getText&lt;/span&gt;&lt;span class="o"&gt;()).&lt;/span&gt;&lt;span class="na"&gt;thenReturn&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getText&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;上述代码用&lt;code&gt;when&lt;/code&gt;方法指定要设置桩的方法，&lt;code&gt;thenReturn&lt;/code&gt;来指定返回值，测试后发现输出为“test”，表明设置方法桩成功。值得注意的时候，给方法设置桩可以设置多次，只会返回最后一次设置的值。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;除了when...thenReturn的写法外，还有doRetrun...when的写法，代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;doReturn&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;123&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;when&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;getText&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;验证模式（Verification Mode）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;细心的读者会发现&lt;code&gt;verify&lt;/code&gt;方法重载里另外一个带VerificationMode参数的方法。这个参数用于设置验证模式，比如说需要验证方法执行了多少次。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;VerificationMode是一个接口，我们可以看看源码中实现这个接口的类来学习它的用法：
+&lt;img alt="impl" src="../images/mockitoTest/1.jpg"&gt;
+&amp;emsp;&amp;emsp;比如Mockito.times(1)代表验证方法执行了1次：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;verify&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;times&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;)).&lt;/span&gt;&lt;span class="na"&gt;getText&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;其他的验证模式也是大体相同的用法，具体可以参考类的说明。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;strong&gt;注意默认没有验证模式的verify方法使用的默认验证模式就是&lt;/strong&gt;&lt;code&gt;Mockito.times(1)&lt;/code&gt;。&lt;/p&gt;
+&lt;h2&gt;参数匹配器（Argument Matcher)&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;有时候我们不关心输入，比如说setText()方法:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TextView&lt;/span&gt; &lt;span class="n"&gt;mockedTextView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;mock&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;verify&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;anyString&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;上述的&lt;code&gt;Mockito.anyString()&lt;/code&gt;就是一个参数匹配器，值得注意的是，默认的验证模式是&lt;code&gt;Mockito.times(1)&lt;/code&gt;，如果使用了参数匹配器，注意调用次数，否则回报：&lt;code&gt;org.mockito.exceptions.verification.TooManyActualInvocations&lt;/code&gt;，下面是调用两次的正确例子：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TextView&lt;/span&gt; &lt;span class="n"&gt;mockedTextView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;mock&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;abc&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;verify&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;times&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;)).&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;anyString&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;由于参数匹配器的种类太多，这里就不一样列举了，可以参考ArgumentMatchers类找到各种匹配器。&lt;/p&gt;
+&lt;h2&gt;抛出异常&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;若果需要某个方法抛出异常，可以使用下面的方法：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;//void返回方法
+Mockito.doThrow(new RuntimeException()).when(mockedTextView).setText(&amp;quot;abc&amp;quot;);
+
+//非void返回方法
+Mockito.when(mockedTextView.getText()).thenThrow(new RuntimeException());
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;其中注意区分不同返回类型的写法不同。另外如果需要防止异常中断执行，可以在增加一个doNothing方法，代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Mockito.doNothing().doThrow(new NullPointerException()).when(mockedTextView).setText(&amp;quot;abc&amp;quot;);
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;可以看到上述代码，&lt;strong&gt;只有Void返回类型方法&lt;/strong&gt;才能使用&lt;code&gt;doNothing()&lt;/code&gt;&lt;/p&gt;
+&lt;h2&gt;自定义应答（Answer）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;对于一个方法设置桩when...thenXxx或者doXxxx...when的组合外，Mockito给了一个自定义应答的的方法让我们自定义方法应答的内容。试想一下，假设有一个异步方法（当然返回类型就是Void）的回调中有多个回调，当你想指定执行某个回调之前学到的显然就不那么容易实现了。如果自定义Answer内容，那将是非常简单的，示例代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;doAnswer&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Answer&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;Object&lt;/span&gt; &lt;span class="nf"&gt;answer&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;InvocationOnMock&lt;/span&gt; &lt;span class="n"&gt;invocationOnMock&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="kd"&gt;throws&lt;/span&gt; &lt;span class="n"&gt;Throwable&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+        &lt;span class="c1"&gt;//获取第一个参数&lt;/span&gt;
+        &lt;span class="n"&gt;Object&lt;/span&gt; &lt;span class="n"&gt;callback&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;invocationOnMock&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getArgument&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+
+        &lt;span class="c1"&gt;//指定回调执行操作&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;onFinished&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;}).&lt;/span&gt;&lt;span class="na"&gt;when&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedClass&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;asyncRequset&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="o"&gt;));&lt;/span&gt;&lt;span class="c1"&gt;//执行一步操作&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;或者举一个简单的例子(采用when...thenAnswer方式)：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;when&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getText&lt;/span&gt;&lt;span class="o"&gt;()).&lt;/span&gt;&lt;span class="na"&gt;thenAnswer&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Answer&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="nd"&gt;@Override&lt;/span&gt;
+            &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="nf"&gt;answer&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;InvocationOnMock&lt;/span&gt; &lt;span class="n"&gt;invocationOnMock&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="kd"&gt;throws&lt;/span&gt; &lt;span class="n"&gt;Throwable&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+                &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;custom answer&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+                &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+            &lt;span class="o"&gt;}&lt;/span&gt;
+        &lt;span class="o"&gt;});&lt;/span&gt;
+&lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;print&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getText&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;很明显，这里最终输出为:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;custom answer
+test
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;间谍（Spy）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;要知道如果Mock一个对象后，这个&lt;strong&gt;Mock对象对于所有非Void返回方法将返回默认值（对象则返回null），所有Void方法将什么都不做&lt;/strong&gt;。如果要保留原来对象的功能，而仅仅修改一个或几个方法的返回值，可以采用Spy方法，具体代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ArrayList&lt;/span&gt; &lt;span class="n"&gt;spyArray&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;spy&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ArrayList&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+&lt;span class="n"&gt;spyArray&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;add&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;spyArray&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;add&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;when&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;spyArray&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;get&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;)).&lt;/span&gt;&lt;span class="na"&gt;thenReturn&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;&lt;span class="c1"&gt;//注意书写位置，否则报IndexOutOfBound&lt;/span&gt;
+&lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;spyArray&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;get&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;));&lt;/span&gt;&lt;span class="c1"&gt;//输出1&lt;/span&gt;
+&lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;print&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;spyArray&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;get&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;));&lt;/span&gt;&lt;span class="c1"&gt;//输出2&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;上述代码可以看到Spy方法没有改变ArrayList里的方法，只是当get(0)时返回1，其他方法执行逻辑还是ArrayList中的逻辑。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;特别注意这个Spy方法看上去似乎很方便，实际上如果你Spy一个需要Mock的对象，就会提示你该对象没有Mock，就比如TextView。&lt;/p&gt;
+&lt;h2&gt;Mock注解（Annotation）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;使用@Mock可以帮我们快速Mock对象：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;AnnotationTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Mock&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;TextView&lt;/span&gt; &lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Before&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;setup&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;MockitoAnnotations&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;initMocks&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;&lt;span class="c1"&gt;//初始化所有Mock注解&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;如果觉得写setup方法比较麻烦，可以去掉并使用Mockito自带的JUnit Rule帮我们自动完成：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;AnnotationTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Rule&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;MockitoRule&lt;/span&gt; &lt;span class="n"&gt;mockitoRule&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;MockitoJUnit&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;rule&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Mock&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;TextView&lt;/span&gt; &lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+    &lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;如果没有使用JUnit Runner，可以直接使用Mockito提供的JUnitRunner（Runner相当于一个容器，负责处理你的测试代码）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@RunWith&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MockitoJUnitRunner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;AnnotationTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Mock&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;TextView&lt;/span&gt; &lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+    &lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;另外Mockito还提供了其他注解，例如@Spy，这个可以用于&lt;strong&gt;无参构造&lt;/strong&gt;的类初始化Spy，所以实用性并不高，其他一些不常用的这里就不介绍了。&lt;/p&gt;
+&lt;h2&gt;静态方法处理&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;实际上即使你看完前面全部内容，还是不能解决我们&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;上一篇文章&lt;/a&gt;最后提到的那个问题，因为&lt;strong&gt;Mockito不支持静态方法的Mock&lt;/strong&gt;！&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;要Mock静态方法有两个方法，一个是使用PowerMock来扩展Mockito，另外一个就是创建一个StaticWrapper来把静态方法变成非静态方法，方法如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LogTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;StaticWrapper&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="c1"&gt;//包裹静态方法为非静态方法&lt;/span&gt;
+        &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;msg&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;msg&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Test&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;test&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;StaticWrapper&lt;/span&gt; &lt;span class="n"&gt;mockedLog&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;mock&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;StaticWrapper&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;mockedLog&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;verify&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedLog&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;尾声&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;上文介绍了Mockito所有基本用法，但是这还不是Mockito的全部，感兴趣的可以自己深入研究一下，例如InOrder的用法等等。虽然我们已经学会了Mockito和JUnit，但是要在JVM上测试Android代码（比如要测试Activity的生命周期），显然之前学的无法解决这个问题。这里又留下一个悬念，下篇文章我们再来探讨这个问题。&lt;/p&gt;
+&lt;h2&gt;相关文章&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Android单元测试之JUnit框架：&lt;/strong&gt;&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;https://maxwell-nc.github.io/android/junitTest.html&lt;/a&gt;
+&lt;strong&gt;Mockito Github：&lt;/strong&gt;&lt;a href="https://github.com/mockito/mockito"&gt;https://github.com/mockito/mockito&lt;/a&gt;&lt;/p&gt;</content><category term="android"></category><category term="test"></category><category term="mockito"></category></entry><entry><title>快速集成ReactNative到现有Android项目</title><link href="https://maxwell-nc.github.io/android/rnIntergation.html" rel="alternate"></link><published>2017-05-24T00:00:00+08:00</published><updated>2017-05-24T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-24:/android/rnIntergation.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;突然想起来之前旧博客的&lt;a href="http://blog.csdn.net/maxwell_nc/article/details/60960864"&gt;《Windows下搭建ReactNative开发环境（Android）》&lt;/a&gt;留下的一个坑，遂填一下坑。而且集成ReactNative到现有Android项目也不是什么容易的事情，网上很多教程都是不完整，你会发现跟着来做都是一步一个坑，不断搜索error解决花了半天才能搭建好，下次再做又是一堆问题，所以我这里记录下自己的集成心得。&lt;/p&gt;
 &lt;h2&gt;准备操作&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;首先你建议你先看看&lt;a href="http://blog.csdn.net/maxwell_nc/article/details/60960864"&gt;上一篇搭建环境的文章&lt;/a&gt;，否则接下来的内容你可以看不懂或者没有对应的工具。然后就是你需要有一个现有的Android项目，如果你需要创建全新项目前一篇已经描述过了，本文就不再重复了。&lt;/p&gt;
