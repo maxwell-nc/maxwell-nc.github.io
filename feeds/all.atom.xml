@@ -1,5 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-26T00:00:00+08:00</updated><entry><title>Android单元测试之Robolectric框架</title><link href="https://maxwell-nc.github.io/android/robolectricTest.html" rel="alternate"></link><published>2017-05-26T00:00:00+08:00</published><updated>2017-05-26T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-26:/android/robolectricTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-06-01T00:00:00+08:00</updated><entry><title>Android单元测试之AssertJ框架</title><link href="https://maxwell-nc.github.io/android/assertjTest.html" rel="alternate"></link><published>2017-06-01T00:00:00+08:00</published><updated>2017-06-01T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-06-01:/android/assertjTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href="https://maxwell-nc.github.io/android/robolectricTest.html"&gt;上一篇Android单元测试文章&lt;/a&gt;说到如果使用Junit给我们提供的Assert去对比Intent，那就需要每个成员都对比一次，十分不方便，今天给大家带来一个十分便利的框架AssertJ，由于这个框架本身是给Java使用的，我们可以直接使用针对Android设计的&lt;a href="https://github.com/square/assertj-android"&gt;AssertJ-Android框架&lt;/a&gt;。这个框架官方说明中写道“... aims to make it even easier to test Android”（致力于让安卓测试更简单），它和Assertj原版的比较可以看看官方的说明，这个不是本文的重点，这里就不多说了。&lt;/p&gt;
+&lt;h2&gt;Gradle依赖&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先当然是引入AssertJ-Android，直接在app的build.gradle中添加：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;testCompile &amp;#39;com.squareup.assertj:assertj-android:1.1.1&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;如果遇到冲突问题，比如：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Conflict with dependency 'com.android.support:support-annotations' in project ':app'. Resolved versions for …&lt;/p&gt;&lt;/blockquote&gt;</summary><content type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href="https://maxwell-nc.github.io/android/robolectricTest.html"&gt;上一篇Android单元测试文章&lt;/a&gt;说到如果使用Junit给我们提供的Assert去对比Intent，那就需要每个成员都对比一次，十分不方便，今天给大家带来一个十分便利的框架AssertJ，由于这个框架本身是给Java使用的，我们可以直接使用针对Android设计的&lt;a href="https://github.com/square/assertj-android"&gt;AssertJ-Android框架&lt;/a&gt;。这个框架官方说明中写道“... aims to make it even easier to test Android”（致力于让安卓测试更简单），它和Assertj原版的比较可以看看官方的说明，这个不是本文的重点，这里就不多说了。&lt;/p&gt;
+&lt;h2&gt;Gradle依赖&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先当然是引入AssertJ-Android，直接在app的build.gradle中添加：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;testCompile &amp;#39;com.squareup.assertj:assertj-android:1.1.1&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;如果遇到冲突问题，比如：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Conflict with dependency 'com.android.support:support-annotations' in project ':app'. Resolved versions for app (23.0.1) and test app (22.2.1) differ. See http://g.co/androidstudio/app-test-app-conflict for details.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;可以排除部分模块,如上述的support-annotations：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;testCompile( &amp;#39;com.squareup.assertj:assertj-android:1.1.1&amp;#39; ,{
+    exclude group: &amp;#39;com.android.support&amp;#39;, module: &amp;#39;support-annotations&amp;#39;
+})
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;值得注意，Support-v4和Appcompat也是需要单独的依赖：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;testCompile &amp;#39;com.squareup.assertj:assertj-android-support-v4:1.1.1&amp;#39;
+testCompile &amp;#39;com.squareup.assertj:assertj-android-appcompat-v7:1.1.1&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;AssertJ-Android还支持很多其他库，这些依赖都可以在官方文档找到，这里不一一说明。&lt;/p&gt;
+&lt;h2&gt;快速入门&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;由于AssertJ比较简单，这里就直接给一个简单例子说明下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Assertions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertThat&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;actual&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;isEqualTo&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;expected&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;上面的是比较两个对象的断言，&lt;strong&gt;注意assertThat传入的是actual实际对象&lt;/strong&gt;，这个容易和Junit的搞混。&lt;/p&gt;
+&lt;h2&gt;导包问题&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;注意AssertJ-Android包含了AssertJ和扩展的Android API,分别对应:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;org&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertj&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;core&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;api&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;Assertions&lt;/span&gt;
+&lt;span class="n"&gt;org&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertj&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;android&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;api&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;Assertions&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;使用的时候要注意包名，否则可能会找不到方法。&lt;/p&gt;
+&lt;h2&gt;链式判断&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;前文说到，使用Junit的Assert判断两个Intent比较麻烦，下面我们以Intent为例子说明链式判断：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Assertions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertThat&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;actual&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+          &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;hasComponent&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;expected&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getComponent&lt;/span&gt;&lt;span class="o"&gt;())&lt;/span&gt;
+          &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;hasAction&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;expected&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getAction&lt;/span&gt;&lt;span class="o"&gt;())&lt;/span&gt;
+          &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;hasFlags&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;expected&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getFlags&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;首先Assertions.assertThat会根据actual的类型返回对应的AbstractAssert子类，比如这里返回的是IntentAssert，而IntentAssert里面每个方法都是返回IntentAssert，这样可以做到链式调用，快速判断两个对象的属性。而且针对不同的对象他给出的方法也不一样，比如说MapAssert它身上有contains等方法专门针对Map对象来判断，十分方便。这里就不一样介绍了，使用IDE的自动提示功能很快你就能找到需要的方法了。&lt;/p&gt;
+&lt;h2&gt;自定义Assertions&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;实际上AssertJ-Android就是基于AssertJ基础上添加了大量Android相关API的自定义Assertions。下面我们也来为我们自己写的类自定义Assertions。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先假设我们有一个UserInfo类需要我们自定义Assert类：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;UserInfo&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;userName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+    &lt;span class="c1"&gt;//here is getter and setter...&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;然后我们定义一个UserInfoAssert类，前面说过，这些Assert类都是继承自AbstractAssert类，注意泛型即可：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;UserInfoAssert&lt;/span&gt; &lt;span class="kd"&gt;extends&lt;/span&gt; &lt;span class="n"&gt;AbstractAssert&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;UserInfoAssert&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;UserInfo&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="nf"&gt;UserInfoAssert&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UserInfo&lt;/span&gt; &lt;span class="n"&gt;actual&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;super&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;actual&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;UserInfoAssert&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;UserInfoAssert&lt;/span&gt; &lt;span class="nf"&gt;hasUserName&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;isNotNull&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;&lt;span class="c1"&gt;//防止actual为空&lt;/span&gt;
+        &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;userName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;actual&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getUserName&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TextUtils&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;isEmpty&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;userName&lt;/span&gt;&lt;span class="o"&gt;))&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;failWithMessage&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Expected username was not null but was null.&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;最后需要自定义一个Assertions类给我们提供访问UserInfoAssert：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Assertions&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;static&lt;/span&gt; &lt;span class="n"&gt;UserInfoAssert&lt;/span&gt; &lt;span class="nf"&gt;assertThat&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UserInfo&lt;/span&gt; &lt;span class="n"&gt;actual&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;UserInfoAssert&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;actual&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;完了之后就可以使用类似AssertJ的写法了：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Assertions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertThat&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;UserInfo&lt;/span&gt;&lt;span class="o"&gt;()).&lt;/span&gt;&lt;span class="na"&gt;hasUserName&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;上述代码如无意外就会抛出一个错误，需要注意的只是Assertions的导包问题。&lt;/p&gt;
+&lt;h2&gt;总结&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;经过一系列单元测试框架介绍，Android单元测试的基本内容就这些了，比如说如果快速编写单元测试用例等等这些，如果需要深入了解的话可以去看看一些相关的书籍。&lt;/p&gt;
+&lt;h2&gt;相关文章&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Android单元测试之JUnit框架：&lt;/strong&gt;&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;https://maxwell-nc.github.io/android/junitTest.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Android单元测试之Mockito框架：&lt;/strong&gt;&lt;a href="https://maxwell-nc.github.io/android/mockitoTest.html"&gt;https://maxwell-nc.github.io/android/mockitoTest.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Android单元测试之Robolectric框架：&lt;/strong&gt;&lt;a href="https://maxwell-nc.github.io/android/robolectricTest.html"&gt;https://maxwell-nc.github.io/android/robolectricTest.html&lt;/a&gt;&lt;/p&gt;</content><category term="android"></category><category term="test"></category><category term="assertj"></category></entry><entry><title>Android单元测试之Robolectric框架</title><link href="https://maxwell-nc.github.io/android/robolectricTest.html" rel="alternate"></link><published>2017-05-26T00:00:00+08:00</published><updated>2017-05-26T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-26:/android/robolectricTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href="https://maxwell-nc.github.io/android/mockitoTest.html"&gt;上一篇Android单元测试文章&lt;/a&gt;最后说道要测试Android代码逻辑，光有JUnit和Mockito是不够的，假设你使用了TextView的setText,用Mockito框架的话，默认的TextView的getText方法会返回null,如果是简单的代码，使用Mockito的桩设置还可以接受，如果是要测试到Activity的生命周期等一些复杂逻辑就显得比较复杂了。&lt;/p&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;为了解决这个问题,诞生了Instrumentation、Robolectric等等的测试框架，不过Instrumentation实际上还是要运行代码到平台上测试，耗费大量的时间，我们今天要介绍的是运行在JVM上的Robolectric测试框架。&lt;/p&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;PS：本来想找一些参考文章，结果发现网上的文章多半是说一半没有另一半，或者有些可能遇到的问题没有指出。最主要的是官方的文档也是少的可怜，给出的Sample也是旧版本的，完全很多地方都不一样了。&lt;/p&gt;
