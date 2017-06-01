@@ -1,5 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path - android</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/android.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-25T00:00:00+08:00</updated><entry><title>Android单元测试之Mockito框架</title><link href="https://maxwell-nc.github.io/android/mockitoTest.html" rel="alternate"></link><published>2017-05-25T00:00:00+08:00</published><updated>2017-05-25T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-25:/android/mockitoTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path - android</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/android.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-05-26T00:00:00+08:00</updated><entry><title>Android单元测试之Robolectric框架</title><link href="https://maxwell-nc.github.io/android/robolectricTest.html" rel="alternate"></link><published>2017-05-26T00:00:00+08:00</published><updated>2017-05-26T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-26:/android/robolectricTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href="https://maxwell-nc.github.io/android/mockitoTest.html"&gt;上一篇Android单元测试文章&lt;/a&gt;最后说道要测试Android代码逻辑，光有JUnit和Mockito是不够的，假设你使用了TextView的setText,用Mockito框架的话，默认的TextView的getText方法会返回null,如果是简单的代码，使用Mockito的桩设置还可以接受，如果是要测试到Activity的生命周期等一些复杂逻辑就显得比较复杂了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;为了解决这个问题,诞生了Instrumentation、Robolectric等等的测试框架，不过Instrumentation实际上还是要运行代码到平台上测试，耗费大量的时间，我们今天要介绍的是运行在JVM上的Robolectric测试框架。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;PS：本来想找一些参考文章，结果发现网上的文章多半是说一半没有另一半，或者有些可能遇到的问题没有指出。最主要的是官方的文档也是少的可怜，给出的Sample也是旧版本的，完全很多地方都不一样了。&lt;/p&gt;
+&lt;h2&gt;Robolectric基本原理&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;在使用Robolectric之前我们先要明白Robolectric是如何工作的。比如说我们前文说到的TextView，如果我们使用Mockito，他给我们提供的是Mock后的TextView，而Robolectric给我们提供的是ShadowTextView，这个ShadowTextView实现了TextView身上的方法，但他又与Android的运行环境无关，也就是说他可以像使用TextView一样的方法，但不用在平台上运行代码，大大提高测试效率。&lt;/p&gt;
+&lt;h2&gt;特别注意事项&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;使用Robolectric要注意它的版本以及其支持的SDK版本，如果不支持千万不要用高版本SDK编译，或者升级Gradle插件和编译器版本，否则运行时会出现各种问题。如果版本太高，例如我尝试使用Gradle Wrapper版本4.0配合Gradle插件3.0.0版本时发现是无法成功测试的。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;本文采用最新的Robolectric 3.x（目前是3.4-rc2 …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href="https://maxwell-nc.github.io/android/mockitoTest.html"&gt;上一篇Android单元测试文章&lt;/a&gt;最后说道要测试Android代码逻辑，光有JUnit和Mockito是不够的，假设你使用了TextView的setText,用Mockito框架的话，默认的TextView的getText方法会返回null,如果是简单的代码，使用Mockito的桩设置还可以接受，如果是要测试到Activity的生命周期等一些复杂逻辑就显得比较复杂了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;为了解决这个问题,诞生了Instrumentation、Robolectric等等的测试框架，不过Instrumentation实际上还是要运行代码到平台上测试，耗费大量的时间，我们今天要介绍的是运行在JVM上的Robolectric测试框架。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;PS：本来想找一些参考文章，结果发现网上的文章多半是说一半没有另一半，或者有些可能遇到的问题没有指出。最主要的是官方的文档也是少的可怜，给出的Sample也是旧版本的，完全很多地方都不一样了。&lt;/p&gt;
+&lt;h2&gt;Robolectric基本原理&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;在使用Robolectric之前我们先要明白Robolectric是如何工作的。比如说我们前文说到的TextView，如果我们使用Mockito，他给我们提供的是Mock后的TextView，而Robolectric给我们提供的是ShadowTextView，这个ShadowTextView实现了TextView身上的方法，但他又与Android的运行环境无关，也就是说他可以像使用TextView一样的方法，但不用在平台上运行代码，大大提高测试效率。&lt;/p&gt;
+&lt;h2&gt;特别注意事项&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;使用Robolectric要注意它的版本以及其支持的SDK版本，如果不支持千万不要用高版本SDK编译，或者升级Gradle插件和编译器版本，否则运行时会出现各种问题。如果版本太高，例如我尝试使用Gradle Wrapper版本4.0配合Gradle插件3.0.0版本时发现是无法成功测试的。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;本文采用最新的Robolectric 3.x（目前是3.4-rc2），测试的SDK API版本为25，Gradle Wrapper为3.3，Gradle插件为2.3.0。另外我用的Android Studio版本也是3.0版本，如果低于2.0的版本的建议升级，否则可能会遇到其他问题（本文就不在讨论了）。&lt;/p&gt;
+&lt;h2&gt;集成Robolectric&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先第一步是添加Gradle编译依赖，由于Robolectric本身比较大，所以对于一些功能，它采用add-on的方式，除了核心包其他都是可选添加的，编辑app下的build.gradle文件：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;dependencies {
+    testCompile &amp;#39;org.robolectric:robolectric:3.+&amp;#39; //核心包
+    testCompile &amp;#39;org.robolectric:shadows-support-v4:3.+&amp;#39; //支持Support-v4包
+    testCompile &amp;quot;org.robolectric:shadows-multidex:3.+&amp;quot; //支持Multidex功能
+    //...
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;值得注意的是，要使用Robolectric也要添加JUnit依赖，具体可以回顾一下&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;《Android单元测试之JUnit框架》&lt;/a&gt;。&lt;/p&gt;
+&lt;h2&gt;测试运行环境（@RunWith）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;还记之前文章说到的JUnit给我们提供一个&lt;code&gt;@RunWith&lt;/code&gt;注解去设置测试运行环境吗？Robolectric提供一个&lt;code&gt;RobolectricTestRunner&lt;/code&gt;的沙盒测试运行环境，注意低版本的Robolectric可能不是这个类名。这个测试环境使用各种Shadow类代替真正的Android对象，从而实现模拟Android App的运行。所以所有需要使用Robolectric的测试类都要加上类注解：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@RunWith&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RobolectricTestRunner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ExampleUtilsTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Robolectric配置（@Config）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;很多网上的教程都是直接给了一个简单的例子，结果自己运行的时候会发现出现各种问题，所以这里先不给例子，先说一下怎么配置才能正确地运行。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;为了方便配置RobolectricTestRunner提供的环境，比如要设置运行的SDK版本，设置包名，自定义Application等等配置，Robolectric提供了一个&lt;code&gt;@Config&lt;/code&gt;注解方便用户配置Robolectric。我们可以从源码中看到@Config可以接受很多参数，下面是几个比较常用的:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;sdk：&lt;/strong&gt;SDK版本&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;manifest：&lt;/strong&gt;清单文件位置&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;buildDir：&lt;/strong&gt;构建目录&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;packageName：&lt;/strong&gt;包名&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;constants：&lt;/strong&gt;常量设置（一般直接使用BuildConfig）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;shadows：&lt;/strong&gt;自定义Shadow类&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;application：&lt;/strong&gt;自定义Application类&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;由于有很多参数，Robolectric为了使用方便提供了很多默认值，通常唯一必须指定的只有constants，因为配置BuildConfig后Robolectric框架会自动完成寻找各种目录和配置包名等等操作。所以需要在使用Robolectric的测试类上加上@Config注解：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@RunWith&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RobolectricTestRunner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nd"&gt;@Config&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;constants&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;BuildConfig&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ExampleUtilsTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;好了，按照之前说的，配置BuildConfig后就会自动完成寻找各种目录和配置包名等等操作，唯独这个AndroidManifest清单文件可能会寻找不到。&lt;/p&gt;
+&lt;h2&gt;AndroidManifest问题&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;如果你按照其他的教程来操作，很可能运行时就提示:&lt;code&gt;No such manifest file: build\intermediates\bundles\debug\AndroidManifest.xml&lt;/code&gt;，无法找到AndroidManifest.xml。我们来分析分析这个问题。首先由于@Config最终是给RobolectricTestRunner使用的，所以我们打开RobolectricTestRunner的源码，可以找到：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;protected&lt;/span&gt; &lt;span class="n"&gt;List&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;FrameworkMethod&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;getChildren&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;//...&lt;/span&gt;
+    &lt;span class="n"&gt;Config&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getConfig&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;frameworkMethod&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getMethod&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+    &lt;span class="n"&gt;AndroidManifest&lt;/span&gt; &lt;span class="n"&gt;appManifest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getAppManifest&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;当然我们找到getAppManifest方法发现它采用了ManifestFactory工厂去生产清单文件，找到工厂接口实现类GradleManifestFactory是适合于Android的清单工厂。可以看到里面各种自动寻找目录的逻辑，其中：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;manifestName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;manifest&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="n"&gt;URL&lt;/span&gt; &lt;span class="n"&gt;manifestUrl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getClass&lt;/span&gt;&lt;span class="o"&gt;().&lt;/span&gt;&lt;span class="na"&gt;getClassLoader&lt;/span&gt;&lt;span class="o"&gt;().&lt;/span&gt;&lt;span class="na"&gt;getResource&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;manifestName&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;manifestUrl&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;manifestUrl&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getProtocol&lt;/span&gt;&lt;span class="o"&gt;().&lt;/span&gt;&lt;span class="na"&gt;equals&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;file&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;))&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="n"&gt;manifest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;FileFsFile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;from&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;manifestUrl&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getPath&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;FileFsFile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;from&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;buildOutputDir&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;manifests&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;full&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;exists&lt;/span&gt;&lt;span class="o"&gt;())&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="n"&gt;manifest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;FileFsFile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;from&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;buildOutputDir&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;manifests&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;full&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;flavor&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;abiSplit&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;type&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;manifestName&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;FileFsFile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;from&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;buildOutputDir&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;manifests&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;aapt&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;exists&lt;/span&gt;&lt;span class="o"&gt;())&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="c1"&gt;// Android gradle plugin 2.2.0+ can put library manifest files inside of &amp;quot;aapt&amp;quot; instead of &amp;quot;full&amp;quot;&lt;/span&gt;
+  &lt;span class="n"&gt;manifest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;FileFsFile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;from&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;buildOutputDir&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;manifests&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;aapt&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;flavor&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;abiSplit&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;type&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;manifestName&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="n"&gt;manifest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;FileFsFile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;from&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;buildOutputDir&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;bundles&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;flavor&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;abiSplit&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;type&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;manifestName&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;这部分代码就是寻找清单文件的代码，为了偷懒，直接下断点，看看生成的路径是否正确：
+&lt;img alt="path" src="../images/robolectricTest/1.jpg"&gt;
+&amp;emsp;&amp;emsp;可以看到获取完整路径后实际上是少了一个模块名称，所以会走到最后的逻辑，从而导致提示报错。比较麻烦的时候，这个工厂我们不能自定义，退而求之我们修改他的前序buildOutputDir参数，这个参数就是对应Config参数buildDir,所以给Config增加一个参数：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@RunWith&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RobolectricTestRunner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nd"&gt;@Config&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;constants&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;BuildConfig&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;buildDir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;app/build&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ExampleUtilsTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;注意相对和绝对路径问题。&lt;/p&gt;
+&lt;h2&gt;Robolectric运行测试&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;下面我们尝试些一个测试例子，创建一个Activity并且验证它非null：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@RunWith&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RobolectricTestRunner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nd"&gt;@Config&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;constants&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;BuildConfig&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;buildDir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;app/build&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ExampleUtilsTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Test&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;testActivity&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="kd"&gt;throws&lt;/span&gt; &lt;span class="n"&gt;Exception&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;MainActivity&lt;/span&gt; &lt;span class="n"&gt;mainActivity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Robolectric&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setupActivity&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MainActivity&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertNotNull&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mainActivity&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;这个简单的例子我们先不解析为什么这么写，尝试运行，你可能会遇到以下问题：
+- AppCompatActivity问题
+- MultiDexApplication问题&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;遇到上述问题请先跳到后面看对应的问题章节，如果你无上述问题，但是运行时一直Download，如下图所示：
+&lt;img alt="download" src="../images/robolectricTest/2.jpg"&gt;
+&amp;emsp;&amp;emsp;这个是Robolectric执行不同SDK版本运行时需要对应运行库，由于服务器本身比较慢，经常超时，有可能一直卡住，如果你足够耐心可以等待其下载完成，如果你没有耐心，可以先跳过，看后面的“Robolectric依赖库问题”。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;如果上述问题都处理了，就可以看到运行通过了。接下来我们来正式学习Robolectric的用法。&lt;/p&gt;
+&lt;h2&gt;Robolectric依赖库问题&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;由于Robolectric的依赖库下载经常超时，我们可以改用手动下载方式去解决，先找到&lt;code&gt;C:\Users\（你的用户名）\.m2\repository\org\robolectric\android-all\&lt;/code&gt;目录为需要下载的依赖库位置，可以Maven参考去下载对应版本：&lt;a href="http://mvnrepository.com/artifact/org.robolectric/android-all"&gt;http://mvnrepository.com/artifact/org.robolectric/android-all&lt;/a&gt;，下载的Jar后先暂停测试进程，然后删除对应的xxx.jar.tmp文件，复制xxx.jar文件进去，重新运行测试即可。&lt;/p&gt;
+&lt;h2&gt;AppCompatActivity问题&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;如果你使用的Activity是继承自AppCompatActivity，运行的时候会出现&lt;code&gt;java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity.&lt;/code&gt;问题，遇到这个问题只需要把继承AppCompatActivity的主题改为Theme.Appcompat主题或者他的子主题，比如：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;activity&lt;/span&gt; 
+    &lt;span class="na"&gt;android:name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;.MainActivity&amp;quot;&lt;/span&gt;
+    &lt;span class="na"&gt;android:theme=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;@style/Theme.AppCompat.Light&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    //....
+&lt;span class="nt"&gt;&amp;lt;/activity&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;MultiDexApplication问题&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;如果你的Application继承自MultiDexApplication就有可能会出现：&lt;code&gt;java.lang.RuntimeException: Multi dex installation failed.&lt;/code&gt;，那是因为你没有添加shadows-multidex依赖库，可以参考前文说的，添加：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;testCompile &amp;quot;org.robolectric:shadows-multidex:3.+&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;测试Activity&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;上面的例子已经展示了通过&lt;code&gt;Robolectric.setupActivity&lt;/code&gt;创建了一个Activity，那么这个setupActivity做了什么呢？下面我们看一下源码，可以看出，实际上setupActivity相当于做了：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Robolectric&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;buildActivity&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MainActivity&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;create&lt;/span&gt;&lt;span class="o"&gt;().&lt;/span&gt;&lt;span class="na"&gt;get&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;在Robolectric中，Activity的生命周期由ActivityController来控制，使用buildActivity来创建一个ActivityController，通过查看源码可以看到，调用create()方法，实际上顺序调用了performCreate的方法，实际上就是执行了Activity的onCreate方法。而get()则是获取Activity对象。通过查看ActivityController的源码，可以看出他身上的方法和常用Activity的生命周期对应如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;create()&lt;/strong&gt;--&amp;gt;Activity.onCreate()&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;start()&lt;/strong&gt;--&amp;gt;Activity.onStart()&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;resume()&lt;/strong&gt;--&amp;gt;Activity.onResume()&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;pause()&lt;/strong&gt;--&amp;gt;Activity.onPause()&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;stop()&lt;/strong&gt;--&amp;gt;Activity.onStop()&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;destroy()&lt;/strong&gt;--&amp;gt;Activity.onDestory()&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;还有其他比如onRestart等的可以参考源代码找到。&lt;/p&gt;
+&lt;h2&gt;测试Intent&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;假设有一个MainActivity，上面的btnNext按钮点击后会跳转到NextActivity，我们利用Robolectric来测试这段代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;//模拟点击跳转&lt;/span&gt;
+&lt;span class="n"&gt;Button&lt;/span&gt; &lt;span class="n"&gt;btnNext&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Button&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="n"&gt;mainActivity&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;findViewById&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;btn_next&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;btnNext&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;performClick&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+&lt;span class="c1"&gt;//获取跳转的意图&lt;/span&gt;
+&lt;span class="n"&gt;Intent&lt;/span&gt; &lt;span class="n"&gt;actual&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ShadowApplication&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getInstance&lt;/span&gt;&lt;span class="o"&gt;().&lt;/span&gt;&lt;span class="na"&gt;getNextStartedActivity&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+&lt;span class="c1"&gt;//期望意图&lt;/span&gt;
+&lt;span class="n"&gt;Intent&lt;/span&gt; &lt;span class="n"&gt;expected&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Intent&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mainActivity&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NextActivity&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+
+&lt;span class="c1"&gt;//假设一致&lt;/span&gt;
+&lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertEquals&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;expected&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getComponent&lt;/span&gt;&lt;span class="o"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;actual&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getComponent&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;值得注意的是，如果新版Robolectric使用Assert.assertEquals(expected, actual)来直接对比两个Intent，可能会出现不一致现象。所以只能对比他的组件名，后面会介绍另外一个工具帮助我们快速对比。&lt;/p&gt;
+&lt;h2&gt;测试Fragment&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;Fragment和Activity的测试大同小异，值得注意的是如果使用的兼容包要注意导入，代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;//非V4包写法&lt;/span&gt;
+&lt;span class="n"&gt;BlankFragment&lt;/span&gt; &lt;span class="n"&gt;blankFragment&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Robolectric&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;buildFragment&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;BlankFragment&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;get&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+&lt;span class="c1"&gt;//兼容V4包写法&lt;/span&gt;
+&lt;span class="n"&gt;SuppportFragment&lt;/span&gt; &lt;span class="n"&gt;supportFragment&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;SuppportFragment&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="n"&gt;SupportFragmentTestUtil&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;startFragment&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;supportFragment&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;&lt;span class="c1"&gt;//触发Fragment的onCreateView()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;非V4包buildFragment产生的也是FragmentController，和Activity的结构大体相似，而V4包的则是FragmentManager，这里不一一分析了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;另外还有测试Service等组件，可以使用对应的buildXxx，比如说使用&lt;code&gt;Robolectric.buildService(Service.class)&lt;/code&gt;来获得ServiceController，剩下的逻辑和上述的测试Activity的大体相同。如果不关心生命周期，可以把组件当做普通类使用测试（不建议）。&lt;/p&gt;
+&lt;h2&gt;测试Toast&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;这个看上去似乎没有什么必要的工作，实际上这里是想说明一种测试思想。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="c1"&gt;//上面执行了弹出Toast的代码&lt;/span&gt;
+&lt;span class="n"&gt;assertEquals&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ShadowToast&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getTextOfLatestToast&lt;/span&gt;&lt;span class="o"&gt;(),&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;toast content&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;这里举这个简单例子是为了简单说明，如果要获取某个类的状态，可以通过其Shadow类来获取，比如AlertDialog可以通过ShadowAlertDialog来获取弹出的AlertDialog等等。这里就不一一说明了。&lt;/p&gt;
+&lt;h2&gt;Application和ShadowApplication&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;code&gt;ShadowApplication.getInstance()&lt;/code&gt;和&lt;code&gt;RuntimeEnvironment.application&lt;/code&gt;两个Application有什么区别呢？我们分析源码看看ShadowApplication.getInstance()的源码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;RuntimeEnvironment&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;application&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;shadowOf&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RuntimeEnvironment&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;application&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;其中shadowOf是把真实模拟的Application变成Shadow对象，可以提供一些原本没有的方法。例如RuntimeEnvironment.application可以使用getString去获取字符串信息，而ShadowApplication.getInstance()不行，但他可以使用getNextStartedActivity获取下一个启动的Activity等方法。&lt;/p&gt;
+&lt;h2&gt;获取Shadow对象&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;假设有一个对象，你想获取它的Shadow对象，可以使用&lt;code&gt;Shadows.shadowOf&lt;/code&gt;，例如上文说到的：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; &lt;span class="n"&gt;ShadowApplication&lt;/span&gt; &lt;span class="n"&gt;shadowApplication&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Shadows&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;shadowOf&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RuntimeEnvironment&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;application&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;如果是自定义的Shadow对象则使用&lt;code&gt;Shadow.extract&lt;/code&gt;方法，别急，马上就说明怎么自定义Shadow对象。&lt;/p&gt;
+&lt;h2&gt;自定义Shadow对象&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;假设有原始类SampleClass，你想要创建他的Shadow对象，并且想修改和扩展它的方法，原始类代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cm"&gt;/**&lt;/span&gt;
+&lt;span class="cm"&gt; * 原始类&lt;/span&gt;
+&lt;span class="cm"&gt; */&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SampleClass&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="nf"&gt;getString&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;str&lt;/span&gt;&lt;span class="o"&gt;){&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;str&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;你可以使用Robolectric提供给的@Implements注解说明原始类，使用@Implementation说明该方法为替换原始类中的方法，另外可以随意扩展方法，代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@Implements&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SampleClass&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ShadowSampleClass&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Implementation&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="nf"&gt;getString&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;str&lt;/span&gt;&lt;span class="o"&gt;){&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+    &lt;span class="cm"&gt;/**&lt;/span&gt;
+&lt;span class="cm"&gt;     * 扩展的方法&lt;/span&gt;
+&lt;span class="cm"&gt;     */&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="nf"&gt;getStringEx&lt;/span&gt;&lt;span class="o"&gt;(){&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;之后你需要@Config下添加shadows参数说明需要使用的Shadow对象，就可以在代码中使用了，运行的时候单元测试中的SampleClass会被替换成ShadowSampleClass，具体代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@RunWith&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RobolectricTestRunner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nd"&gt;@Config&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;constants&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;BuildConfig&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;buildDir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;app/build&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;shadows&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="n"&gt;ShadowSampleClass&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;})&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ExampleUtilsTest&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Test&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;testShadows&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="kd"&gt;throws&lt;/span&gt; &lt;span class="n"&gt;Exception&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;SampleClass&lt;/span&gt; &lt;span class="n"&gt;sampleClass&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;SampleClass&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+
+        &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;original&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sampleClass&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getString&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;123&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertEquals&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;original&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+
+        &lt;span class="c1"&gt;//转换出Shadow对象&lt;/span&gt;
+        &lt;span class="n"&gt;ShadowSampleClass&lt;/span&gt; &lt;span class="n"&gt;shadowSampleClass&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Shadow&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;extract&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sampleClass&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;assertEquals&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="n"&gt;shadowSampleClass&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getStringEx&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;可以发现上述两个assertEquals都是passed的。&lt;/p&gt;
+&lt;h2&gt;总结&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;Robolectric给我们带来了非常方便的测试，但是它本身存在比较多的坑，而且版本之间差别也非常大，所以这个玩意还需要大家多琢磨琢磨，尤其是在已有项目中集成可是要费一点时间了。好了，还记得上文说到的Intent不能使用Assert直接判断是否相等吗？下篇给大家介绍一个神器来解决这个问题。&lt;/p&gt;
+&lt;h2&gt;相关文章&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Android单元测试之JUnit框架：&lt;/strong&gt;&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;https://maxwell-nc.github.io/android/junitTest.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Android单元测试之Mockito框架：&lt;/strong&gt;&lt;a href="https://maxwell-nc.github.io/android/mockitoTest.html"&gt;https://maxwell-nc.github.io/android/mockitoTest.html&lt;/a&gt;&lt;/p&gt;</content><category term="android"></category><category term="test"></category><category term="robolectric"></category></entry><entry><title>Android单元测试之Mockito框架</title><link href="https://maxwell-nc.github.io/android/mockitoTest.html" rel="alternate"></link><published>2017-05-25T00:00:00+08:00</published><updated>2017-05-25T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-05-25:/android/mockitoTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;之前写的&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;JUnit框架单元测试&lt;/a&gt;的最后留了一个悬念，今天我们把这个问题解决下，首先我们要理解mock的概念，然后学习使用mock来做单元测试。关于Mock的框架有很多，比如Mockito、PowerMock、EasyMock等等，本文主要介绍Mockito的用法，各种框架的对比不在本文阐述范围，而且此类框架大体相同，只需要学习其中一个就能轻松地学习其他框架，没必要纠结那个框架才是最好的。&lt;/p&gt;
 &lt;h2&gt;Mock的概念&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;首先要明白什么是Mock，为什么要Mock，Mock能干什么这三个问题。Mock的中文意思是“模仿”，Mock就是去构造（模仿）一个虚拟的对象，而这个对象通常比较难直接创建，有了Mock可以轻松地帮助你对复杂的功能解耦，实现单元测试。比如&lt;a href="https://maxwell-nc.github.io/android/junitTest.html"&gt;前文&lt;/a&gt;最后留下的Log类，你会发现它依赖于Android运行环境，很难把整个依赖树都构建出来，所以我们需要Mock。&lt;/p&gt;
