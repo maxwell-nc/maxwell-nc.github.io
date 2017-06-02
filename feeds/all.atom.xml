@@ -1,5 +1,278 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-06-01T00:00:00+08:00</updated><entry><title>Android单元测试之AssertJ框架</title><link href="https://maxwell-nc.github.io/android/assertjTest.html" rel="alternate"></link><published>2017-06-01T00:00:00+08:00</published><updated>2017-06-01T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-06-01:/android/assertjTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maxwell's Growth Path</title><link href="https://maxwell-nc.github.io/" rel="alternate"></link><link href="https://maxwell-nc.github.io/feeds/all.atom.xml" rel="self"></link><id>https://maxwell-nc.github.io/</id><updated>2017-06-02T00:00:00+08:00</updated><entry><title>Android中的Lambda表达式详解</title><link href="https://maxwell-nc.github.io/android/retrolambda.html" rel="alternate"></link><published>2017-06-02T00:00:00+08:00</published><updated>2017-06-02T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-06-02:/android/retrolambda.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;Lambda表达式是一个&lt;strong&gt;看上去&lt;/strong&gt;很难懂的语法糖，目前有一种趋势表明它越来越火，各种语言都开始支持Lambda表达式。即使你不使用这种语法糖，你也应该去学习了解，否则你可能看不懂很多代码。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;不过由于Java8才引入Lambda表达式，而Android Studio一直都是嵌入JDK(Java Development Kit)1.7，自然要在Android Studio上使用Lamda表达式，这时候只能靠开源力量，自然就有Retrolambda这个Gradle插件。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;当然Lambda的好处、缺点这里就不解析了，当然我认为无论你是否使用，Lambda也是需要学习的一个语法糖。本文为了方便阅读，尽可能避免会涉及到其他Java8的新特性。&lt;/p&gt;
+&lt;h2&gt;引入Retrolambda&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先需要使用Lambda，你要有一个JDK(Java Development Kit)1.8，修改你的项目JDK版本为1.8及以上的版本，如下图所示：
+&lt;img alt="jdk" src="../images/retrolambda/1.jpg"&gt;
+&amp;emsp;&amp;emsp;接下来需要在Application的build.gradle中添加Retrolambda插件(来自mavenCentral依赖库)：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;buildscript {
+
+    repositories {
+        mavenCentral()
+        //...
+    }
+    dependencies {
+        classpath &amp;#39;me.tatarka:gradle-retrolambda:3 …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h2&gt;前序&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;Lambda表达式是一个&lt;strong&gt;看上去&lt;/strong&gt;很难懂的语法糖，目前有一种趋势表明它越来越火，各种语言都开始支持Lambda表达式。即使你不使用这种语法糖，你也应该去学习了解，否则你可能看不懂很多代码。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;不过由于Java8才引入Lambda表达式，而Android Studio一直都是嵌入JDK(Java Development Kit)1.7，自然要在Android Studio上使用Lamda表达式，这时候只能靠开源力量，自然就有Retrolambda这个Gradle插件。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;当然Lambda的好处、缺点这里就不解析了，当然我认为无论你是否使用，Lambda也是需要学习的一个语法糖。本文为了方便阅读，尽可能避免会涉及到其他Java8的新特性。&lt;/p&gt;
+&lt;h2&gt;引入Retrolambda&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;首先需要使用Lambda，你要有一个JDK(Java Development Kit)1.8，修改你的项目JDK版本为1.8及以上的版本，如下图所示：
+&lt;img alt="jdk" src="../images/retrolambda/1.jpg"&gt;
+&amp;emsp;&amp;emsp;接下来需要在Application的build.gradle中添加Retrolambda插件(来自mavenCentral依赖库)：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;buildscript {
+
+    repositories {
+        mavenCentral()
+        //...
+    }
+    dependencies {
+        classpath &amp;#39;me.tatarka:gradle-retrolambda:3.6.1&amp;#39;
+        //...
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        //...
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;然后在需要用用到lambda的模块，比如app模块中的build.gradle文件中设置插件和编译Java版本：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;//...
+apply plugin: &amp;#39;me.tatarka.retrolambda&amp;#39;
+
+android {
+    //...
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;如果你的项目使用了混淆，可以添加：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;-dontwarn java.lang.invoke.*
+-dontwarn **$$Lambda$*
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;完成了上述操作后执行Gradle Sync然后尝试运行App无误后就代表环境搭建完成。&lt;/p&gt;
+&lt;h2&gt;Hello Lambda（IDE自动转换）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;由于我们现在不懂Lambda表达，所以我们让Android Studio给我们转换出Lambda表达式。假设我们写了一个点击监听器代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;//匿名内部类写法&lt;/span&gt;
+&lt;span class="n"&gt;findViewById&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;btn_click&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;setOnClickListener&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;View&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;OnClickListener&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="nd"&gt;@Override&lt;/span&gt;
+        &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;onClick&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;View&lt;/span&gt; &lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;tag&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;hello lambda&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;});&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;会发现插件提示可以转换成Lambda表达式，使用自动完成提示快捷键，选择“Replace with lambda”自动转成Lambda表达式：
+&lt;img alt="hint" src="../images/retrolambda/2.jpg"&gt;
+&amp;emsp;&amp;emsp;最后变成如下的写法：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;//转成lambda表达式写法&lt;/span&gt;
+&lt;span class="n"&gt;findViewById&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;btn_click&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+    &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setOnClickListener&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;view&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;tag&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;hello lambda&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;));&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;看上去代码精简了不少，下面我们来学习下Lambda表达式的语法。&lt;/p&gt;
+&lt;h2&gt;基本形式&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;Lambda表达式无论怎么变化，都有一个基本的形式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;(参数) -&amp;gt; {表达式}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;其中符号&lt;code&gt;-&amp;gt;&lt;/code&gt;是不变的，&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;strong&gt;参数的变化情况&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;无参数&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;() -&amp;gt; exp&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;单一参数&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;param -&amp;gt; exp&lt;/code&gt;（自动推导参数类型，可省略()括号）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;非单一参数&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;(param1,param2) -&amp;gt; exp&lt;/code&gt;（自动推导参数类型）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;(int param1,int param2) -&amp;gt; exp&lt;/code&gt;（不能自动推导参数类型）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;&lt;strong&gt;表达式的变化情况&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;空表达式&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;param -&amp;gt; {}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;单行表达式&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;param -&amp;gt; exp&lt;/code&gt;（可忽略{}括号，返回表达式也可以省略return）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;非单行表达式&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;param -&amp;gt; {exp1;exp2;}&lt;/code&gt;(表达式可以是return语句)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;上述的表达方法可能有些抽象，下面我们来举个例子说明下。
+就拿前面我们转换出来的Lambda表达式为例：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;view&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;tag&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;hello lambda&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;这里的&lt;code&gt;view&lt;/code&gt;属于参数，&lt;code&gt;Log.i("tag","hello lambda")&lt;/code&gt;属于表达式，其中参数属于单一参数，表达式属于单行表达式，所以省略了()和{}这两个括号。&lt;/p&gt;
+&lt;h2&gt;为什么&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;我们探讨一下为什么可以这样写，首先这个方法setOnClickListener接收的匿名内部了已经是固定View.OnClickListener类型，而这个接口也只有onClick一个方法，而注解@Override本身也可以忽略的，也就是说这些都是可以忽略推导出来的，自然就可以写成&lt;code&gt;(参数) -&amp;gt; {表达式}&lt;/code&gt;的形式了。也许细心的朋友会问：返回值呢？这我就反问还记得Java的方法签名吗？Java的方法签名中，返回值是无关变量，也就是返回值可以通过方法名和参数列表来确定，这也是为什么重载时不能单一改变方法返回值的原因。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;下面我们看一个带泛型的例子：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;List&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Integer&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ArrayList&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+
+&lt;span class="c1"&gt;//匿名内部类形式&lt;/span&gt;
+&lt;span class="n"&gt;Collections&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sort&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Comparator&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Integer&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+       &lt;span class="nd"&gt;@Override&lt;/span&gt;
+       &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;compare&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Integer&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Integer&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+           &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+       &lt;span class="o"&gt;}&lt;/span&gt;
+   &lt;span class="o"&gt;});&lt;/span&gt;
+
+&lt;span class="c1"&gt;//Lambda写法&lt;/span&gt;
+&lt;span class="n"&gt;Collections&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sort&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;上面的Collections.sort方法泛型&lt;T&gt;是可以根据list的泛型进行推导的，自然lambda表达式就无需泛型声明，而对于单一return表达式&lt;code&gt;{return a-b;}&lt;/code&gt;也是可以省略掉return、分号和括号的。关于Comparator接口，大家会发现他不只有一个方法，但是仅仅只有compare方法是必须实现的，也就是当这个匿名内部类只有一个方法的时候，必然是compare方法，当有两个方法的时候也不能使用lambda表达式了。&lt;/p&gt;
+&lt;h2&gt;Functional Interface（函数式接口）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;上面说到Comparator接口只有一个抽象方法需要实现，这样的接口在Java 8中称为函数式接口。在Java 8之后的源码中，这样的接口都会使用&lt;code&gt;@FunctionalInterface&lt;/code&gt;这个注解去标注。可以查看这个注解的注释，其中写到：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Conceptually, a functional interface has exactly one abstract method. Since {@linkplain java.lang.reflect.Method#isDefault() default methods} have an implementation, they are not abstract.  If an interface declares an abstract method overriding one of the public methods of {@code java.lang.Object}, that also does &lt;em&gt;not&lt;/em&gt; count toward the interface's abstract method count since any implementation of the interface will have an implementation from {@code java.lang.Object} or elsewhere.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;简单说明一下就是指函数式接口只能有一个抽象方法是不包括default标记的方法（有默认实现）和Object中已有的方法。所以回去看看Comparator接口的源码，它既包含&lt;code&gt;boolean equals(Object obj);&lt;/code&gt;这种Object中已有的方法，也包含default标记的方法。但是只有compare这样一个抽象方法是必须实现的。&lt;/p&gt;
+&lt;h2&gt;返回值&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;Lambda表达式除了可以作为参数，也可以作为变量赋值：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;OnClickListener&lt;/span&gt; &lt;span class="n"&gt;listener&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;tag&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;msg&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;btnClick&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setOnClickListener&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;listener&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;Lambda表达式的返回值&lt;strong&gt;不一定是&lt;/strong&gt;函数式接口。&lt;/p&gt;
+&lt;h2&gt;变量作用域&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;下面我们来研究lambda表达式中变量作用域，比如说访问外部的类型：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;btnClick&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setOnClickListener&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;tag&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;valueOf&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;)));&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;由于Java8的新特性Effectively final，所以lambda表达式&lt;strong&gt;可以直接访问外部变量而不需要加final，但这个变量不能够修改&lt;/strong&gt;，否则IDE报错。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;另外lambda表达式中的&lt;strong&gt;()中的参数名不能与外部变量同名&lt;/strong&gt;，否则IDE报错。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;对于lambda表达式的&lt;strong&gt;this是代表对应的外部类&lt;/strong&gt;，而不代表匿名内部类本身（这和匿名内部类是不一样的），举个例子说明下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;MainActivity&lt;/span&gt; &lt;span class="kd"&gt;extends&lt;/span&gt; &lt;span class="n"&gt;AppCompatActivity&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="kd"&gt;protected&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;onCreate&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Bundle&lt;/span&gt; &lt;span class="n"&gt;savedInstanceState&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;//...&lt;/span&gt;
+        &lt;span class="n"&gt;btnClick&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;setOnClickListener&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;tag&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;toString&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;&lt;span class="c1"&gt;//这里的this代表MainActivity&lt;/span&gt;
+        &lt;span class="o"&gt;});&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;使用lambda表达式的时候千万要注意变量的作用域。&lt;/p&gt;
+&lt;h2&gt;Method References(方法引用)&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;下面我们学习一种lambda表达式简化形式，先举个例子：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;List&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Integer&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ArrayList&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+
+&lt;span class="c1"&gt;//Lambda基本表达式&lt;/span&gt;
+&lt;span class="n"&gt;Collections&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sort&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;compareTo&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;));&lt;/span&gt;
+
+&lt;span class="c1"&gt;//方法引用&lt;/span&gt;
+&lt;span class="n"&gt;Collections&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sort&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Integer&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;compareTo&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;方法引用的基本形式就是：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;类名::方法名
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;方法的()没什么意义，所以不需要写，而对于这个形式可能出现的情况包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;对象::实例方法&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;类::静态方法&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;类型对象::实例方法&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;比如说上面的&lt;code&gt;Integer::compareTo&lt;/code&gt;就属于&lt;code&gt;类型对象::实例方法&lt;/code&gt;这种。再举个例子，比如说&lt;code&gt;System.out::println&lt;/code&gt;这种就是属于&lt;code&gt;类::静态方法&lt;/code&gt;的形式。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;怎么推导？我们从简化过程来一步步说明。就以上面&lt;code&gt;(a, b) -&amp;gt; a.compareTo(b)&lt;/code&gt;这个例子:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;compareTo&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;    &lt;span class="c1"&gt;//原始lambda表达式&lt;/span&gt;
+    &lt;span class="c1"&gt;//↓↓↓&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Integer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;compareTo&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;  &lt;span class="c1"&gt;//compareTo属于Integer类型对象的方法&lt;/span&gt;
+    &lt;span class="c1"&gt;//↓↓↓&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Integer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;compareTo&lt;/span&gt;     &lt;span class="c1"&gt;//a、b有顺序，&amp;quot;(b)&amp;quot;可以省略&lt;/span&gt;
+    &lt;span class="c1"&gt;//↓↓↓&lt;/span&gt;
+&lt;span class="n"&gt;Integer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;compareTo&lt;/span&gt;   &lt;span class="c1"&gt;//没有使用参数副号，&amp;quot;(a, b) -&amp;gt; &amp;quot;都可以省略&lt;/span&gt;
+    &lt;span class="c1"&gt;//↓↓↓&lt;/span&gt;
+&lt;span class="nl"&gt;Integer:&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;compareTo&lt;/span&gt;  &lt;span class="c1"&gt;//为了区分，使用::符号&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;另外，如果lambda表达式可以转换成方法引用，Android Studio也是会提示的。&lt;strong&gt;一般只用到一个已存在的方法并且没有额外的参数就可以使用方法引用来表示lambda表达式。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Constructor References（构造方法引用）&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;下面介绍构造方法引用，实际上有人也把它归为方法引用，因为他的形式是一样的，只是::符号后面跟的方法名变成固定的new，即：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;类名::new
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;这个举例子通常用到新的API，为了防止陌生面孔出现，我们这里通过自定义例子来说明，首先要定义函数式接口，因为方法引用的参数肯定是函数式接口：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@FunctionalInterface&lt;/span&gt;
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;interface&lt;/span&gt; &lt;span class="nc"&gt;Wrapper&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="c1"&gt;//对应Java8中提供的Supplier&lt;/span&gt;
+    &lt;span class="n"&gt;T&lt;/span&gt; &lt;span class="nf"&gt;get&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;然后写一个打印字符串是否为空的方法（仅仅为了说明，简单化例子）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt; &lt;span class="kd"&gt;extends&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;printIsEmpty&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Wrapper&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;i&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;tag&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;get&lt;/span&gt;&lt;span class="o"&gt;().&lt;/span&gt;&lt;span class="na"&gt;isEmpty&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;yes&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;no&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;然后调用方法写法：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;//匿名内部类&lt;/span&gt;
+&lt;span class="n"&gt;printIsEmpty&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Wrapper&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="nd"&gt;@Override&lt;/span&gt;
+        &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="nf"&gt;get&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;});&lt;/span&gt;
+
+&lt;span class="c1"&gt;//lambda表达式原始写法&lt;/span&gt;
+&lt;span class="n"&gt;printIsEmpty&lt;/span&gt;&lt;span class="o"&gt;(()&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+
+&lt;span class="c1"&gt;//构造方法引用写法&lt;/span&gt;
+&lt;span class="n"&gt;printIsEmpty&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;注意的是，还有一种构造方法引用是数组型的：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;类名[]::new
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&amp;emsp;&amp;emsp;比如说&lt;code&gt;String[]::new&lt;/code&gt;，这里就不举详细的例子了。&lt;/p&gt;
+&lt;h2&gt;总结&lt;/h2&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;以上就是Android中使用Lambda表达式的内容，目前由于版本问题，尚未得到普及，不过例如RxJava等一些框架的文章大部分是使用Lambda表达式的形式说明，所以建议还是需要认真学一学，至少能读懂别人写的吧，至于使用不使用那又是另一回事。&lt;/p&gt;</content><category term="android"></category><category term="java8"></category><category term="lambda"></category><category term="retrolambda"></category></entry><entry><title>Android单元测试之AssertJ框架</title><link href="https://maxwell-nc.github.io/android/assertjTest.html" rel="alternate"></link><published>2017-06-01T00:00:00+08:00</published><updated>2017-06-01T00:00:00+08:00</updated><author><name>Maxwell-nc</name></author><id>tag:maxwell-nc.github.io,2017-06-01:/android/assertjTest.html</id><summary type="html">&lt;h2&gt;前序&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href="https://maxwell-nc.github.io/android/robolectricTest.html"&gt;上一篇Android单元测试文章&lt;/a&gt;说到如果使用Junit给我们提供的Assert去对比Intent，那就需要每个成员都对比一次，十分不方便，今天给大家带来一个十分便利的框架AssertJ，由于这个框架本身是给Java使用的，我们可以直接使用针对Android设计的&lt;a href="https://github.com/square/assertj-android"&gt;AssertJ-Android框架&lt;/a&gt;。这个框架官方说明中写道“... aims to make it even easier to test Android”（致力于让安卓测试更简单），它和Assertj原版的比较可以看看官方的说明，这个不是本文的重点，这里就不多说了。&lt;/p&gt;
 &lt;h2&gt;Gradle依赖&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;首先当然是引入AssertJ-Android，直接在app的build.gradle中添加：&lt;/p&gt;
