@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="chinese (simplified)">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="前序   最近打算写一篇完整的RxJava/RxAndroid 2.x使用详解，一方面网上没有找到比较完整的教程，完整的教程又不是面向基础读者，或者还停留在RxJava 1.x的版本中，一方面自己可以当做一个学习笔记，什么时候忘记了也可以快速查一下。   本文就不再讨论Rxjava...">
+        <meta name="keywords" content="android, reactive-streams, rxjava">
+        <link rel="icon" href="https://maxwell-nc.github.io/favicon.ico">
+
+        <title>RxJava 2.x 使用详解(一) 快速入门 - Maxwell's Growth Path</title>
+
+        <!-- Stylesheets -->
+        <link href="https://maxwell-nc.github.io/theme/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/fonts.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/nest.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/pygment.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://maxwell-nc.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Full Atom Feed" />
+        <link href="https://maxwell-nc.github.io/feeds/android.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container-article gradient">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <!-- <div class="header-logo">
+                        <a class="pull-left" href="https://maxwell-nc.github.io/"><img class="mr20" src="https://maxwell-nc.github.io/logo.svg" alt="logo">Maxwell's Growth Path</a>
+                    </div> -->
+                    <div class="nav pull-right">
+                                <a href="https://maxwell-nc.github.io/">主页</a>
+                                <a href="https://maxwell-nc.github.io/categories.html">博文目录</a>
+                                <a href="https://maxwell-nc.github.io/tags.html">标签</a>
+                                <a href="https://maxwell-nc.github.io/feeds/all.atom.xml">订阅</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper-article">
+        <div class="row">
+              <div class="col-lg-12">
+					<div class="header-vertical-line"></div>
+					<h1 class="header-title-article">RxJava 2.x 使用详解(一) 快速入门</h1>
+					<p class="header-date-article">
+					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
+					2017-06-06&nbsp;&nbsp;|&nbsp;&nbsp;
+					目录 <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/reactive-streams.html">reactive-streams</a>, <a href="https://maxwell-nc.github.io/tag/rxjava.html">rxjava</a></p>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+    <div class="container content">
+        <h2>前序</h2>
+<p>&emsp;&emsp;最近打算写一篇完整的RxJava/RxAndroid 2.x使用详解，一方面网上没有找到比较完整的教程，完整的教程又不是面向基础读者，或者还停留在RxJava 1.x的版本中，一方面自己可以当做一个学习笔记，什么时候忘记了也可以快速查一下。</p>
+<p>&emsp;&emsp;本文就不再讨论Rxjava 1.x和2.x两个版本有什么区别，关于这个可以参考<a href="https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0">官方wiki</a>，可能现在还看不懂，没关系，可以直接学习2.x，我认为新的迟早要普及，旧版项目也会迁移到新的上。</p>
+<p>&emsp;&emsp;另外本文<strong>尽量不使用</strong>Lambda表达式，方便读者理解。</p>
+<h2>概念</h2>
+<p>&emsp;&emsp;首先知道什么是RxJava，Rx是ReactiveX的缩写，而ReactiveX是Reactive Extensions的缩写。RxJava顾名思义即使Java上的异步和基于事件响应式编程库。</p>
+<p>&emsp;&emsp;RxJava基于观察者模式，主要有四个部分：观察者、被观察者、订阅、事件。这样说很难说的明白，我们马上举一个例子来说明。</p>
+<h2>Hello RxJava</h2>
+<p>&emsp;&emsp;首先根据上面说的，首先需要一个观察者，可以通过创建FlowableSubscriber，由于事件处理的数据类型不一样，FlowableSubscriber需要一个泛型来说明这个数据类型，这里假设我们要处理String类型数据，代码如下：</p>
+<div class="highlight"><pre><span></span><span class="c1">//创建观察者</span>
+<span class="n">FlowableSubscriber</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">subscriber</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FlowableSubscriber</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Subscription</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//订阅时候的操作</span>
+        <span class="n">s</span><span class="o">.</span><span class="na">request</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">);</span><span class="c1">//请求多少事件，这里表示不限制</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNext</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//onNext事件处理</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//onError事件处理</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//onComplete事件处理</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;可以看到观察者身上有onNext、onError、onComplete这几个事件，接下来我们需要一个被观察者。RxJava中需要使用<code>create()</code>方法去创建：</p>
+<div class="highlight"><pre><span></span><span class="c1">//被观察者</span>
+<span class="n">Flowable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">flowable</span> <span class="o">=</span> <span class="n">Flowable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="k">new</span> <span class="n">FlowableOnSubscribe</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">FlowableEmitter</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">e</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">//订阅观察者时的操作</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">&quot;test1&quot;</span><span class="o">);</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">&quot;test2&quot;</span><span class="o">);</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">},</span> <span class="n">BackpressureStrategy</span><span class="o">.</span><span class="na">BUFFER</span><span class="o">);</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;这里先忽略BackpressureStrategy是什么东西，后面会说到，被观察者执行各种操作，最后需要通过<code>subscribe()</code>订阅观察者：</p>
+<div class="highlight"><pre><span></span><span class="n">flowable</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">subscriber</span><span class="o">);</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;值得注意的是<strong>一个被观察者可以订阅多个观察者</strong>。然后尝试运行上述代码，发现LogCat顺序输出"test1"和"test2"，可以知道onNext是顺序执行的，一个正常的事件队列情况应该如下:</p>
+<ul>
+<li>onNext -&gt; onNext ... -&gt; onComplete</li>
+<li>onNext -&gt; onNext ... -&gt; onError</li>
+</ul>
+<h2>Actions</h2>
+<p>&emsp;&emsp;上面可以看到FlowableSubscriber中我们只关心onNext方法，其他方法如果我们我们不需要，那么可以用Consumer（Java 8读者注意导包）来作为观察者：</p>
+<div class="highlight"><pre><span></span><span class="n">flowable</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="k">new</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//相当于onNext事件处理</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;Consumer&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;当我们查看<code>subscribe()</code>的重载的时候会发现，如果你关心有多个重载方法，其中有一组用于简化观察者的：</p>
+<div class="highlight"><pre><span></span><span class="n">subscribe</span><span class="o">(</span><span class="n">onNext</span><span class="o">)</span>   <span class="c1">//即上面的例子</span>
+<span class="n">subscribe</span><span class="o">(</span><span class="n">onNext</span><span class="o">,</span><span class="n">onError</span><span class="o">)</span>
+<span class="n">subscribe</span><span class="o">(</span><span class="n">onNext</span><span class="o">,</span><span class="n">onError</span><span class="o">,</span><span class="n">onComplete</span><span class="o">)</span>
+<span class="n">subscribe</span><span class="o">(</span><span class="n">onNext</span><span class="o">,</span><span class="n">onError</span><span class="o">,</span><span class="n">onComplete</span><span class="o">,</span><span class="n">onSubscribe</span><span class="o">)</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;这里给出一个完整参数的例子，其他重载方法参考即可:</p>
+<div class="highlight"><pre><span></span><span class="n">flowable</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span>
+        <span class="k">new</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span><span class="c1">//相当于onNext</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+            <span class="o">}</span>
+        <span class="o">},</span> <span class="k">new</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;()</span> <span class="o">{</span><span class="c1">//相当于onError</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">throwable</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+            <span class="o">}</span>
+        <span class="o">},</span> <span class="k">new</span> <span class="n">Action</span><span class="o">()</span> <span class="o">{</span><span class="c1">//相当于onComplete，注意这里是Action</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+            <span class="o">}</span>
+        <span class="o">},</span> <span class="k">new</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">Subscription</span><span class="o">&gt;()</span> <span class="o">{</span><span class="c1">//相当于onSubscribe</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">Subscription</span> <span class="n">subscription</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上面出现了一个Action，那么这个Action和Consumer是什么关系呢？实际上，这两个都是属于<strong>Actions</strong>：</p>
+<ul>
+<li><strong>Action</strong>:无参数类型</li>
+<li><strong>Consumer<T></strong>:单一参数类型</li>
+</ul>
+<p>&emsp;&emsp;可以看到onComplete方法在FlowableSubscriber中属于无参数方法，而其他属于单一参数方法，自然对应使用Action和Consumer。这时候你可能会产生一个疑问，假如有2个参数呢？3个参数呢？...这里就需要使用：</p>
+<ul>
+<li><strong>BiConsumer<T1, T2></strong>:双参数类型</li>
+<li><strong>Consumer<Obejct[]></strong>:多参数类型</li>
+</ul>
+<p>&emsp;&emsp;这里暂时没有使用到，后面用到再说明，就不再展开讨论了。</p>
+<h2>Observable和Observer</h2>
+<p>&emsp;&emsp;被观察者除了Flowable以外还有Observable，它的使用方法和Flowable大体相似，也是使用<code>create()</code>创建:</p>
+<div class="highlight"><pre><span></span><span class="c1">//被观察者</span>
+<span class="n">Observable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">observable</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="k">new</span> <span class="n">ObservableOnSubscribe</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">ObservableEmitter</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">e</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">//订阅观察者时的操作</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">&quot;test1&quot;</span><span class="o">);</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">&quot;test2&quot;</span><span class="o">);</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">});</span><span class="c1">//没有背压设置</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;由于Observable不支持订阅Subscriber观察者，需要使用Observer作为观察者，其实现方式和Subscriber大体相似：</p>
+<div class="highlight"><pre><span></span><span class="c1">//观察者</span>
+<span class="n">Observer</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">observer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Observer</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Disposable</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//订阅时候的操作，无需request</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNext</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//onNext事件处理</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;observer&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//onError事件处理</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//onComplete事件处理</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;订阅操作也是通过<code>subscribe()</code>来操作：</p>
+<div class="highlight"><pre><span></span><span class="n">observable</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">observer</span><span class="o">);</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;也可以通过上文提到的Actions来简化观察者，其写法和Flowable的subscribe方法是完全一样的，这里就不再展开讨论了。</p>
+<h2>Observable和Flowable</h2>
+<p>&emsp;&emsp;下面我们观察下上面两个例子，发现Observable和Flowable其中前者不需要背压（BackPressure）参数和请求资源(request)操作，其他都是大体相似的，那么他们两个有什么区别呢？分别什么时候用呢？</p>
+<p>&emsp;&emsp;这两者区别十分明显，Observable不支持背压，而Flowable支持背压（背压是什么？后面再说，先明白区别）。关键是什么时候用呢，下面根据官方的建议：</p>
+<p>使用Observable
+- 不超过1000个元素、随着时间流逝基本不会出现OOM
+- GUI事件或者1000Hz频率以下的元素
+- 平台不支持Java Steam(Java8新特性)
+- Observable开销比Flowable低</p>
+<p>使用Flowable
+- 超过10k+的元素(可以知道上限)
+- 读取硬盘操作（可以指定读取多少行）
+- 通过JDBC读取数据库
+- 网络（流）IO操作</p>
+<h2>BackPressure（背压）</h2>
+<p>&emsp;&emsp;了解了Observable和Flowable的区别，我们还不知什么叫做背压，下面我们来简单了解下概念。所谓背压就是<strong>生产者（被观察者）的生产速度大于消费者（观察者）消费速度</strong>从而导致的问题。</p>
+<p>&emsp;&emsp;举一个简单点的例子，如果被观察者快速发送消息，但是观察者处理消息的很缓慢，如果没有特定的流（Flow）控制，就会导致大量消息积压占用系统资源，最终导致十分缓慢。</p>
+<p>&emsp;&emsp;怎么优化和减少这种情况后面再探讨，不过可以注意到，Flowable创建的时候已经设置了BackpressureStrategy，而且Subscriber使用了request来控制最大的流量。</p>
+<h2>Single和SingleObserver</h2>
+<p>&emsp;&emsp;如果你使用一个单一连续事件流，即只有一个onNext事件，接着就触发onComplete或者onError，这样你可以使用Single。</p>
+<p>&emsp;&emsp;Single只包含两个事件，一个是正常处理成功的onSuccess，另一个是处理失败的onError，它<strong>只发送一次</strong>消息（当然就不存在背压问题），其中Single类似于Observable，其代码如下：</p>
+<div class="highlight"><pre><span></span><span class="c1">//被观察者</span>
+<span class="n">Single</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">single</span> <span class="o">=</span> <span class="n">Single</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="k">new</span> <span class="n">SingleOnSubscribe</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">SingleEmitter</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">e</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onSuccess</span><span class="o">(</span><span class="s">&quot;test&quot;</span><span class="o">);</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onSuccess</span><span class="o">(</span><span class="s">&quot;test2&quot;</span><span class="o">);</span><span class="c1">//错误写法，重复调用也不会处理</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+
+<span class="c1">//订阅观察者SingleObserver</span>
+<span class="n">single</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="k">new</span> <span class="n">SingleObserver</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Disposable</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSuccess</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//相当于onNext和onComplete</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;Single也可以使用Actions来简化Observer，还记得BiConsumer这个双参数的Actions吗，正可以用于Single：</p>
+<div class="highlight"><pre><span></span><span class="c1">//订阅观察者BiConsumer</span>
+<span class="n">single</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="k">new</span> <span class="n">BiConsumer</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Throwable</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="n">Throwable</span> <span class="n">throwable</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">//onSuccess和onError操作都在这里处理</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;当然也有单一Actions的模式：</p>
+<ul>
+<li>single.subscribe(onSuccess)</li>
+<li>single.subscribe(onSuccess,onError)</li>
+</ul>
+<p>&emsp;&emsp;这里就不在展开了。另外Single也可以直接转换成Flowable或者Observable:</p>
+<div class="highlight"><pre><span></span><span class="n">single</span><span class="o">.</span><span class="na">toFlowable</span><span class="o">();</span>
+<span class="n">single</span><span class="o">.</span><span class="na">toObservable</span><span class="o">();</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;其实他还以转成接下来要说的Completable等，也是使用toXxx的方法。转换之后就可以使用后者独有的方法，这里先不说，后面会有单独篇章详细说明。</p>
+<h2>Completable和CompletableObserver</h2>
+<p>&emsp;&emsp;如果你的观察者连onNext事件都不关心，你可以使用Completable，他只有onComplete和onError两个事件：</p>
+<div class="highlight"><pre><span></span><span class="n">Completable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="k">new</span> <span class="n">CompletableOnSubscribe</span><span class="o">()</span> <span class="o">{</span><span class="c1">//被观察者</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">CompletableEmitter</span> <span class="n">e</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span><span class="c1">//单一onComplete或者onError</span>
+    <span class="o">}</span>
+
+<span class="o">}).</span><span class="na">subscribe</span><span class="o">(</span><span class="k">new</span> <span class="n">CompletableObserver</span><span class="o">()</span> <span class="o">{</span><span class="c1">//观察者</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Disposable</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;同样也可以使用Actions来简化Observer：</p>
+<ul>
+<li>completable.subscribe(onComplete)</li>
+<li>completable.subscribe(onComplete,onError)</li>
+</ul>
+<p>&emsp;&emsp;要转换成其他类型的被观察者，也是可以使用<code>toFlowable()</code>、<code>toObservable()</code>等方法去转换。</p>
+<h2>Maybe和MaybeObserver</h2>
+<p>&emsp;&emsp;如果你有一个需求是可能发送一个数据或者不会发送任何数据，这时候你就需要Maybe，它类似于Single和Completable的混合体。</p>
+<p>&emsp;&emsp;Maybe可能会调用以下其中一种情况（也就是所谓的Maybe）：</p>
+<ul>
+<li>onSuccess或者onError</li>
+<li>onComplete或者onError</li>
+</ul>
+<p>&emsp;&emsp;可以看到onSuccess和onComplete是互斥的存在，例子代码如下：</p>
+<div class="highlight"><pre><span></span><span class="c1">//被观察者</span>
+<span class="n">Maybe</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">maybe</span> <span class="o">=</span> <span class="n">Maybe</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="k">new</span> <span class="n">MaybeOnSubscribe</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">MaybeEmitter</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">e</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">onSuccess</span><span class="o">(</span><span class="s">&quot;test&quot;</span><span class="o">);</span><span class="c1">//发送一个数据的情况，或者onError，不需要再调用onComplete(调用了也不会触发onComplete回调方法)</span>
+        <span class="c1">//e.onComplete();//不需要发送数据的情况，或者onError</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+
+<span class="c1">//订阅观察者</span>
+<span class="n">maybe</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="k">new</span> <span class="n">MaybeObserver</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Disposable</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSuccess</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//发送一个数据时，相当于onNext和onComplete，但不会触发另一个方法onComplete</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//无数据发送时候的onComplete事件</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="s">&quot;onComplete&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+<span class="o">});</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;同样可以是用Actions来简化Observer:</p>
+<ul>
+<li>maybe.subscribe(onSuccess);</li>
+<li>maybe.subscribe(onSuccess,onError);</li>
+<li>maybe.subscribe(onSuccess,onError,onComplete);</li>
+</ul>
+<p>&emsp;&emsp;要转换成其他类型的被观察者，也是可以使用<code>toFlowable()</code>、<code>toObservable()</code>等方法去转换。</p>
+<h2>尾声</h2>
+<p>&emsp;&emsp;通过上述文章，我们初步了解了RxJava的观察者和被观察者，利用Actions来简化观察者，各种观察者的区别和转换。</p>
+<p>&emsp;&emsp;但是我们可以看到现阶段的被观察者即使只发送一个onComplete事件也需要一大段的代码，即使使用lambda表达式也显得有点臃肿，下一篇会介绍RxJava的操作符，帮助大家简化日常常用操作，比如通过一个列表创建一个被观察者，这里的话先留下一个悬念了。</p>
+		<br/><br/>
+		<p style="color: #eb2344;"><b>
+		原创文章，欢迎转载，请保留出处。有任何错误、疑问或者建议，欢迎指出。
+		</b></p>
+		<br/><br/>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'maxwell-nc';
+                var disqus_identifier = 'android/rxjava2-1.html';
+                //var disqus_url = 'https://maxwell-nc.github.io/android/rxjava2-1.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">社交</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/maxwell-nc" target="_blank">Github</a></li>
+                            <li><a href="mailto:maxwell_nc@163.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">链接</div>
+                        <ul class="list-unstyled">
+                            <li><a href="http://blog.csdn.net/maxwell_nc" target="_blank">旧的博客</a></li>
+                        </ul>
+                    </div> 
+					<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <p class="pull-right text-right">
+                            <em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank"><u>Pelican</u></a></em><br/>
+                            <em>Original Theme by <a href="https://github.com/molivier" target="_blank"><u>Molivier</u></a></em><br/>
+                            <em>Modified Theme by <a href="https://github.com/maxwell-nc" target="_blank"><u>Maxwell-nc</u></a></em><br/>
+                            <small>&copy; Maxwell-nc 2017</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>
