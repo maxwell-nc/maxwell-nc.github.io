@@ -109,12 +109,12 @@
 &lt;p&gt;&amp;emsp;&amp;emsp;上面出现了一个Action，那么这个Action和Consumer是什么关系呢？实际上，这两个都是属于&lt;strong&gt;Actions&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Action&lt;/strong&gt;:无参数类型&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Consumer&lt;T&gt;&lt;/strong&gt;:单一参数类型&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Consumer&amp;lt;T&gt;&lt;/strong&gt;:单一参数类型&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;可以看到onComplete方法在FlowableSubscriber中属于无参数方法，而其他属于单一参数方法，自然对应使用Action和Consumer。这时候你可能会产生一个疑问，假如有2个参数呢？3个参数呢？...这里就需要使用：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;BiConsumer&lt;T1, T2&gt;&lt;/strong&gt;:双参数类型&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Consumer&lt;Obejct[]&gt;&lt;/strong&gt;:多参数类型&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;BiConsumer&amp;lt;T1, T2&gt;&lt;/strong&gt;:双参数类型&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Consumer&amp;lt;Obejct[]&gt;&lt;/strong&gt;:多参数类型&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;这里暂时没有使用到，后面用到再说明，就不再展开讨论了。&lt;/p&gt;
 &lt;h2&gt;Observable和Observer&lt;/h2&gt;
@@ -473,7 +473,7 @@ android {
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&amp;emsp;&amp;emsp;上面的Collections.sort方法泛型&lt;T&gt;是可以根据list的泛型进行推导的，自然lambda表达式就无需泛型声明，而对于单一return表达式&lt;code&gt;{return a-b;}&lt;/code&gt;也是可以省略掉return、分号和括号的。关于Comparator接口，大家会发现他不只有一个方法，但是仅仅只有compare方法是必须实现的，也就是当这个匿名内部类只有一个方法的时候，必然是compare方法，当有两个方法的时候也不能使用lambda表达式了。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;上面的Collections.sort方法泛型&amp;lt;T&gt;是可以根据list的泛型进行推导的，自然lambda表达式就无需泛型声明，而对于单一return表达式&lt;code&gt;{return a-b;}&lt;/code&gt;也是可以省略掉return、分号和括号的。关于Comparator接口，大家会发现他不只有一个方法，但是仅仅只有compare方法是必须实现的，也就是当这个匿名内部类只有一个方法的时候，必然是compare方法，当有两个方法的时候也不能使用lambda表达式了。&lt;/p&gt;
 &lt;h2&gt;Functional Interface（函数式接口）&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;上面说到Comparator接口只有一个抽象方法需要实现，这样的接口在Java 8中称为函数式接口。在Java 8之后的源码中，这样的接口都会使用&lt;code&gt;@FunctionalInterface&lt;/code&gt;这个注解去标注。可以查看这个注解的注释，其中写到：&lt;/p&gt;
 &lt;blockquote&gt;

@@ -214,7 +214,7 @@ android {
 </pre></div>
 
 
-<p>&emsp;&emsp;上面的Collections.sort方法泛型<T>是可以根据list的泛型进行推导的，自然lambda表达式就无需泛型声明，而对于单一return表达式<code>{return a-b;}</code>也是可以省略掉return、分号和括号的。关于Comparator接口，大家会发现他不只有一个方法，但是仅仅只有compare方法是必须实现的，也就是当这个匿名内部类只有一个方法的时候，必然是compare方法，当有两个方法的时候也不能使用lambda表达式了。</p>
+<p>&emsp;&emsp;上面的Collections.sort方法泛型&lt;T>是可以根据list的泛型进行推导的，自然lambda表达式就无需泛型声明，而对于单一return表达式<code>{return a-b;}</code>也是可以省略掉return、分号和括号的。关于Comparator接口，大家会发现他不只有一个方法，但是仅仅只有compare方法是必须实现的，也就是当这个匿名内部类只有一个方法的时候，必然是compare方法，当有两个方法的时候也不能使用lambda表达式了。</p>
 <h2>Functional Interface（函数式接口）</h2>
 <p>&emsp;&emsp;上面说到Comparator接口只有一个抽象方法需要实现，这样的接口在Java 8中称为函数式接口。在Java 8之后的源码中，这样的接口都会使用<code>@FunctionalInterface</code>这个注解去标注。可以查看这个注解的注释，其中写到：</p>
 <blockquote>

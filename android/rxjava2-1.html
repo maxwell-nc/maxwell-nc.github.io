@@ -180,12 +180,12 @@
 <p>&emsp;&emsp;上面出现了一个Action，那么这个Action和Consumer是什么关系呢？实际上，这两个都是属于<strong>Actions</strong>：</p>
 <ul>
 <li><strong>Action</strong>:无参数类型</li>
-<li><strong>Consumer<T></strong>:单一参数类型</li>
+<li><strong>Consumer&lt;T></strong>:单一参数类型</li>
 </ul>
 <p>&emsp;&emsp;可以看到onComplete方法在FlowableSubscriber中属于无参数方法，而其他属于单一参数方法，自然对应使用Action和Consumer。这时候你可能会产生一个疑问，假如有2个参数呢？3个参数呢？...这里就需要使用：</p>
 <ul>
-<li><strong>BiConsumer<T1, T2></strong>:双参数类型</li>
-<li><strong>Consumer<Obejct[]></strong>:多参数类型</li>
+<li><strong>BiConsumer&lt;T1, T2></strong>:双参数类型</li>
+<li><strong>Consumer&lt;Obejct[]></strong>:多参数类型</li>
 </ul>
 <p>&emsp;&emsp;这里暂时没有使用到，后面用到再说明，就不再展开讨论了。</p>
 <h2>Observable和Observer</h2>
