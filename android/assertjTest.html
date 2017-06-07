@@ -55,6 +55,20 @@
 
             <!-- Header -->
     <!-- Header -->
+	<script src="https://maxwell-nc.github.io/theme/js/toc.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	if(window.screen.width >= 768){
+		window.onscroll = function(){
+			var t = document.documentElement.scrollTop || document.body.scrollTop; 
+			var top_div = document.getElementById( "top_div" );
+			if( t >= 300 ) {
+				top_div.style.display = "block";
+			} else {
+				top_div.style.display = "none";
+			}
+		}
+	}
+	</script>
     <div class="container header-wrapper-article">
         <div class="row">
               <div class="col-lg-12">
@@ -63,7 +77,7 @@
 					<p class="header-date-article">
 					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
 					2017-06-01&nbsp;&nbsp;|&nbsp;&nbsp;
-					目录 <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-folder-open mr5" aria-hidden="true"></span> <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;
 					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
 <a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/assertj.html">assertj</a>, <a href="https://maxwell-nc.github.io/tag/test.html">test</a></p>
               </div>
@@ -77,7 +91,9 @@
 
 
         <!-- Content -->
-    <div class="container content">
+	<div id="top_div" onclick="javascript:window.scrollTo(0,0)"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> 回到顶部</div>
+    <div id="contents" class="container content">
+		<div id="toc"></div>
         <h2>前序</h2>
 <p>&emsp;&emsp;<a href="https://maxwell-nc.github.io/android/robolectricTest.html">上一篇Android单元测试文章</a>说到如果使用Junit给我们提供的Assert去对比Intent，那就需要每个成员都对比一次，十分不方便，今天给大家带来一个十分便利的框架AssertJ，由于这个框架本身是给Java使用的，我们可以直接使用针对Android设计的<a href="https://github.com/square/assertj-android">AssertJ-Android框架</a>。这个框架官方说明中写道“... aims to make it even easier to test Android”（致力于让安卓测试更简单），它和Assertj原版的比较可以看看官方的说明，这个不是本文的重点，这里就不多说了。</p>
 <h2>Gradle依赖</h2>

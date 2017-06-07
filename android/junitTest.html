@@ -55,6 +55,20 @@
 
             <!-- Header -->
     <!-- Header -->
+	<script src="https://maxwell-nc.github.io/theme/js/toc.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	if(window.screen.width >= 768){
+		window.onscroll = function(){
+			var t = document.documentElement.scrollTop || document.body.scrollTop; 
+			var top_div = document.getElementById( "top_div" );
+			if( t >= 300 ) {
+				top_div.style.display = "block";
+			} else {
+				top_div.style.display = "none";
+			}
+		}
+	}
+	</script>
     <div class="container header-wrapper-article">
         <div class="row">
               <div class="col-lg-12">
@@ -63,7 +77,7 @@
 					<p class="header-date-article">
 					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
 					2017-05-22&nbsp;&nbsp;|&nbsp;&nbsp;
-					目录 <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-folder-open mr5" aria-hidden="true"></span> <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;
 					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
 <a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/junit.html">junit</a>, <a href="https://maxwell-nc.github.io/tag/test.html">test</a></p>
               </div>
@@ -77,7 +91,9 @@
 
 
         <!-- Content -->
-    <div class="container content">
+	<div id="top_div" onclick="javascript:window.scrollTo(0,0)"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> 回到顶部</div>
+    <div id="contents" class="container content">
+		<div id="toc"></div>
         <h2>前序</h2>
 <p>&emsp;&emsp;最近抽空整理下项目，顺手整理了单元测试，于是记录下自己学习单元测试的心得，让更多的人快速用上单元测试提高开发效率。本文主要讲解如何使用JUnit框架进行单元测试，不会提及单元测试优缺点。</p>
 <h2>在Android项目中使用JUnit</h2>
@@ -126,12 +142,14 @@
 <p>&emsp;&emsp;点击Run后则会生成一个测试结果，如果一条绿条就证明已经成功通过测试了，否则的话你可以查看哪一个方法存在问题，然后处理。
 <img alt="pass" src="../images/junitTest/6.jpg"></p>
 <h2>批量测试和生产报告</h2>
-<p>&emsp;&emsp;假设你只有一个类或者只有几个类需要测试的话，那可以直接使用上文说的方法来测试，但是假设你有很多的类和方法需要测试的话上面的操作就显得是十分笨拙。Android Studio的Gradle插件为我们生成了三个任务：
-- testDebugUnitTest
-- testReleaseUnitTest
-- test
-&emsp;&emsp;其中前两个任务是分别执行为Debug和Release模式下的所有单元测试，第三个任务就是执行前面两个任务。
-&emsp;&emsp;你可以在Terminal里面使用</p>
+<p>&emsp;&emsp;假设你只有一个类或者只有几个类需要测试的话，那可以直接使用上文说的方法来测试，但是假设你有很多的类和方法需要测试的话上面的操作就显得是十分笨拙。Android Studio的Gradle插件为我们生成了三个任务：</p>
+<ul>
+<li>testDebugUnitTest</li>
+<li>testReleaseUnitTest</li>
+<li>test</li>
+</ul>
+<p>&emsp;&emsp;其中前两个任务是分别执行为Debug和Release模式下的所有单元测试，第三个任务就是执行前面两个任务。</p>
+<p>&emsp;&emsp;你可以在Terminal里面使用</p>
 <div class="highlight"><pre><span></span>gradlew testDebugUnitTest
 </pre></div>
 
@@ -143,8 +161,8 @@
 <p>&emsp;&emsp;使用浏览器打开可以看到详细测试报告：
 <img alt="report" src="../images/junitTest/9.jpg"></p>
 <h2>JUnit Assert</h2>
-<p>&emsp;&emsp;下面进入正题，上文我们使用了一个Assert.assertEquals方法来判断fullUrl和testUrl是否相同，其中这个Assert类就是用来验证结果的，有“假设”的意思。比如assertEquals方法就是“假设相同”的意思，如果不相同则会报错。
-&emsp;&emsp;那么除了assertEquals之外还有什么方法呢？我们可以从Assert源码结构观察出来，下面我们列举一下：</p>
+<p>&emsp;&emsp;下面进入正题，上文我们使用了一个Assert.assertEquals方法来判断fullUrl和testUrl是否相同，其中这个Assert类就是用来验证结果的，有“假设”的意思。比如assertEquals方法就是“假设相同”的意思，如果不相同则会报错。</p>
+<p>&emsp;&emsp;那么除了assertEquals之外还有什么方法呢？我们可以从Assert源码结构观察出来，下面我们列举一下：</p>
 <ul>
 <li><strong>assertTrue</strong> 假设为真</li>
 <li><strong>assertFalse</strong> 假设为假</li>

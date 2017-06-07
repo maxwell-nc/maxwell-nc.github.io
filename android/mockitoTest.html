@@ -55,6 +55,20 @@
 
             <!-- Header -->
     <!-- Header -->
+	<script src="https://maxwell-nc.github.io/theme/js/toc.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	if(window.screen.width >= 768){
+		window.onscroll = function(){
+			var t = document.documentElement.scrollTop || document.body.scrollTop; 
+			var top_div = document.getElementById( "top_div" );
+			if( t >= 300 ) {
+				top_div.style.display = "block";
+			} else {
+				top_div.style.display = "none";
+			}
+		}
+	}
+	</script>
     <div class="container header-wrapper-article">
         <div class="row">
               <div class="col-lg-12">
@@ -63,7 +77,7 @@
 					<p class="header-date-article">
 					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
 					2017-05-25&nbsp;&nbsp;|&nbsp;&nbsp;
-					目录 <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-folder-open mr5" aria-hidden="true"></span> <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;
 					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
 <a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/mockito.html">mockito</a>, <a href="https://maxwell-nc.github.io/tag/test.html">test</a></p>
               </div>
@@ -77,7 +91,9 @@
 
 
         <!-- Content -->
-    <div class="container content">
+	<div id="top_div" onclick="javascript:window.scrollTo(0,0)"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> 回到顶部</div>
+    <div id="contents" class="container content">
+		<div id="toc"></div>
         <h2>前序</h2>
 <p>&emsp;&emsp;之前写的<a href="https://maxwell-nc.github.io/android/junitTest.html">JUnit框架单元测试</a>的最后留了一个悬念，今天我们把这个问题解决下，首先我们要理解mock的概念，然后学习使用mock来做单元测试。关于Mock的框架有很多，比如Mockito、PowerMock、EasyMock等等，本文主要介绍Mockito的用法，各种框架的对比不在本文阐述范围，而且此类框架大体相同，只需要学习其中一个就能轻松地学习其他框架，没必要纠结那个框架才是最好的。</p>
 <h2>Mock的概念</h2>
@@ -145,16 +161,16 @@
 <p>&emsp;&emsp;由于参数匹配器的种类太多，这里就不一样列举了，可以参考ArgumentMatchers类找到各种匹配器。</p>
 <h2>抛出异常</h2>
 <p>&emsp;&emsp;若果需要某个方法抛出异常，可以使用下面的方法：</p>
-<div class="highlight"><pre><span></span>//void返回方法
-Mockito.doThrow(new RuntimeException()).when(mockedTextView).setText(&quot;abc&quot;);
+<div class="highlight"><pre><span></span><span class="c1">//void返回方法</span>
+<span class="n">Mockito</span><span class="o">.</span><span class="na">doThrow</span><span class="o">(</span><span class="k">new</span> <span class="n">RuntimeException</span><span class="o">()).</span><span class="na">when</span><span class="o">(</span><span class="n">mockedTextView</span><span class="o">).</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;abc&quot;</span><span class="o">);</span>
 
-//非void返回方法
-Mockito.when(mockedTextView.getText()).thenThrow(new RuntimeException());
+<span class="c1">//非void返回方法</span>
+<span class="n">Mockito</span><span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">mockedTextView</span><span class="o">.</span><span class="na">getText</span><span class="o">()).</span><span class="na">thenThrow</span><span class="o">(</span><span class="k">new</span> <span class="n">RuntimeException</span><span class="o">());</span>
 </pre></div>
 
 
 <p>&emsp;&emsp;其中注意区分不同返回类型的写法不同。另外如果需要防止异常中断执行，可以在增加一个doNothing方法，代码如下：</p>
-<div class="highlight"><pre><span></span>Mockito.doNothing().doThrow(new NullPointerException()).when(mockedTextView).setText(&quot;abc&quot;);
+<div class="highlight"><pre><span></span><span class="n">Mockito</span><span class="o">.</span><span class="na">doNothing</span><span class="o">().</span><span class="na">doThrow</span><span class="o">(</span><span class="k">new</span> <span class="n">NullPointerException</span><span class="o">()).</span><span class="na">when</span><span class="o">(</span><span class="n">mockedTextView</span><span class="o">).</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;abc&quot;</span><span class="o">);</span>
 </pre></div>
 
 

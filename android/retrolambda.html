@@ -55,6 +55,20 @@
 
             <!-- Header -->
     <!-- Header -->
+	<script src="https://maxwell-nc.github.io/theme/js/toc.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	if(window.screen.width >= 768){
+		window.onscroll = function(){
+			var t = document.documentElement.scrollTop || document.body.scrollTop; 
+			var top_div = document.getElementById( "top_div" );
+			if( t >= 300 ) {
+				top_div.style.display = "block";
+			} else {
+				top_div.style.display = "none";
+			}
+		}
+	}
+	</script>
     <div class="container header-wrapper-article">
         <div class="row">
               <div class="col-lg-12">
@@ -63,7 +77,7 @@
 					<p class="header-date-article">
 					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
 					2017-06-02&nbsp;&nbsp;|&nbsp;&nbsp;
-					目录 <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-folder-open mr5" aria-hidden="true"></span> <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;
 					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
 <a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/java8.html">java8</a>, <a href="https://maxwell-nc.github.io/tag/lambda.html">lambda</a>, <a href="https://maxwell-nc.github.io/tag/retrolambda.html">retrolambda</a></p>
               </div>
@@ -77,7 +91,9 @@
 
 
         <!-- Content -->
-    <div class="container content">
+	<div id="top_div" onclick="javascript:window.scrollTo(0,0)"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> 回到顶部</div>
+    <div id="contents" class="container content">
+		<div id="toc"></div>
         <h2>前序</h2>
 <p>&emsp;&emsp;Lambda表达式是一个<strong>看上去</strong>很难懂的语法糖，目前有一种趋势表明它越来越火，各种语言都开始支持Lambda表达式。即使你不使用这种语法糖，你也应该去学习了解，否则你可能看不懂很多代码。</p>
 <p>&emsp;&emsp;不过由于Java8才引入Lambda表达式，而Android Studio一直都是嵌入JDK(Java Development Kit)1.7，自然要在Android Studio上使用Lamda表达式，这时候只能靠开源力量，自然就有Retrolambda这个Gradle插件。</p>

@@ -1065,16 +1065,16 @@ testCompile &amp;#39;com.squareup.assertj:assertj-android-appcompat-v7:1.1.1&amp
 &lt;p&gt;&amp;emsp;&amp;emsp;由于参数匹配器的种类太多，这里就不一样列举了，可以参考ArgumentMatchers类找到各种匹配器。&lt;/p&gt;
 &lt;h2&gt;抛出异常&lt;/h2&gt;
 &lt;p&gt;&amp;emsp;&amp;emsp;若果需要某个方法抛出异常，可以使用下面的方法：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;//void返回方法
-Mockito.doThrow(new RuntimeException()).when(mockedTextView).setText(&amp;quot;abc&amp;quot;);
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;//void返回方法&lt;/span&gt;
+&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;doThrow&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;RuntimeException&lt;/span&gt;&lt;span class="o"&gt;()).&lt;/span&gt;&lt;span class="na"&gt;when&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;abc&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
 
-//非void返回方法
-Mockito.when(mockedTextView.getText()).thenThrow(new RuntimeException());
+&lt;span class="c1"&gt;//非void返回方法&lt;/span&gt;
+&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;when&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getText&lt;/span&gt;&lt;span class="o"&gt;()).&lt;/span&gt;&lt;span class="na"&gt;thenThrow&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;RuntimeException&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&amp;emsp;&amp;emsp;其中注意区分不同返回类型的写法不同。另外如果需要防止异常中断执行，可以在增加一个doNothing方法，代码如下：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Mockito.doNothing().doThrow(new NullPointerException()).when(mockedTextView).setText(&amp;quot;abc&amp;quot;);
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Mockito&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;doNothing&lt;/span&gt;&lt;span class="o"&gt;().&lt;/span&gt;&lt;span class="na"&gt;doThrow&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;NullPointerException&lt;/span&gt;&lt;span class="o"&gt;()).&lt;/span&gt;&lt;span class="na"&gt;when&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mockedTextView&lt;/span&gt;&lt;span class="o"&gt;).&lt;/span&gt;&lt;span class="na"&gt;setText&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;abc&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -1527,12 +1527,14 @@ Unable to resolve module `react/lib/ReactComponentWithPureRenderMixin`
 &lt;p&gt;&amp;emsp;&amp;emsp;点击Run后则会生成一个测试结果，如果一条绿条就证明已经成功通过测试了，否则的话你可以查看哪一个方法存在问题，然后处理。
 &lt;img alt="pass" src="../images/junitTest/6.jpg"&gt;&lt;/p&gt;
 &lt;h2&gt;批量测试和生产报告&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;假设你只有一个类或者只有几个类需要测试的话，那可以直接使用上文说的方法来测试，但是假设你有很多的类和方法需要测试的话上面的操作就显得是十分笨拙。Android Studio的Gradle插件为我们生成了三个任务：
-- testDebugUnitTest
-- testReleaseUnitTest
-- test
-&amp;emsp;&amp;emsp;其中前两个任务是分别执行为Debug和Release模式下的所有单元测试，第三个任务就是执行前面两个任务。
-&amp;emsp;&amp;emsp;你可以在Terminal里面使用&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;假设你只有一个类或者只有几个类需要测试的话，那可以直接使用上文说的方法来测试，但是假设你有很多的类和方法需要测试的话上面的操作就显得是十分笨拙。Android Studio的Gradle插件为我们生成了三个任务：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;testDebugUnitTest&lt;/li&gt;
+&lt;li&gt;testReleaseUnitTest&lt;/li&gt;
+&lt;li&gt;test&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;其中前两个任务是分别执行为Debug和Release模式下的所有单元测试，第三个任务就是执行前面两个任务。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;你可以在Terminal里面使用&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gradlew testDebugUnitTest
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -1544,8 +1546,8 @@ Unable to resolve module `react/lib/ReactComponentWithPureRenderMixin`
 &lt;p&gt;&amp;emsp;&amp;emsp;使用浏览器打开可以看到详细测试报告：
 &lt;img alt="report" src="../images/junitTest/9.jpg"&gt;&lt;/p&gt;
 &lt;h2&gt;JUnit Assert&lt;/h2&gt;
-&lt;p&gt;&amp;emsp;&amp;emsp;下面进入正题，上文我们使用了一个Assert.assertEquals方法来判断fullUrl和testUrl是否相同，其中这个Assert类就是用来验证结果的，有“假设”的意思。比如assertEquals方法就是“假设相同”的意思，如果不相同则会报错。
-&amp;emsp;&amp;emsp;那么除了assertEquals之外还有什么方法呢？我们可以从Assert源码结构观察出来，下面我们列举一下：&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;下面进入正题，上文我们使用了一个Assert.assertEquals方法来判断fullUrl和testUrl是否相同，其中这个Assert类就是用来验证结果的，有“假设”的意思。比如assertEquals方法就是“假设相同”的意思，如果不相同则会报错。&lt;/p&gt;
+&lt;p&gt;&amp;emsp;&amp;emsp;那么除了assertEquals之外还有什么方法呢？我们可以从Assert源码结构观察出来，下面我们列举一下：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;assertTrue&lt;/strong&gt; 假设为真&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;assertFalse&lt;/strong&gt; 假设为假&lt;/li&gt;

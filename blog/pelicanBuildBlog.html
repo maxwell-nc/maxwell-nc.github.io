@@ -55,6 +55,20 @@
 
             <!-- Header -->
     <!-- Header -->
+	<script src="https://maxwell-nc.github.io/theme/js/toc.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	if(window.screen.width >= 768){
+		window.onscroll = function(){
+			var t = document.documentElement.scrollTop || document.body.scrollTop; 
+			var top_div = document.getElementById( "top_div" );
+			if( t >= 300 ) {
+				top_div.style.display = "block";
+			} else {
+				top_div.style.display = "none";
+			}
+		}
+	}
+	</script>
     <div class="container header-wrapper-article">
         <div class="row">
               <div class="col-lg-12">
@@ -63,7 +77,7 @@
 					<p class="header-date-article">
 					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
 					2017-05-17&nbsp;&nbsp;|&nbsp;&nbsp;
-					目录 <a href="https://maxwell-nc.github.io/category/python.html">Python</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-folder-open mr5" aria-hidden="true"></span> <a href="https://maxwell-nc.github.io/category/python.html">Python</a>&nbsp;&nbsp;
 					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
 <a href="https://maxwell-nc.github.io/tag/pelican.html">pelican</a>, <a href="https://maxwell-nc.github.io/tag/python.html">python</a>, <a href="https://maxwell-nc.github.io/tag/windows.html">windows</a></p>
               </div>
@@ -77,7 +91,9 @@
 
 
         <!-- Content -->
-    <div class="container content">
+	<div id="top_div" onclick="javascript:window.scrollTo(0,0)"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> 回到顶部</div>
+    <div id="contents" class="container content">
+		<div id="toc"></div>
         <h2>前序</h2>
 <p>&emsp;&emsp;首先Pelican的知名度在国内明显没有Hexo的高，导致也没有几篇教程。遂写一篇简单的Windows搭建教程，给小白们快速使用Pelican搭建静态博客并且发表到Gtihub Pages上。</p>
 <h2>安装Pelican</h2>
