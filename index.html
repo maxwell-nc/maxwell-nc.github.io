@@ -12,7 +12,6 @@
 
         <!-- Stylesheets -->
         <link href="https://maxwell-nc.github.io/theme/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://maxwell-nc.github.io/theme/css/fonts.css" rel="stylesheet">
         <link href="https://maxwell-nc.github.io/theme/css/nest.css" rel="stylesheet">
         <link href="https://maxwell-nc.github.io/theme/css/pygment.css" rel="stylesheet">
         <!-- /Stylesheets -->
@@ -34,7 +33,7 @@
     <body>
 
         <!-- Header -->
-    <div class="header-container gradient">
+    <div class="header-container-article gradient">
 
             <!-- Static navbar -->
             <div class="container">
@@ -56,11 +55,14 @@
     <div class="container header-wrapper">
         <div class="row">
               <div class="col-lg-12">
-                  <div class="header-content">
+                  <!-- <div class="header-content">
                       <h1 class="header-title">Maxwell's Growth Path</h1>
                       <div class="header-underline"></div>
                       <p class="header-subtitle header-subtitle-homepage">主要记录学习中遇到的问题和技术分享</p>
-                  </div>
+                  </div> -->
+				  <div class="header-vertical-line"></div>
+				  <h1 class="header-title-article">Maxwell's Growth Path</h1>
+				  <p class="header-date-article">主要记录学习中遇到的问题和技术分享</p>
               </div>
         </div>
     </div>
@@ -77,25 +79,185 @@
             <h2><a href="https://maxwell-nc.github.io/index.html">最新文章 </a></h2>
             <dl class="dl-horizontal">
                 <dt>2017-06-06</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/rxjava2-1.html">RxJava 2.x 使用详解(一) 快速入门</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/android/rxjava2-1.html">RxJava 2.x 使用详解(一) 快速入门</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;最近打算写一篇完整的RxJava/RxAndroid 2.x使用详解，一方面网上没有找到比较完整的教程，完整的教程又不是面向基础读者，或者还停留在RxJava 1.x的版本中，一方面自己可以当做一个学习笔记，什么时候忘记了也可以快速查一下。</p>
+<p>&emsp;&emsp;本文就不再讨论Rxjava 1.x和2.x两个版本有什么区别，关于这个可以参考<a href="https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0">官方wiki</a>，可能现在还看不懂，没关系，可以直接学习2.x，我认为新的迟早要普及，旧版项目也会迁移到新的上。</p>
+<p>&emsp;&emsp;另外本文<strong>尽量不使用</strong>Lambda表达式，方便读者理解。</p>
+<h2>概念</h2>
+<p>&emsp;&emsp;首先知道什么是RxJava，Rx是ReactiveX的缩写，而ReactiveX是Reactive Extensions的缩写。RxJava顾名思义即使Java上的异步和基于事件响应式编程库。</p>
+<p>&emsp;&emsp;RxJava基于观察者模式，主要有四个部分：观察者、被观察者、订阅、事件。这样说很难说的明白，我们马上举一个例子来说明。</p>
+<h2>Hello RxJava</h2>
+<p>&emsp;&emsp;首先根据上面说的，首先需要一个观察者，可以通过创建FlowableSubscriber，由于事件处理的数据类型不一样，FlowableSubscriber需要一个泛型来说明这个数据类型，这里假设我们要处理String类型数据 …</p></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/rxjava2-1.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-06-02</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/retrolambda.html">Android中的Lambda表达式详解</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/android/retrolambda.html">Android中的Lambda表达式详解</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;Lambda表达式是一个<strong>看上去</strong>很难懂的语法糖，目前有一种趋势表明它越来越火，各种语言都开始支持Lambda表达式。即使你不使用这种语法糖，你也应该去学习了解，否则你可能看不懂很多代码。</p>
+<p>&emsp;&emsp;不过由于Java8才引入Lambda表达式，而Android Studio一直都是嵌入JDK(Java Development Kit)1.7，自然要在Android Studio上使用Lamda表达式，这时候只能靠开源力量，自然就有Retrolambda这个Gradle插件。</p>
+<p>&emsp;&emsp;当然Lambda的好处、缺点这里就不解析了，当然我认为无论你是否使用，Lambda也是需要学习的一个语法糖。本文为了方便阅读，尽可能避免会涉及到其他Java8的新特性。</p>
+<h2>引入Retrolambda</h2>
+<p>&emsp;&emsp;首先需要使用Lambda，你要有一个JDK(Java Development Kit)1.8，修改你的项目JDK版本为1.8及以上的版本，如下图所示：
+<img alt="jdk" src="../images/retrolambda/1.jpg">
+&emsp;&emsp;接下来需要在Application的build.gradle中添加Retrolambda插件(来自mavenCentral依赖库)：</p>
+<div class="highlight"><pre><span></span>buildscript {
+
+    repositories {
+        mavenCentral()
+        //...
+    }
+    dependencies {
+        classpath &#39;me.tatarka:gradle-retrolambda:3 …</pre></div></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/retrolambda.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-06-01</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/assertjTest.html">Android单元测试之AssertJ框架</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/android/assertjTest.html">Android单元测试之AssertJ框架</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;<a href="https://maxwell-nc.github.io/android/robolectricTest.html">上一篇Android单元测试文章</a>说到如果使用Junit给我们提供的Assert去对比Intent，那就需要每个成员都对比一次，十分不方便，今天给大家带来一个十分便利的框架AssertJ，由于这个框架本身是给Java使用的，我们可以直接使用针对Android设计的<a href="https://github.com/square/assertj-android">AssertJ-Android框架</a>。这个框架官方说明中写道“... aims to make it even easier to test Android”（致力于让安卓测试更简单），它和Assertj原版的比较可以看看官方的说明，这个不是本文的重点，这里就不多说了。</p>
+<h2>Gradle依赖</h2>
+<p>&emsp;&emsp;首先当然是引入AssertJ-Android，直接在app的build.gradle中添加：</p>
+<div class="highlight"><pre><span></span>testCompile &#39;com.squareup.assertj:assertj-android:1.1.1&#39;
+</pre></div>
+
+
+<p>&emsp;&emsp;如果遇到冲突问题，比如：</p>
+<blockquote>
+<p>Conflict with dependency 'com.android.support:support-annotations' in project ':app'. Resolved versions for …</p></blockquote></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/assertjTest.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-26</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/robolectricTest.html">Android单元测试之Robolectric框架</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/android/robolectricTest.html">Android单元测试之Robolectric框架</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;<a href="https://maxwell-nc.github.io/android/mockitoTest.html">上一篇Android单元测试文章</a>最后说道要测试Android代码逻辑，光有JUnit和Mockito是不够的，假设你使用了TextView的setText,用Mockito框架的话，默认的TextView的getText方法会返回null,如果是简单的代码，使用Mockito的桩设置还可以接受，如果是要测试到Activity的生命周期等一些复杂逻辑就显得比较复杂了。</p>
+<p>&emsp;&emsp;为了解决这个问题,诞生了Instrumentation、Robolectric等等的测试框架，不过Instrumentation实际上还是要运行代码到平台上测试，耗费大量的时间，我们今天要介绍的是运行在JVM上的Robolectric测试框架。</p>
+<p>&emsp;&emsp;PS：本来想找一些参考文章，结果发现网上的文章多半是说一半没有另一半，或者有些可能遇到的问题没有指出。最主要的是官方的文档也是少的可怜，给出的Sample也是旧版本的，完全很多地方都不一样了。</p>
+<h2>Robolectric基本原理</h2>
+<p>&emsp;&emsp;在使用Robolectric之前我们先要明白Robolectric是如何工作的。比如说我们前文说到的TextView，如果我们使用Mockito，他给我们提供的是Mock后的TextView，而Robolectric给我们提供的是ShadowTextView，这个ShadowTextView实现了TextView身上的方法，但他又与Android的运行环境无关，也就是说他可以像使用TextView一样的方法，但不用在平台上运行代码，大大提高测试效率。</p>
+<h2>特别注意事项</h2>
+<p>&emsp;&emsp;使用Robolectric要注意它的版本以及其支持的SDK版本，如果不支持千万不要用高版本SDK编译，或者升级Gradle插件和编译器版本，否则运行时会出现各种问题。如果版本太高，例如我尝试使用Gradle Wrapper版本4.0配合Gradle插件3.0.0版本时发现是无法成功测试的。</p>
+<p>&emsp;&emsp;本文采用最新的Robolectric 3.x（目前是3.4-rc2 …</p></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/robolectricTest.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-25</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/mockitoTest.html">Android单元测试之Mockito框架</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/android/mockitoTest.html">Android单元测试之Mockito框架</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;之前写的<a href="https://maxwell-nc.github.io/android/junitTest.html">JUnit框架单元测试</a>的最后留了一个悬念，今天我们把这个问题解决下，首先我们要理解mock的概念，然后学习使用mock来做单元测试。关于Mock的框架有很多，比如Mockito、PowerMock、EasyMock等等，本文主要介绍Mockito的用法，各种框架的对比不在本文阐述范围，而且此类框架大体相同，只需要学习其中一个就能轻松地学习其他框架，没必要纠结那个框架才是最好的。</p>
+<h2>Mock的概念</h2>
+<p>&emsp;&emsp;首先要明白什么是Mock，为什么要Mock，Mock能干什么这三个问题。Mock的中文意思是“模仿”，Mock就是去构造（模仿）一个虚拟的对象，而这个对象通常比较难直接创建，有了Mock可以轻松地帮助你对复杂的功能解耦，实现单元测试。比如<a href="https://maxwell-nc.github.io/android/junitTest.html">前文</a>最后留下的Log类，你会发现它依赖于Android运行环境，很难把整个依赖树都构建出来，所以我们需要Mock。</p>
+<h2>集成Mocktio</h2>
+<p>&emsp;&emsp;Android上集成非常简单，在app项目下的build.gradle添加测试编译依赖(下面采用2.x最新版本)：</p>
+<div class="highlight"><pre><span></span>dependencies {
+    //...
+    testCompile &quot;org.mockito:mockito-core:2.+&quot;
+}
+</pre></div>
+
+
+<p>&emsp;&emsp;然后使用Gradle Sync一下即可。顺便附上Mockito的Jcenter地址：<a href="http://jcenter.bintray.com/org/mockito/mockito-core/">http …</a></p></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/mockitoTest.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-24</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/rnIntergation.html">快速集成ReactNative到现有Android项目</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/android/rnIntergation.html">快速集成ReactNative到现有Android项目</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;突然想起来之前旧博客的<a href="http://blog.csdn.net/maxwell_nc/article/details/60960864">《Windows下搭建ReactNative开发环境（Android）》</a>留下的一个坑，遂填一下坑。而且集成ReactNative到现有Android项目也不是什么容易的事情，网上很多教程都是不完整，你会发现跟着来做都是一步一个坑，不断搜索error解决花了半天才能搭建好，下次再做又是一堆问题，所以我这里记录下自己的集成心得。</p>
+<h2>准备操作</h2>
+<p>&emsp;&emsp;首先你建议你先看看<a href="http://blog.csdn.net/maxwell_nc/article/details/60960864">上一篇搭建环境的文章</a>，否则接下来的内容你可以看不懂或者没有对应的工具。然后就是你需要有一个现有的Android项目，如果你需要创建全新项目前一篇已经描述过了，本文就不再重复了。</p>
+<p>&emsp;&emsp;本文集成的<strong>ReactNative版本为0.44</strong>，如果不是的话可能与本文内容有所差异，请自行甄别。</p>
+<h2>安装ReactNative到项目</h2>
+<p>&emsp;&emsp;我们已一个已存在的工程ExistedProject为例，首先打开项目的目录，在CMD输入：</p>
+<div class="highlight"><pre><span></span>npm init
+</pre></div>
+
+
+<p>&emsp;&emsp;<code>npm init</code>会提示引导你创建package.json,如下图所示：
+<img alt="init" src="../images/rnIntergation/1.jpg">
+&emsp;&emsp;创建成功后可以安装React、ReactNative到目录里面，继续在<strong>当前目录</strong>下输入命令：</p>
+<div class="highlight"><pre><span></span>npm install --save react react-native
+</pre></div>
+
+
+<p>&emsp;&emsp;等待安装成功的过程中，可以到<a href="https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig">https://raw.githubusercontent …</a></p></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/rnIntergation.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-22</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/junitTest.html">Android单元测试之JUnit框架</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/android/junitTest.html">Android单元测试之JUnit框架</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;最近抽空整理下项目，顺手整理了单元测试，于是记录下自己学习单元测试的心得，让更多的人快速用上单元测试提高开发效率。本文主要讲解如何使用JUnit框架进行单元测试，不会提及单元测试优缺点。</p>
+<h2>在Android项目中使用JUnit</h2>
+<p>&emsp;&emsp;记得在Eclipse中集成Junit框架是一件很复杂的事情，首先要导入lib包，然后配置...现在如果使用Android Studio的话什么工作都不需要处理，创建一个新的项目就帮你配置好整个JUnit框架，你只需要专心写测试类即可。而且测试类也是可以自动生成的,如下图所示：
+<img alt="dir" src="../images/junitTest/1.jpg">
+&emsp;&emsp;可以看到生成<code>app/src/main</code>为源码目录，对应<code>app/src/test</code>为测试类目录，Android Studio会自动生成一个ExampleUnitTest类，实际上这个test目录下的包名可以与src目录的不一样。</p>
+<p>&emsp;&emsp;以上图为例，我写了一个ExampleUtils作为本次测试例子，其代码为：</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleUtils</span> <span class="o">{</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * 获取完整的地址路径</span>
+<span class="cm">     *</span>
+<span class="cm">     * @param url 可能不完整的路径</span>
+<span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getFullUrl</span><span class="o">(</span><span class="n">String</span> <span class="n">url</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">url</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&quot;http …</span></pre></div></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/junitTest.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-19</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/mobsfAnalys.html">MobSF Android静态分析使用心得</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/android/mobsfAnalys.html">MobSF Android静态分析使用心得</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;此前也接触过一些第三方静态分析工具，因为工作原因接触了一款开源移动App安全框架<a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF">MobileSecurityFramework</a>，经过一番折腾后决定写下一篇博文记录一下心得。</p>
+<h2>搭建环境</h2>
+<p>&emsp;&emsp;本文是基于Windows搭建的Android App静态分析环境，首先是先要到<a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF">Github</a>上拿去拉一份源码下来。由于这个框架是基于Python开发的，而且需要反编译Apk，所以我们列下需要的环境清单：</p>
+<ul>
+<li>Python 2.7(不能使3.x版本，低于2.7我也没有试过)</li>
+<li>Oracle JDK 1.7+</li>
+<li>MobSF源码</li>
+</ul>
+<p>&emsp;&emsp;以上是静态分析需要的环境，另外再官方的文档中写了一句推荐使用虚拟机环境搭建，否则存在安全问题，这里只是试用一下就不使用虚拟机了。</p>
+<p>&emsp;&emsp;拿到源码后解压到一个目录里，在这个目录打开CMD，输入命令：</p>
+<div class="highlight"><pre><span></span>py -2 pip install -r requirements.txt
+</pre></div>
+
+
+<p>&emsp;&emsp;注意我这里因为同时安装了Python2.x和3.x，所以使用py启动器来指定版本，如果只有Python2.x，可以直接采用：</p>
+<div class="highlight"><pre><span></span>pip install -r …</pre></div></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/mobsfAnalys.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-17</dt>
-                <dd><a href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html">Windows下使用Pelican搭建静态博客</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html">Windows下使用Pelican搭建静态博客</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;首先Pelican的知名度在国内明显没有Hexo的高，导致也没有几篇教程。遂写一篇简单的Windows搭建教程，给小白们快速使用Pelican搭建静态博客并且发表到Gtihub Pages上。</p>
+<h2>安装Pelican</h2>
+<p>&emsp;&emsp;在Windows下搭建pelican环境可以说完爆Jekyll,如果熟悉Python，甚至比Hexo还要简单，闲话不多说，直接开干。</p>
+<p>&emsp;&emsp;因为Pelican是基于Python开发的，所以首先得安装Python环境。我目前使用的是<a href="https://www.python.org/downloads/">Python 3.6.1</a>，这个版本再Windows安装的话连环境都不需要手动配置即可完成。</p>
+<p>&emsp;&emsp;接下来需要使用Python包管理工具，建议没有安装pip的可以使用easy_install安装：</p>
+<div class="highlight"><pre><span></span>easy_install pip
+</pre></div>
+
+
+<p>&emsp;&emsp;安装完成后使用pip安装pelican和markdown</p>
+<div class="highlight"><pre><span></span>pip install markdown
+pip install pelican
+</pre></div>
+
+
+<p>&emsp;&emsp;如果一切正常的话，恭喜已经搭建完成Pelican环境了，是不是很简单？</p>
+<h2>创建博客</h2>
+<p>&emsp;&emsp;首先你需要一个存放你的博客的目录，进入到目录里面，打开cmd，输入下面命令可以生成一个基本的博客模板：</p>
+<div class="highlight"><pre><span></span>pelican-quickstart
+</pre></div>
+
+
+<p>&emsp;&emsp;如下图所示会询问你一些设置，这些设置会生成对应的pelicanconf.py配置文件和Makefile文件，不过Windows下由于不能使用Makefile，所以这里即使填错选项也可以待会在修改。</p>
+<p><img alt="pelican-quickstart" src="../images/pelicanBuildBlog/1.jpg"></p>
+<p>&emsp;&emsp;如果提示"Done. Your new project …</p></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-16</dt>
-                <dd><a href="https://maxwell-nc.github.io/blog/blogIntroduction.html">博客说明</a></dd>
+                <dd><a href="https://maxwell-nc.github.io/blog/blogIntroduction.html">博客说明</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;由于之前用Hexo搭建的GitPages源目录丢失了，本来已经打算Github上面维护的博客停止维护了，但是<a href="http://blog.csdn.net/maxwell_nc">我的CSDN博客</a>强制要求用户绑定隐私信息，否则无法登陆，而且此前没有任何公开提前声明或通知，于是决定放弃CSDN的博客，继续拥抱GithubPages。</p>
+<p>&emsp;&emsp;然后最近发现了Python也有Pelican这样类似的静态博客搭建工具，由于自己对Python比较熟悉，于是重新用Pelican搭建了一个博客。</p>
+<p>&emsp;&emsp;虽然没有找到Windows下的Pelican教程，但是参考Linux平台下的教程也是非常轻松搭建起来了，之后有空的话顺便写一个教程(PS:由于Windows不能使用Makefile，我写了个简单的批处理代替它)。</p>
+<h2>关于博文</h2>
+<p>&emsp;&emsp;不得不说这个问题，由于上文说到我的CSDN博客无法登陆，所以无法迁移上面的博文，需要看的朋友只能移步过去了，在博客下面有一个Link可以快速跳转过去哦。</p>
+<p>&emsp;&emsp;而原来Hexo搭建的Pages文章由于数量比较少，博文主要是项目说明，所以把原来比较重要的博文内容迁移到对应项目的ReadMe上面，这样就不会有太大损失了（苦，手动迁移）。</p>
+<p>&emsp;&emsp;以后会坚持带更高质量的文章给大家，有兴趣的看看原来的Hexo博客也可以查看下History拉到本地跑起来看看。</p>
+<h2>关于主题</h2>
+<p>&emsp;&emsp;看了下Pelican的主题并没有Hexo的主题多，虽然说可以把它移植过来，但是出于时间考虑，我只是找一个个人认为比较美观简洁的主题，然后最后还是花了半天修改了下样式和一些设置。</p>
+<p>&emsp;&emsp;这个修改后的主题可以在<a href="https://github.com/maxwell-nc/nest">这里</a>找到，非常感谢原作者。</p>
+<h2>关于评论</h2>
+<p>&emsp;&emsp;综合各种原因，采用了Disqus第三方评论系统，这个评论系统在国外十分流行，可惜国内无法访问，本来想采用国内的平台，无奈不是已经关闭就是需要登记隐私信息 …</p></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/blog/blogIntroduction.html">[ 阅读全文 ]</a></dd>
             </dl>
         </div>
     </div>
