@@ -78,6 +78,35 @@
         <div class="container content archive">
             <h2><a href="https://maxwell-nc.github.io/index2.html">最新文章 <small>- page 2</small></a></h2>
             <dl class="dl-horizontal">
+                <dt>2017-05-17</dt>
+                <dd><a href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html">Windows下使用Pelican搭建静态博客</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;首先Pelican的知名度在国内明显没有Hexo的高，导致也没有几篇教程。遂写一篇简单的Windows搭建教程，给小白们快速使用Pelican搭建静态博客并且发表到Gtihub Pages上。</p>
+<h2>安装Pelican</h2>
+<p>&emsp;&emsp;在Windows下搭建pelican环境可以说完爆Jekyll,如果熟悉Python，甚至比Hexo还要简单，闲话不多说，直接开干。</p>
+<p>&emsp;&emsp;因为Pelican是基于Python开发的，所以首先得安装Python环境。我目前使用的是<a href="https://www.python.org/downloads/">Python 3.6.1</a>，这个版本再Windows安装的话连环境都不需要手动配置即可完成。</p>
+<p>&emsp;&emsp;接下来需要使用Python包管理工具，建议没有安装pip的可以使用easy_install安装：</p>
+<div class="highlight"><pre><span></span>easy_install pip
+</pre></div>
+
+
+<p>&emsp;&emsp;安装完成后使用pip安装pelican和markdown</p>
+<div class="highlight"><pre><span></span>pip install markdown
+pip install pelican
+</pre></div>
+
+
+<p>&emsp;&emsp;如果一切正常的话，恭喜已经搭建完成Pelican环境了，是不是很简单？</p>
+<h2>创建博客</h2>
+<p>&emsp;&emsp;首先你需要一个存放你的博客的目录，进入到目录里面，打开cmd，输入下面命令可以生成一个基本的博客模板：</p>
+<div class="highlight"><pre><span></span>pelican-quickstart
+</pre></div>
+
+
+<p>&emsp;&emsp;如下图所示会询问你一些设置，这些设置会生成对应的pelicanconf.py配置文件和Makefile文件，不过Windows下由于不能使用Makefile，所以这里即使填错选项也可以待会在修改。</p>
+<p><img alt="pelican-quickstart" src="../images/pelicanBuildBlog/1.jpg"></p>
+<p>&emsp;&emsp;如果提示"Done. Your new project …</p></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-16</dt>
                 <dd><a href="https://maxwell-nc.github.io/blog/blogIntroduction.html">博客说明</a>
                 <br/><div class="summary"><h2>前序</h2>

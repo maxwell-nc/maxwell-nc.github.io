@@ -78,6 +78,27 @@
         <div class="container content archive">
             <h2><a href="https://maxwell-nc.github.io/index.html">最新文章 </a></h2>
             <dl class="dl-horizontal">
+                <dt>2017-06-28</dt>
+                <dd><a href="https://maxwell-nc.github.io/android/rxjava2-3.html">RxJava 2.x 使用详解(三) 过滤操作符</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;上篇说到RxJava创建操作符，这一节来说说过滤操作符，还记得上节中说到interval操作符如果没有其他限制的话就会无限发送onNext事件，永远也不会调用onComplete事件，如果需要限制的话，可以使用一些过滤操作符进行限制。</p>
+<h2>filter</h2>
+<p>&emsp;&emsp;先说一个基本的过滤操作符filter，可以自己设定任意的规则来过滤数据，比如过滤出大于等于2的元素：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="k">new</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">test</span><span class="o">(</span><span class="n">Integer</span> <span class="n">integer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+                <span class="c1">//过滤出&gt;=2的数据</span>
+                <span class="k">return</span> <span class="n">integer</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">})</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">integer</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">integer</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上面的结果只会输出2和3，因为<code>boolean test(T t)</code>方法返回true则表示元素数据有效，否则则为无效抛弃。</p>
+<h2>take …</h2></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/rxjava2-3.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-06-08</dt>
                 <dd><a href="https://maxwell-nc.github.io/android/rxjava2-2.html">RxJava 2.x 使用详解(二) 创建操作符</a>
                 <br/><div class="summary"><h2>前序</h2>
@@ -230,35 +251,6 @@
 <p>&emsp;&emsp;注意我这里因为同时安装了Python2.x和3.x，所以使用py启动器来指定版本，如果只有Python2.x，可以直接采用：</p>
 <div class="highlight"><pre><span></span>pip install -r …</pre></div></div>
                  <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/mobsfAnalys.html">[ 阅读全文 ]</a></dd>
-                <dt>2017-05-17</dt>
-                <dd><a href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html">Windows下使用Pelican搭建静态博客</a>
-                <br/><div class="summary"><h2>前序</h2>
-<p>&emsp;&emsp;首先Pelican的知名度在国内明显没有Hexo的高，导致也没有几篇教程。遂写一篇简单的Windows搭建教程，给小白们快速使用Pelican搭建静态博客并且发表到Gtihub Pages上。</p>
-<h2>安装Pelican</h2>
-<p>&emsp;&emsp;在Windows下搭建pelican环境可以说完爆Jekyll,如果熟悉Python，甚至比Hexo还要简单，闲话不多说，直接开干。</p>
-<p>&emsp;&emsp;因为Pelican是基于Python开发的，所以首先得安装Python环境。我目前使用的是<a href="https://www.python.org/downloads/">Python 3.6.1</a>，这个版本再Windows安装的话连环境都不需要手动配置即可完成。</p>
-<p>&emsp;&emsp;接下来需要使用Python包管理工具，建议没有安装pip的可以使用easy_install安装：</p>
-<div class="highlight"><pre><span></span>easy_install pip
-</pre></div>
-
-
-<p>&emsp;&emsp;安装完成后使用pip安装pelican和markdown</p>
-<div class="highlight"><pre><span></span>pip install markdown
-pip install pelican
-</pre></div>
-
-
-<p>&emsp;&emsp;如果一切正常的话，恭喜已经搭建完成Pelican环境了，是不是很简单？</p>
-<h2>创建博客</h2>
-<p>&emsp;&emsp;首先你需要一个存放你的博客的目录，进入到目录里面，打开cmd，输入下面命令可以生成一个基本的博客模板：</p>
-<div class="highlight"><pre><span></span>pelican-quickstart
-</pre></div>
-
-
-<p>&emsp;&emsp;如下图所示会询问你一些设置，这些设置会生成对应的pelicanconf.py配置文件和Makefile文件，不过Windows下由于不能使用Makefile，所以这里即使填错选项也可以待会在修改。</p>
-<p><img alt="pelican-quickstart" src="../images/pelicanBuildBlog/1.jpg"></p>
-<p>&emsp;&emsp;如果提示"Done. Your new project …</p></div>
-                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/blog/pelicanBuildBlog.html">[ 阅读全文 ]</a></dd>
             </dl>
         </div>
     </div>
