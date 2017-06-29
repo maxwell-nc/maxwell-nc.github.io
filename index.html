@@ -78,6 +78,23 @@
         <div class="container content archive">
             <h2><a href="https://maxwell-nc.github.io/index.html">最新文章 </a></h2>
             <dl class="dl-horizontal">
+                <dt>2017-06-29</dt>
+                <dd><a href="https://maxwell-nc.github.io/android/rxjava2-4.html">RxJava 2.x 使用详解(四) 合并聚合操作符</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;这期我们来说一下RxJava中合并操作符和聚合操作符，主要用于合并多个被观察者或者把一个观察者的多个元素聚合成一个元素。文章先从合并操作符开始说明，当切换到聚合操作符时，文章会提到。</p>
+<h2>startWith / startWithArray</h2>
+<p>&emsp;&emsp;如果你需要在被观察发送元素之前追加数据或者追加新的被观察者，这时候可以使用startWith操作符，例子如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">startWith</span><span class="o">(</span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">startWith</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码输出结果为“0,1,2,3,4,5,6”,如果你需要追加多个元素，则需要使用另外一个操作符startWithArray，一次追加多个元素。</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">startWithArray</span><span class="o">(</span><span class="mi">1 …</span></pre></div></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/rxjava2-4.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-06-28</dt>
                 <dd><a href="https://maxwell-nc.github.io/android/rxjava2-3.html">RxJava 2.x 使用详解(三) 过滤操作符</a>
                 <br/><div class="summary"><h2>前序</h2>
@@ -231,26 +248,6 @@
     <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getFullUrl</span><span class="o">(</span><span class="n">String</span> <span class="n">url</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(!</span><span class="n">url</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&quot;http …</span></pre></div></div>
                  <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/junitTest.html">[ 阅读全文 ]</a></dd>
-                <dt>2017-05-19</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/mobsfAnalys.html">MobSF Android静态分析使用心得</a>
-                <br/><div class="summary"><h2>前序</h2>
-<p>&emsp;&emsp;此前也接触过一些第三方静态分析工具，因为工作原因接触了一款开源移动App安全框架<a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF">MobileSecurityFramework</a>，经过一番折腾后决定写下一篇博文记录一下心得。</p>
-<h2>搭建环境</h2>
-<p>&emsp;&emsp;本文是基于Windows搭建的Android App静态分析环境，首先是先要到<a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF">Github</a>上拿去拉一份源码下来。由于这个框架是基于Python开发的，而且需要反编译Apk，所以我们列下需要的环境清单：</p>
-<ul>
-<li>Python 2.7(不能使3.x版本，低于2.7我也没有试过)</li>
-<li>Oracle JDK 1.7+</li>
-<li>MobSF源码</li>
-</ul>
-<p>&emsp;&emsp;以上是静态分析需要的环境，另外再官方的文档中写了一句推荐使用虚拟机环境搭建，否则存在安全问题，这里只是试用一下就不使用虚拟机了。</p>
-<p>&emsp;&emsp;拿到源码后解压到一个目录里，在这个目录打开CMD，输入命令：</p>
-<div class="highlight"><pre><span></span>py -2 pip install -r requirements.txt
-</pre></div>
-
-
-<p>&emsp;&emsp;注意我这里因为同时安装了Python2.x和3.x，所以使用py启动器来指定版本，如果只有Python2.x，可以直接采用：</p>
-<div class="highlight"><pre><span></span>pip install -r …</pre></div></div>
-                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/mobsfAnalys.html">[ 阅读全文 ]</a></dd>
             </dl>
         </div>
     </div>

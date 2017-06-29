@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="chinese (simplified)">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="前序   这期我们来说一下RxJava中合并操作符和聚合操作符，主要用于合并多个被观察者或者把一个观察者的多个元素聚合成一个元素。文章先从合并操作符开始说明，当切换到聚合操作符时，文章会提到。 startWith / startWithArray   如果你需要在被观察发送元素之前追加数据或者追加新的被观察者，这时候可以使用startWith操作符，例子如下：...">
+        <meta name="keywords" content="android, reactive-streams, rxjava">
+        <link rel="icon" href="https://maxwell-nc.github.io/favicon.ico">
+
+        <title>RxJava 2.x 使用详解(四) 合并聚合操作符 - Maxwell's Growth Path</title>
+
+        <!-- Stylesheets -->
+        <link href="https://maxwell-nc.github.io/theme/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/nest.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/pygment.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://maxwell-nc.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Full Atom Feed" />
+        <link href="https://maxwell-nc.github.io/feeds/android.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container-article gradient">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <!-- <div class="header-logo">
+                        <a class="pull-left" href="https://maxwell-nc.github.io/"><img class="mr20" src="https://maxwell-nc.github.io/logo.svg" alt="logo">Maxwell's Growth Path</a>
+                    </div> -->
+                    <div class="nav pull-right">
+                                <a href="https://maxwell-nc.github.io/">主页</a>
+                                <a href="https://maxwell-nc.github.io/categories.html">博文目录</a>
+                                <a href="https://maxwell-nc.github.io/tags.html">标签</a>
+                                <a href="https://maxwell-nc.github.io/feeds/all.atom.xml">订阅</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+	<script src="https://maxwell-nc.github.io/theme/js/toc.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	if(window.screen.width >= 768){
+		window.onscroll = function(){
+			var t = document.documentElement.scrollTop || document.body.scrollTop; 
+			var top_div = document.getElementById( "top_div" );
+			if( t >= 300 ) {
+				top_div.style.display = "block";
+			} else {
+				top_div.style.display = "none";
+			}
+		}
+	}
+	</script>
+    <div class="container header-wrapper-article">
+        <div class="row">
+              <div class="col-lg-12">
+					<div class="header-vertical-line"></div>
+					<h1 class="header-title-article">RxJava 2.x 使用详解(四) 合并聚合操作符</h1>
+					<p class="header-date-article">
+					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
+					2017-06-29&nbsp;&nbsp;|&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-folder-open mr5" aria-hidden="true"></span> <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/reactive-streams.html">reactive-streams</a>, <a href="https://maxwell-nc.github.io/tag/rxjava.html">rxjava</a></p>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+	<div id="top_div" onclick="javascript:window.scrollTo(0,0)"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> 回到顶部</div>
+    <div id="contents" class="container content">
+		<div id="toc"></div>
+        <h2>前序</h2>
+<p>&emsp;&emsp;这期我们来说一下RxJava中合并操作符和聚合操作符，主要用于合并多个被观察者或者把一个观察者的多个元素聚合成一个元素。文章先从合并操作符开始说明，当切换到聚合操作符时，文章会提到。</p>
+<h2>startWith / startWithArray</h2>
+<p>&emsp;&emsp;如果你需要在被观察发送元素之前追加数据或者追加新的被观察者，这时候可以使用startWith操作符，例子如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">startWith</span><span class="o">(</span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">startWith</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码输出结果为“0,1,2,3,4,5,6”,如果你需要追加多个元素，则需要使用另外一个操作符startWithArray，一次追加多个元素。</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">startWithArray</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码输出结果为“1,2,3,4,5,6”，实际上上述两个操作符从源码中观察，都可以发现它实际上使用的concat和concatArray操作符去实现的。下面我们来说明下这两个操作符。</p>
+<h2>concat / concatArray</h2>
+<p>&emsp;&emsp;concat操作符可以连接最多4个的被观察者，他们的顺序是<strong>串行执行</strong>的：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码输出结果为“1,2,3,4,5,6”，如果需要多于4个被观察合并在一起，可以使用concatArray操作符：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">concatArray</span><span class="o">(</span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<h2>merge / mergeArray</h2>
+<p>&emsp;&emsp;上面说到的concat操作符，对于每一个被观察者都是按照顺序串行执行的，接下来介绍的merge操作符也是合并多个被观察者，但他们合并后是<strong>按照时间线并行执行</strong>，举个例子：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述例子中，两个被观察将并行执行，输出结果为"0,3-&gt;1,4-&gt;2,5"，可以直观的地观察到和concat操作符的区别。</p>
+<p>&emsp;&emsp;和concat操作符一样，merge也是最多只能合并4个被观察者，可以使用mergeArray来合并多个被观察者，这里就不举例子了。</p>
+<h2>concatDelayError / mergeDelayError</h2>
+<p>&emsp;&emsp;使用concat和merge操作符时，如果遇到其中一个被观察者发出onError事件则会马上终止其他被观察者的事件，如果希望onError事件推迟到其他被观察者都结束后才触发，可以使用对应的concatDelayError或者mergeDelayError操作符，比如：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">mergeDelayError</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">onError</span><span class="o">(</span><span class="k">new</span> <span class="n">NullPointerException</span><span class="o">()),</span> <span class="n">BackpressureStrategy</span><span class="o">.</span><span class="na">ERROR</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;concatArray和mergeArray也可以使用对应的操作符：<code>concatArrayDelayError</code>和<code>mergeArrayDelayError</code>，这里就不一一列举例子了。</p>
+<h2>zip</h2>
+<p>&emsp;&emsp;多个被观察者压缩成单个的操作可以使用zip操作符，如果多个被观察者数量不同，则以少的为基准，可以使用Funtions来自定义zip操作（zipper）：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">zip</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">),</span>
+        <span class="o">(</span><span class="n">int1</span><span class="o">,</span> <span class="n">int2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">int1</span> <span class="o">+</span> <span class="n">int2</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码中输出的结果为5、7。</p>
+<p>&emsp;&emsp;对于delayError的操作是通过参数传递进去的，在zipper参数之后。zip操作符最多接受9个被观察者，这里的zipper使用到的Functions按照被观察个数分别对应Function、BiFunction和Function3 - Function9，其中的apply方法用于对应的操作。</p>
+<h2>combineLatest</h2>
+<p>&emsp;&emsp;combineLatest类似zip操作符，但它合并时机和zip不一样，zip是一对一合并压缩，combineLatest则是在同一个时间线上，合并最后的元素，举个例子：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">combineLatest</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1L</span><span class="o">,</span> <span class="mi">2L</span><span class="o">,</span> <span class="mi">3L</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">),</span>
+        <span class="o">(</span><span class="n">long1</span><span class="o">,</span> <span class="n">long2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">long1</span> <span class="o">+</span> <span class="n">long2</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述例子只会合并 3+0 、3+1 、3+2 ，即输出3、4、5这几个元素。对于第一个观察者中1、2元素被忽略了。</p>
+<h2>combineLatestDelayError</h2>
+<p>&emsp;&emsp;combineLatest要处理delayError问题，需要使用combineLatestDelayError操作符，这个操作符把combiner的Funtions用Object[]数组的Funtion来代替，而且是作为第一个参数，上述的combineLatest例子使用combineLatestDelayError可以改写成：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">combineLatestDelayError</span><span class="o">(</span>
+         <span class="n">objects</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="n">Long</span><span class="o">)</span> <span class="n">objects</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">+</span> <span class="o">(</span><span class="n">Long</span><span class="o">)</span> <span class="n">objects</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span>
+         <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1L</span><span class="o">,</span> <span class="mi">2L</span><span class="o">,</span> <span class="mi">3L</span><span class="o">),</span>
+         <span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
+         <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<h2>reduce</h2>
+<p>&emsp;&emsp;下面我们来介绍聚合操作符，要把一个被观察者的所有元素都聚合成单一的元素，可以使用reduce操作符，比如把所有元素都加起来，代码如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">reduce</span><span class="o">((</span><span class="n">last</span><span class="o">,</span> <span class="n">item</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">last</span> <span class="o">+</span> <span class="s">&quot;,&quot;</span> <span class="o">+</span> <span class="n">item</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">last</span> <span class="o">+</span> <span class="n">item</span><span class="o">;</span>
+        <span class="o">})</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;可以看到一开始，先执行1+2，然后用1+2的结果和3相加，最后输出6，相当于把三个元素聚合在一起。</p>
+<h2>count</h2>
+<p>&emsp;&emsp;如果要统计一个被观察者发送多少个元素可以使用count方法,其代码如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">count</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;count操作符会把观察者转换成Single<Long>类型的被观察者，上述代码会输出3（即原被观察者发送的元素数量）。</p>
+<h2>collect</h2>
+<p>&emsp;&emsp;collect和reduce操作相似，不过它是需要自己定义收集的容器和收集逻辑，下面举个例子，利用ArrayList收集发射的元素：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">collect</span><span class="o">(</span>
+                <span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;&gt;()</span> <span class="o">{</span><span class="c1">//创建收集容器</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+                    <span class="o">}</span>
+                <span class="o">},</span> <span class="k">new</span> <span class="n">BiConsumer</span><span class="o">&lt;</span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">Integer</span><span class="o">&gt;()</span> <span class="o">{</span><span class="c1">//收集操作</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">,</span> <span class="n">Integer</span> <span class="n">integer</span><span class="o">)</span>
+                            <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span><span class="c1">//前者容器，后者数据</span>
+                        <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">integer</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">})</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+
+<span class="c1">//lambda写法</span>
+<span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">ArrayList</span><span class="o">::</span><span class="k">new</span><span class="o">,</span> <span class="n">ArrayList</span><span class="o">::</span><span class="n">add</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述操作最终会输出[1, 2, 3]这个ArrayList元素，相当于收集了所有元素的结果。</p>
+<h2>尾声</h2>
+<p>&emsp;&emsp;现在回头才发现RxJava的操作符实在不少，后面还将讲述RxJava中的条件操作符、变换操作符等等，这些要到后面再慢慢一一说来了。</p>
+		
+		<h2>相关文章</h2>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(一) 快速入门：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-1.html">https://maxwell-nc.github.io/android/rxjava2-1.html</a>
+		</p>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(二) 创建操作符：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-2.html">https://maxwell-nc.github.io/android/rxjava2-2.html</a>
+		</p>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(三) 过滤操作符：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-3.html">https://maxwell-nc.github.io/android/rxjava2-3.html</a>
+		</p>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(四) 合并聚合操作符：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-4.html">https://maxwell-nc.github.io/android/rxjava2-4.html</a>
+		</p>
+		<br/><br/>
+		
+		<blockquote style="/* color: #eb2344; */"><b style="font-weight: 100;">
+		原创文章，欢迎转载，请保留出处。有任何错误、疑问或者建议，欢迎指出。<br/>
+		请注明文章出自于：https://maxwell-nc.github.io/android/rxjava2-4.html
+		</b></blockquote>
+		<br/>
+			<div style="display: inline;font-size: 13px;">
+				上一篇：<a href="https://maxwell-nc.github.io/android/rxjava2-3.html">RxJava 2.x 使用详解(三) 过滤操作符</a>
+			</div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'maxwell-nc';
+                var disqus_identifier = 'android/rxjava2-4.html';
+                //var disqus_url = 'https://maxwell-nc.github.io/android/rxjava2-4.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">社交</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/maxwell-nc" target="_blank">Github</a></li>
+                            <li><a href="mailto:maxwell_nc@163.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">链接</div>
+                        <ul class="list-unstyled">
+                            <li><a href="http://blog.csdn.net/maxwell_nc" target="_blank">旧的博客</a></li>
+                        </ul>
+                    </div> 
+					<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3" style="font-size: 12px;">
+                        <p class="pull-right text-right">
+                            <em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank"><u>Pelican</u></a></em><br/>
+                            <em>Theme by <a href="https://github.com/molivier" target="_blank"><u>Molivier</u></a></em><br/>
+                            <em>Modified Theme by <a href="https://github.com/maxwell-nc" target="_blank"><u>Maxwell-nc</u></a></em><br/>
+                            <small>&copy; Maxwell-nc 2017</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>
