@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="chinese (simplified)">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="前序   本期将会介绍条件操作符，用于控制被观察者开始、停止、跳过的各种条件操作符。本文均使用lambda表达式来书写代码，如果不熟悉的朋友可以在IDE中瞧一瞧原来的接受的参数即可。（本文主要是简化了Predicate类型参数） all...">
+        <meta name="keywords" content="android, reactive-streams, rxjava">
+        <link rel="icon" href="https://maxwell-nc.github.io/favicon.ico">
+
+        <title>RxJava 2.x 使用详解(五) 条件操作符 - Maxwell's Growth Path</title>
+
+        <!-- Stylesheets -->
+        <link href="https://maxwell-nc.github.io/theme/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/nest.css" rel="stylesheet">
+        <link href="https://maxwell-nc.github.io/theme/css/pygment.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://maxwell-nc.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Full Atom Feed" />
+        <link href="https://maxwell-nc.github.io/feeds/android.atom.xml" type="application/atom+xml" rel="alternate" title="Maxwell's Growth Path Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container-article gradient">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <!-- <div class="header-logo">
+                        <a class="pull-left" href="https://maxwell-nc.github.io/"><img class="mr20" src="https://maxwell-nc.github.io/logo.svg" alt="logo">Maxwell's Growth Path</a>
+                    </div> -->
+                    <div class="nav pull-right">
+                                <a href="https://maxwell-nc.github.io/">主页</a>
+                                <a href="https://maxwell-nc.github.io/categories.html">博文目录</a>
+                                <a href="https://maxwell-nc.github.io/tags.html">标签</a>
+                                <a href="https://maxwell-nc.github.io/feeds/all.atom.xml">订阅</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+	<script src="https://maxwell-nc.github.io/theme/js/toc.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	if(window.screen.width >= 768){
+		window.onscroll = function(){
+			var t = document.documentElement.scrollTop || document.body.scrollTop; 
+			var top_div = document.getElementById( "top_div" );
+			if( t >= 300 ) {
+				top_div.style.display = "block";
+			} else {
+				top_div.style.display = "none";
+			}
+		}
+	}
+	</script>
+    <div class="container header-wrapper-article">
+        <div class="row">
+              <div class="col-lg-12">
+					<div class="header-vertical-line"></div>
+					<h1 class="header-title-article">RxJava 2.x 使用详解(五) 条件操作符</h1>
+					<p class="header-date-article">
+					<!-- 作者 <a href="https://maxwell-nc.github.io/author/maxwell-nc.html">Maxwell-nc</a>, --> 
+					2017-06-30&nbsp;&nbsp;|&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-folder-open mr5" aria-hidden="true"></span> <a href="https://maxwell-nc.github.io/category/android.html">Android</a>&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://maxwell-nc.github.io/tag/android.html">android</a>, <a href="https://maxwell-nc.github.io/tag/reactive-streams.html">reactive-streams</a>, <a href="https://maxwell-nc.github.io/tag/rxjava.html">rxjava</a></p>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+	<div id="top_div" onclick="javascript:window.scrollTo(0,0)"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> 回到顶部</div>
+    <div id="contents" class="container content">
+		<div id="toc"></div>
+        <h2>前序</h2>
+<p>&emsp;&emsp;本期将会介绍条件操作符，用于控制被观察者开始、停止、跳过的各种条件操作符。本文均使用lambda表达式来书写代码，如果不熟悉的朋友可以在IDE中瞧一瞧原来的接受的参数即可。（本文主要是简化了Predicate类型参数）</p>
+<h2>all</h2>
+<p>&emsp;&emsp;要判断所有元素是否满足某个条件，可以使用all操作符，它接受一个Predicate，其中的test方法用于判断某个元素是否满足条件，最终输出是否所有元素都满足条件，比如下面例子：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">all</span><span class="o">(</span><span class="n">integer</span> <span class="o">-&gt;</span> <span class="n">integer</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述例子是判断是否所有元素都大于等于0，all操作符会把被观察者转换成Single&lt;Boolean>类型的被观察者，最终输出结果为true。</p>
+<h2>ambArray</h2>
+<p>&emsp;&emsp;ambArray操作符可以从多个被观察者中选择第一个发射元素的被观察者进行处理，其他被观察者则抛弃，比如：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">ambArray</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">timer</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">))</span><span class="c1">//仅处理第一个发射元素的被观察者</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码只会处理第二个被观察者，输出结果为3,4,5。</p>
+<h2>contains</h2>
+<p>&emsp;&emsp;如果要判断被观察者是否包含某一个元素，可以使用contains操作符，例子如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码判断被观察者发射元素中是否包含“3”，contains操作符会把被观察者转换成Single&lt;Boolean>类型的被观察者,输出结果为true。</p>
+<h2>any</h2>
+<p>&emsp;&emsp;我们观察contains的源码会发现，实际上它调用的是any操作符，any操作符可以判断是否存在某一个元素满足一定的条件，用法和all操作符类似，也是接受一个Predicate，例子如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">any</span><span class="o">(</span><span class="n">integer</span> <span class="o">-&gt;</span> <span class="n">integer</span> <span class="o">==</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述例子即寻找是否有元素"3"，等价于<code>contains(3)</code>,any操作符也是把被观察者转换成Single&lt;Boolean>类型的被观察者,输出结果为true。</p>
+<h2>isEmpty</h2>
+<p>&emsp;&emsp;要判断一个被观察者是否发射过元素，可以使用isEmpty操作符，其例子如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码输出false，可以源码发现isEmpty实际上是调用了all操作符。</p>
+<h2>defaultIfEmpty</h2>
+<p>&emsp;&emsp;如果你需要在被观察者不发送数据的时候需要发送一个默认的元素，可以使用defaultIfEmpty操作符，其例子如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">empty</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">defaultIfEmpty</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;如果被观察者不发送任何数据，则会发送默认数据，上述代码中发送的是“1”，故输出结果为“1”。</p>
+<h2>switchIfEmpty</h2>
+<p>&emsp;&emsp;defaultIfEmpty操作符只能在被观察者不发送数据时发送一个默认的数据，如果需要发送更多数据，则可以使用switchIfEmpty操作符，发送自定义的被观察者作为替代，比如：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">empty</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">switchIfEmpty</span><span class="o">(</span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码将会输出3,4,5。</p>
+<h2>sequenceEqual</h2>
+<p>&emsp;&emsp;如果要对比两个被观察者发射的元素队列，可以使用sequenceEqual操作符，它只关心<strong>两个发射队列的元素、元素发射顺序、和最终状态</strong>，而不关心他的时间，下面是一个例子：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">sequenceEqual</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">0</span><span class="n">L</span><span class="o">,</span> <span class="mi">1L</span><span class="o">,</span> <span class="mi">2L</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述例子中输出是true，sequenceEqual操作符对于元素的类型也是十分敏感的，假设要自定义Integer和Long类型值相等则认为两个元素相等，可以添加额外的参数isEqual，由于sequenceEqual操作符只能对比两个被观察者，所以使用BiPredicate作为判断类型，下面是例子:</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">sequenceEqual</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">),</span>
+        <span class="o">(</span><span class="n">num1</span><span class="o">,</span> <span class="n">num2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">num1</span><span class="o">.</span><span class="na">longValue</span><span class="o">()</span> <span class="o">==</span> <span class="n">num2</span><span class="o">.</span><span class="na">longValue</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码中两个类型均为Number类型，但如果不使用自定义的isEqual参数，则会返回false，这里使用了判断两个数的Long值相等则相等，所以最后输出结果为true。</p>
+<h2>takeUntil</h2>
+<p>&emsp;&emsp;如果想执行到某个条件就停止事件，可以使用takeUntil操作符，它接受一个Predicate来定义停止条件，其用法如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">takeUntil</span><span class="o">(</span><span class="n">integer</span> <span class="o">-&gt;</span> <span class="n">integer</span><span class="o">==</span><span class="mi">2</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码表明当元素==2时则停止，所以输出结果为1,2。<strong>这里值得注意的是，输出结果是包含该元素的。</strong>除此之外，takeUntil也可以接受另外一个被观察者，当这个被观察者结束之后则停止第一个被观察者,例子如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">interval</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">takeUntil</span><span class="o">(</span><span class="n">Flowable</span><span class="o">.</span><span class="na">timer</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码将会在1秒后停止interval生成的被观察者，所以输出结果只有0,1,2,3,4,5,6,7,8。</p>
+<h2>takeWhile</h2>
+<p>&emsp;&emsp;takeWhile操作符和takeUntil操作符类似，但是takeWhile只接受Predicate，而且<strong>Predicate中的test方法返回true才执行被观察者的事件</strong>，其例子如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">interval</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">takeWhile</span><span class="o">(</span><span class="n">longItem</span> <span class="o">-&gt;</span> <span class="n">longItem</span> <span class="o">!=</span> <span class="mi">5L</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码输出的结果为0,1,2,3,4，注意是不包含5这个元素的。</p>
+<h2>skipUntil</h2>
+<p>&emsp;&emsp;skipUntil操作符接收一个被观察者，知道该被观察者发送事件之前，第一个被观察者所有发送的元素将被抛弃，例如：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">skipUntil</span><span class="o">(</span><span class="n">Flowable</span><span class="o">.</span><span class="na">timer</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述代码中，表示intervalRange生成的被观察者前3秒的发送的元素都会被抛弃，所以最终输出结果为3,4,5,6,7,8,9。</p>
+<h2>skipWhile</h2>
+<p>&emsp;&emsp;skipWhile操作符可以接受一个Predicate用于控制<strong>跳过开始一段数据</strong>，比如：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">intervalRange</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">skipWhile</span><span class="o">(</span><span class="n">longItem</span> <span class="o">-&gt;</span> <span class="n">longItem</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述例子中，少于2的元素将会被跳过，即输出2,3,4，要注意的是，如果<code>.skipWhile(longItem -&gt; longItem &gt; 2)</code>是不会跳过任何发射元素的，因为skipWhile操作符只会过滤一开始的数据，不能跳过中间或者以后的数据。</p>
+<h2>尾声</h2>
+<p>&emsp;&emsp;本期学习了各种条件操作符，下期再介绍下变换操作符，对各种元素进行变换操作。</p>
+		
+		<h2>相关文章</h2>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(一) 快速入门：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-1.html">https://maxwell-nc.github.io/android/rxjava2-1.html</a>
+		</p>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(二) 创建操作符：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-2.html">https://maxwell-nc.github.io/android/rxjava2-2.html</a>
+		</p>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(三) 过滤操作符：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-3.html">https://maxwell-nc.github.io/android/rxjava2-3.html</a>
+		</p>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(四) 合并聚合操作符：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-4.html">https://maxwell-nc.github.io/android/rxjava2-4.html</a>
+		</p>
+		<p style="margin-bottom: 5px;">
+		&emsp;&emsp;RxJava 2.x 使用详解(五) 条件操作符：
+		<a href="https://maxwell-nc.github.io/android/rxjava2-5.html">https://maxwell-nc.github.io/android/rxjava2-5.html</a>
+		</p>
+		<br/><br/>
+		
+		<blockquote style="/* color: #eb2344; */"><b style="font-weight: 100;">
+		原创文章，欢迎转载，请保留出处。有任何错误、疑问或者建议，欢迎指出。<br/>
+		请注明文章出自于：https://maxwell-nc.github.io/android/rxjava2-5.html
+		</b></blockquote>
+		<br/>
+			<div style="display: inline;font-size: 13px;">
+				上一篇：<a href="https://maxwell-nc.github.io/android/rxjava2-4.html">RxJava 2.x 使用详解(四) 合并聚合操作符</a>
+			</div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'maxwell-nc';
+                var disqus_identifier = 'android/rxjava2-5.html';
+                //var disqus_url = 'https://maxwell-nc.github.io/android/rxjava2-5.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">社交</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/maxwell-nc" target="_blank">Github</a></li>
+                            <li><a href="mailto:maxwell_nc@163.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">链接</div>
+                        <ul class="list-unstyled">
+                            <li><a href="http://blog.csdn.net/maxwell_nc" target="_blank">旧的博客</a></li>
+                        </ul>
+                    </div> 
+					<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3" style="font-size: 12px;">
+                        <p class="pull-right text-right">
+                            <em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank"><u>Pelican</u></a></em><br/>
+                            <em>Theme by <a href="https://github.com/molivier" target="_blank"><u>Molivier</u></a></em><br/>
+                            <em>Modified Theme by <a href="https://github.com/maxwell-nc" target="_blank"><u>Maxwell-nc</u></a></em><br/>
+                            <small>&copy; Maxwell-nc 2017</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>

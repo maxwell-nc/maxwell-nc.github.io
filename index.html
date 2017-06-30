@@ -78,6 +78,25 @@
         <div class="container content archive">
             <h2><a href="https://maxwell-nc.github.io/index.html">最新文章 </a></h2>
             <dl class="dl-horizontal">
+                <dt>2017-06-30</dt>
+                <dd><a href="https://maxwell-nc.github.io/android/rxjava2-5.html">RxJava 2.x 使用详解(五) 条件操作符</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;本期将会介绍条件操作符，用于控制被观察者开始、停止、跳过的各种条件操作符。本文均使用lambda表达式来书写代码，如果不熟悉的朋友可以在IDE中瞧一瞧原来的接受的参数即可。（本文主要是简化了Predicate类型参数）</p>
+<h2>all</h2>
+<p>&emsp;&emsp;要判断所有元素是否满足某个条件，可以使用all操作符，它接受一个Predicate，其中的test方法用于判断某个元素是否满足条件，最终输出是否所有元素都满足条件，比如下面例子：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">all</span><span class="o">(</span><span class="n">integer</span> <span class="o">-&gt;</span> <span class="n">integer</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">ele</span> <span class="o">-&gt;</span> <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;tag&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ele</span><span class="o">)));</span>
+</pre></div>
+
+
+<p>&emsp;&emsp;上述例子是判断是否所有元素都大于等于0，all操作符会把被观察者转换成Single&lt;Boolean>类型的被观察者，最终输出结果为true。</p>
+<h2>ambArray</h2>
+<p>&emsp;&emsp;ambArray操作符可以从多个被观察者中选择第一个发射元素的被观察者进行处理，其他被观察者则抛弃，比如：</p>
+<div class="highlight"><pre><span></span><span class="n">Flowable</span><span class="o">.</span><span class="na">ambArray</span><span class="o">(</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">timer</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">),</span>
+        <span class="n">Flowable</span><span class="o">.</span><span class="na">just …</span></pre></div></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/rxjava2-5.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-06-29</dt>
                 <dd><a href="https://maxwell-nc.github.io/android/rxjava2-4.html">RxJava 2.x 使用详解(四) 合并聚合操作符</a>
                 <br/><div class="summary"><h2>前序</h2>
@@ -229,25 +248,6 @@
 
 <p>&emsp;&emsp;等待安装成功的过程中，可以到<a href="https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig">https://raw.githubusercontent …</a></p></div>
                  <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/rnIntergation.html">[ 阅读全文 ]</a></dd>
-                <dt>2017-05-22</dt>
-                <dd><a href="https://maxwell-nc.github.io/android/junitTest.html">Android单元测试之JUnit框架</a>
-                <br/><div class="summary"><h2>前序</h2>
-<p>&emsp;&emsp;最近抽空整理下项目，顺手整理了单元测试，于是记录下自己学习单元测试的心得，让更多的人快速用上单元测试提高开发效率。本文主要讲解如何使用JUnit框架进行单元测试，不会提及单元测试优缺点。</p>
-<h2>在Android项目中使用JUnit</h2>
-<p>&emsp;&emsp;记得在Eclipse中集成Junit框架是一件很复杂的事情，首先要导入lib包，然后配置...现在如果使用Android Studio的话什么工作都不需要处理，创建一个新的项目就帮你配置好整个JUnit框架，你只需要专心写测试类即可。而且测试类也是可以自动生成的,如下图所示：
-<img alt="dir" src="../images/junitTest/1.jpg">
-&emsp;&emsp;可以看到生成<code>app/src/main</code>为源码目录，对应<code>app/src/test</code>为测试类目录，Android Studio会自动生成一个ExampleUnitTest类，实际上这个test目录下的包名可以与src目录的不一样。</p>
-<p>&emsp;&emsp;以上图为例，我写了一个ExampleUtils作为本次测试例子，其代码为：</p>
-<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleUtils</span> <span class="o">{</span>
-
-    <span class="cm">/**</span>
-<span class="cm">     * 获取完整的地址路径</span>
-<span class="cm">     *</span>
-<span class="cm">     * @param url 可能不完整的路径</span>
-<span class="cm">     */</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getFullUrl</span><span class="o">(</span><span class="n">String</span> <span class="n">url</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(!</span><span class="n">url</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&quot;http …</span></pre></div></div>
-                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/junitTest.html">[ 阅读全文 ]</a></dd>
             </dl>
         </div>
     </div>

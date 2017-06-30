@@ -78,6 +78,25 @@
         <div class="container content archive">
             <h2><a href="https://maxwell-nc.github.io/index2.html">最新文章 <small>- page 2</small></a></h2>
             <dl class="dl-horizontal">
+                <dt>2017-05-22</dt>
+                <dd><a href="https://maxwell-nc.github.io/android/junitTest.html">Android单元测试之JUnit框架</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;最近抽空整理下项目，顺手整理了单元测试，于是记录下自己学习单元测试的心得，让更多的人快速用上单元测试提高开发效率。本文主要讲解如何使用JUnit框架进行单元测试，不会提及单元测试优缺点。</p>
+<h2>在Android项目中使用JUnit</h2>
+<p>&emsp;&emsp;记得在Eclipse中集成Junit框架是一件很复杂的事情，首先要导入lib包，然后配置...现在如果使用Android Studio的话什么工作都不需要处理，创建一个新的项目就帮你配置好整个JUnit框架，你只需要专心写测试类即可。而且测试类也是可以自动生成的,如下图所示：
+<img alt="dir" src="../images/junitTest/1.jpg">
+&emsp;&emsp;可以看到生成<code>app/src/main</code>为源码目录，对应<code>app/src/test</code>为测试类目录，Android Studio会自动生成一个ExampleUnitTest类，实际上这个test目录下的包名可以与src目录的不一样。</p>
+<p>&emsp;&emsp;以上图为例，我写了一个ExampleUtils作为本次测试例子，其代码为：</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleUtils</span> <span class="o">{</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * 获取完整的地址路径</span>
+<span class="cm">     *</span>
+<span class="cm">     * @param url 可能不完整的路径</span>
+<span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getFullUrl</span><span class="o">(</span><span class="n">String</span> <span class="n">url</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">url</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&quot;http …</span></pre></div></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/junitTest.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-19</dt>
                 <dd><a href="https://maxwell-nc.github.io/android/mobsfAnalys.html">MobSF Android静态分析使用心得</a>
                 <br/><div class="summary"><h2>前序</h2>
