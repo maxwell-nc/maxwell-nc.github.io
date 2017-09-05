@@ -78,6 +78,28 @@
         <div class="container content archive">
             <h2><a href="https://maxwell-nc.github.io/index2.html">最新文章 <small>- page 2</small></a></h2>
             <dl class="dl-horizontal">
+                <dt>2017-05-24</dt>
+                <dd><a href="https://maxwell-nc.github.io/android/rnIntergation.html">快速集成ReactNative到现有Android项目</a>
+                <br/><div class="summary"><h2>前序</h2>
+<p>&emsp;&emsp;突然想起来之前旧博客的<a href="http://blog.csdn.net/maxwell_nc/article/details/60960864">《Windows下搭建ReactNative开发环境（Android）》</a>留下的一个坑，遂填一下坑。而且集成ReactNative到现有Android项目也不是什么容易的事情，网上很多教程都是不完整，你会发现跟着来做都是一步一个坑，不断搜索error解决花了半天才能搭建好，下次再做又是一堆问题，所以我这里记录下自己的集成心得。</p>
+<h2>准备操作</h2>
+<p>&emsp;&emsp;首先你建议你先看看<a href="http://blog.csdn.net/maxwell_nc/article/details/60960864">上一篇搭建环境的文章</a>，否则接下来的内容你可以看不懂或者没有对应的工具。然后就是你需要有一个现有的Android项目，如果你需要创建全新项目前一篇已经描述过了，本文就不再重复了。</p>
+<p>&emsp;&emsp;本文集成的<strong>ReactNative版本为0.44</strong>，如果不是的话可能与本文内容有所差异，请自行甄别。</p>
+<h2>安装ReactNative到项目</h2>
+<p>&emsp;&emsp;我们已一个已存在的工程ExistedProject为例，首先打开项目的目录，在CMD输入：</p>
+<div class="highlight"><pre><span></span>npm init
+</pre></div>
+
+
+<p>&emsp;&emsp;<code>npm init</code>会提示引导你创建package.json,如下图所示：
+<img alt="init" src="../images/rnIntergation/1.jpg">
+&emsp;&emsp;创建成功后可以安装React、ReactNative到目录里面，继续在<strong>当前目录</strong>下输入命令：</p>
+<div class="highlight"><pre><span></span>npm install --save react react-native
+</pre></div>
+
+
+<p>&emsp;&emsp;等待安装成功的过程中，可以到<a href="https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig">https://raw.githubusercontent …</a></p></div>
+                 <a style="float: right;font-size: 13px;margin-bottom: 20px;" href="https://maxwell-nc.github.io/android/rnIntergation.html">[ 阅读全文 ]</a></dd>
                 <dt>2017-05-22</dt>
                 <dd><a href="https://maxwell-nc.github.io/android/junitTest.html">Android单元测试之JUnit框架</a>
                 <br/><div class="summary"><h2>前序</h2>
